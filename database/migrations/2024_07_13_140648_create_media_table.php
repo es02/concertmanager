@@ -14,15 +14,13 @@ return new class extends Migration
         Schema::create('media', function (Blueprint $table) {
             $table->id();
             $table->integer('tenant_id');
+            $table->integer('user_id');
             $table->integer('event_id');
             $table->string('name');
             $table->string('email');
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password')->nullable();
             $table->longText('bio')->nullable();
             $table->string('pic_url')->nullable();
             $table->string('location')->nullable();
-            $table->rememberToken();
             $table->timestamps();
             $table->enum('state', ['active', 'pending', 'suspended', 'deleted'])->default('pending');
         });

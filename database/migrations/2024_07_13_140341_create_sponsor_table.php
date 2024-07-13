@@ -15,14 +15,12 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->integer('tenant_id');
+            $table->integer('user_id');
             $table->string('name');
             $table->string('email'); //->unique() Need to handle this in logic due to multi-tenant
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password')->nullable();
             $table->longText('bio')->nullable();
             $table->string('pic_url')->nullable();
             $table->string('location')->nullable();
-            $table->rememberToken();
             $table->enum('state', ['active', 'pending', 'suspended', 'deleted'])->default('pending');
         });
     }
