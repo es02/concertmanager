@@ -24,7 +24,7 @@ class ArtistFactory extends Factory
     public function definition(): array
     {
         return [
-            'tenant_id' => 0,
+            'tenant_id' => 1,
             'name' => fake()->name(),
             //'bio' => fake()->lorem(),
             'email' => fake()->unique()->safeEmail(),
