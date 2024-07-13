@@ -102,9 +102,13 @@ class EventController extends Controller
 
         $event = Event::find($id);
         if ($event->venue_id !== $request->venue_id) {
-            $stage = Event_Stage::where('event_id', $id)->first(); //TODO: Multi-stage needs to go through each stage and reset the venue id
-            $stage->venue_id = $request->venue_id;
-            $stage->save();
+            $stages = Event_Stage::where('event_id', $id)->get();
+
+            // TODO: Allow stages to run between multiple venues
+            foreach($stages as $stage){
+                $stage->venue_id = $request->venue_id;
+                $stage->save();
+            }
         }
 
         $event->name = $request->name;
