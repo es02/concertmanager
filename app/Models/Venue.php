@@ -19,44 +19,21 @@ class Venue extends Authenticatable
      */
     protected $fillable = [
         'tenant_id',
-        'booking_agent_id',
+        'user_id',
+        'booking_agent_id', // TODO: Implement booking agent (single login to manage multiple bands)
         'name',
         'email',
-        'password',
         'bio',
         'pic_url',
         'location',
         'capacity',
-        'standard_fee',
-        'ticket_cut',
-        'fee_type',
-        'cut_type',
-        'additional_fees',
+        'standard_fee',     // in dollars - may not match neotiated fee for an event
+        'ticket_cut',       // in dollars
+        'fee_type',         // Is this a total price, or a minimum backed with a ticket cut?
+        'cut_type',         // If a ticket cut, is it per ticket cost, or a pewrcentage?
+        'additional_fees',  // eg: sound/lighting tech, door person, backline, etc
         'tech_specs',
-        'backline',
+        'backline',         // if provided
         'state',
     ];
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
 }
