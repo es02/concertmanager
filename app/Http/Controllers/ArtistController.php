@@ -29,9 +29,7 @@ class ArtistController extends Controller
     }
 
     public function getArtist($id){
-        $artist = Artist::where('id', $id)
-            ->where('state', '!=', 'deleted')
-            ->first();
+        $artist = Artist::find($id);
 
         return Inertia::render('Artist/Show', [
             'artist' => $artist,

@@ -35,7 +35,7 @@ class EventController extends Controller
             ->join('event_set', 'event.id', '=', 'event_set.event_id')
             ->select('event.*', 'event_stage.*', '.*')
             ->where('event.id', $id)
-            ->get();
+            ->first();
 
         return Inertia::render('Event/Show', [
             'event' => $event,
