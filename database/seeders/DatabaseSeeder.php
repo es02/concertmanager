@@ -85,28 +85,28 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Event_Stage::factory()->create([
-            'event_id' => 0,
+            'event_id' => 1,
             'venue_id' => 1,
         ]);
 
         Event_Set::factory()->create([
-            'event_id' => 0,
+            'event_id' => 1,
             'venue_id' => 1,
-            'event_stage_id' => 0,
-            'artist_id' => 0,
+            'event_stage_id' => 1,
+            'artist_id' => 3,
         ]);
 
         Event_Set::factory()->create([
-            'event_id' => 0,
+            'event_id' => 1,
             'venue_id' => 1,
-            'event_stage_id' => 0,
+            'event_stage_id' => 1,
             'artist_id' => 1,
         ]);
 
         Event_Set::factory()->create([
-            'event_id' => 0,
+            'event_id' => 1,
             'venue_id' => 1,
-            'event_stage_id' => 0,
+            'event_stage_id' => 1,
             'artist_id' => 2,
         ]);
     }

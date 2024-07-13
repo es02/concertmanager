@@ -54,7 +54,7 @@ class VenueController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect('your route')
+            return redirect('Venue/Create')
                         ->withErrors($validator)
                         ->withInput();
         }

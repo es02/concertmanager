@@ -17,7 +17,7 @@ class Event_StageFactory extends Factory
     public function definition(): array
     {
         return [
-            'tenant_id' => 0,
+            'tenant_id' => 1,
             'name' => 'Main Stage',
         ];
     }
