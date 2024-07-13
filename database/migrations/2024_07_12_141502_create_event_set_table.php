@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('artist_id');
             $table->string('name');
             $table->dateTime('time');
-            $table->integer('duration'); // in minutes
+            $table->integer('duration')->default(30); // in minutes
             $table->boolean('sideshow')->default(0); // used to track performances that are in the space but not on stage
             $table->timestamps();
             $table->enum('state', ['active', 'pending', 'suspended', 'deleted'])->default('pending');

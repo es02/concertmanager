@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class event_set extends Model
+class Event_Set extends Model
 {
     use HasFactory;
 

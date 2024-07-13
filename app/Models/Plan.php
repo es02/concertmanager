@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class event_stage extends Model
+class Pslan extends Model
 {
     use HasFactory;
 
@@ -15,13 +15,13 @@ class event_stage extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'tenant_id',
-        'event_id',
-        'venue_id',
         'name',
-        'bio',
-        'doors',
-        'close',
+        'price',
+        'period',
+        'trial',
+        'trial_length',
+        'published',
+        'default',
         'state',
     ];
 }

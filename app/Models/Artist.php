@@ -3,11 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
-class tenant extends Model
+class Artist extends Authenticatable
 {
-    use HasFactory;
+    use HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -15,10 +16,18 @@ class tenant extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'tenant_id',
+        'booking_agent_id',
         'name',
-        'fqdn',
-        'plan_id',
-        'payment_token',
+        'email',
+        'password',
+        'bio',
+        'pic_url',
+        'location',
+        'standard_fee',
+        'standard_rider',
+        'tech_specs',
+        'epk_url',
         'state',
     ];
 
@@ -28,7 +37,8 @@ class tenant extends Model
      * @var array<int, string>
      */
     protected $hidden = [
-        'payment_token',
+        'password',
+        'remember_token',
     ];
 
     /**
@@ -39,7 +49,8 @@ class tenant extends Model
     protected function casts(): array
     {
         return [
-            'payment_token' => 'hashed',
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
         ];
     }
 }
