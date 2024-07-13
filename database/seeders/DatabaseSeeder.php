@@ -61,6 +61,7 @@ class DatabaseSeeder extends Seeder
             'location' => 'Brisbane',
             'standard_fee' => 100,
             'bio' => 'Ambient noise',
+            'genre' => 'Drone Doom',
         ]);
 
         Artist::factory()->create([
@@ -69,6 +70,7 @@ class DatabaseSeeder extends Seeder
             'location' => 'Brisbane',
             'standard_fee' => 300,
             'bio' => 'Here for a waggly good time!',
+            'genre' => 'Childrens'
         ]);
 
         Artist::factory()->create([
@@ -77,6 +79,7 @@ class DatabaseSeeder extends Seeder
             'location' => 'Brisbane',
             'standard_fee' => 30000,
             'bio' => 'Recently returned from headline performances at such nonexistent festivals as Inala OpenAir and MelonStock Misery Division are here to rock your next event!',
+            'genre' => 'Post Punk'
         ]);
 
         Event::factory()->create([

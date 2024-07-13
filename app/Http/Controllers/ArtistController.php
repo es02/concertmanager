@@ -65,12 +65,15 @@ class ArtistController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'bio' => $request->bio,
+            'genre' => $request->genre,
             'pic_url' => $request->pic_url,
             'location' => $request->location,
             'standard_fee' => $request->standard_fee,
             'standard_rider' => $request->standard_rider,
             'tech_specs' => $request->tech_specs,
             'epk_url' => $request->epk_url,
+            'booked_previously' => $request->booked_previously,
+            'formed' => $request->formed,
             'state' => 'active'
         ]);
 
@@ -87,12 +90,15 @@ class ArtistController extends Controller
         $artist->email = $request->email;
         $artist->password = Hash::make($request->password);
         $artist->bio = $request->bio;
+        $artist->genre = $request->genre;
         $artist->pic_url = $request->pic_url;
         $artist->location = $request->location;
         $artist->standard_fee = $request->standard_fee;
         $artist->standard_rider = $request->standard_rider;
         $artist->tech_specs = $request->tech_specs;
         $artist->epk_url = $request->epk_url;
+        $artist->booked_previously = $request->booked_previously;
+        $artists->formed = $request->formed;
         $artist->state = $request->status;
         $artist->save();
         return back()->with('status', 'artist-updated');
