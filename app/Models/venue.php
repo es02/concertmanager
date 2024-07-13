@@ -2,12 +2,10 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
 
-class User extends Authenticatable
+class venue extends Model
 {
     use HasFactory, Notifiable;
 
@@ -18,9 +16,21 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'tenant_id',
+        'booking_agent_id',
         'name',
         'email',
         'password',
+        'bio',
+        'pic_url',
+        'location',
+        'capacity',
+        'standard_fee',
+        'ticket_cut',
+        'fee_type',
+        'cut_type',
+        'additional_fees',
+        'tech_specs',
+        'backline',
         'state',
     ];
 

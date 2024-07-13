@@ -29,6 +29,7 @@ return new class extends Migration
             $table->longText('additional_fees')->nullable();
             $table->longText('tech_specs')->nullable();
             $table->longText('backline')->nullable();
+            $table->integer('booking_agent_id')->nullable();
             $table->timestamps();
             $table->enum('state', ['active', 'pending', 'suspended', 'deleted'])->default('pending');
         });
