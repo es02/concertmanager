@@ -23,16 +23,16 @@ class VenueController extends Controller
             ->get();
 
         return Inertia::render('Venue/List', [
-            'artists' => $venues,
+            'venues' => $venues,
         ]);
     }
 
-    public function getVenue($artist_id){
-        $venue = Artist::where('id', artist_id)
+    public function getVenue($id){
+        $venue = Venue::where('id', $id)
             ->get();
 
         return Inertia::render('Venue/Show', [
-            'artist' => $venue,
+            'venue' => $venue,
         ]);
     }
 
@@ -59,7 +59,7 @@ class VenueController extends Controller
                         ->withInput();
         }
 
-        $artist = Venue::Create([
+        $venue = Venue::Create([
             'tenant_id' => 0,
             'name' => $request->name,
             'email' => $request->email,
