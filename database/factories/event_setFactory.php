@@ -19,6 +19,7 @@ class event_setFactory extends Factory
         return [
             'tenant_id' => 0,
             'name' => fake()->name(),
+            'time' => fake()->dateTimeThisMonth(),
         ];
     }
 }

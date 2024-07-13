@@ -21,6 +21,8 @@ class eventFactory extends Factory
             'name' => fake()->name(),
             'description' => fake()->lorem(),
             'venue_id' => 0,
+            'start' => fake()->dateTimeThisMonth(),
+            'end' => fake()->dateTimeThisMonth(),
         ];
     }
 }
