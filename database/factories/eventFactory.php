@@ -17,7 +17,10 @@ class eventFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'tenant_id' => 0,
+            'name' => fake()->name(),
+            'description' => fake()->lorem(),
+            'venue_id' => 0,
         ];
     }
 }
