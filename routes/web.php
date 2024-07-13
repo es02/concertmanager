@@ -21,4 +21,7 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
+    Route::get('/venue', [App\Http\Controllers\VenueController::class, 'getVenueList'])->name('venue');
+    // Route::get('/venue', [App\Http\Controllers\VenueController::class, 'getVenueList'])->name('venue');
+
 });

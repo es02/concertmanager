@@ -12,7 +12,7 @@ use App\Models\Venue;
 
 class VenueController extends Controller
 {
-    use PasswordValidationRules;
+    // use PasswordValidationRules;
 
     public function getVenueList($pagenum = 0){
         $count = Venue::count();
@@ -22,7 +22,7 @@ class VenueController extends Controller
             ->take(10)
             ->get();
 
-        return Inertia::render('Venue/List', [
+        return Inertia::render('Venue/VenueList', [
             'venues' => $venues,
         ]);
     }
