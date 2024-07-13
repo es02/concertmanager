@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('email'); //->unique() Need to handle this in logic due to multi-tenant
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
-            $table->ingeger('capacity')->nullable();
+            $table->integer('capacity')->nullable();
             $table->longText('bio')->nullable();
             $table->string('pic_url')->nullable();
             $table->string('location')->nullable();
