@@ -9,6 +9,7 @@ use Illuminate\Validation\Validator;
 use Inertia\Inertia;
 use Inertia\Response;
 use App\Models\Artist;
+use App\Actions\Fortify\PasswordValidationRules;
 
 class ArtistController extends Controller
 {
@@ -29,7 +30,8 @@ class ArtistController extends Controller
 
     public function getArtist($id){
         $artist = Artist::where('id', $id)
-            ->get();
+            ->where('state', '!=', 'deleted')
+            ->first();
 
         return Inertia::render('Artist/Show', [
             'artist' => $artist,

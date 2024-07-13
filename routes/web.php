@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\ArtistController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -21,4 +22,6 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
+    Route::get('/artist/{id}', [ArtistController::class, 'getArtist']);
+    Route::get('/artists/{pagenum?}', [ArtistController::class, 'getArtistList']);
 });
