@@ -19,10 +19,10 @@ class Artist extends Authenticatable
      */
     protected $fillable = [
         'tenant_id',
+        'user_id',
         'booking_agent_id', // TODO: Implement booking agent (User who manages multiple bands)
         'name',
         'email',
-        'password',
         'bio',
         'pic_url',
         'location',
@@ -32,27 +32,4 @@ class Artist extends Authenticatable
         'epk_url',
         'state',
     ];
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
 }

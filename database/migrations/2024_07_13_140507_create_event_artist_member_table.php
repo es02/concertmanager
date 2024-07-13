@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('event_artist_member', function (Blueprint $table) {
             $table->id();
             $table->integer('tenant_id');
+            $table->integer('artist_id');
             $table->string('name');
             $table->enum('state', ['active', 'pending', 'suspended', 'deleted'])->default('pending');
             $table->timestamps();
