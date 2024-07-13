@@ -10,6 +10,8 @@ class Artist extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    protected $table = 'artist';
+
     /**
      * The attributes that are mass assignable.
      *

@@ -5,9 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Pslan extends Model
+class Plan extends Model
 {
     use HasFactory;
+
+    protected $table = 'plan';
 
     /**
      * The attributes that are mass assignable.

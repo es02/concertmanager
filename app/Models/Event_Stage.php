@@ -9,6 +9,8 @@ class Event_Stage extends Model
 {
     use HasFactory;
 
+    protected $table = 'event_stage';
+
     /**
      * The attributes that are mass assignable.
      *

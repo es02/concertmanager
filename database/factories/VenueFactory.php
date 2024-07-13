@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\plan>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\venue>
  */
-class planFactory extends Factory
+class VenueFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,7 +18,7 @@ class planFactory extends Factory
     {
         return [
             'tenant_id' => 0,
-            'name' => fake()->name(), 
+            'name' => fake()->name(),
         ];
     }
 }

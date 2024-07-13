@@ -9,6 +9,8 @@ class Tenant extends Model
 {
     use HasFactory;
 
+    protected $table = 'tenant';
+
     /**
      * The attributes that are mass assignable.
      *
