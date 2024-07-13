@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\event_stage>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\event_set>
  */
-class event_stageFactory extends Factory
+class Event_SetFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,7 +18,9 @@ class event_stageFactory extends Factory
     {
         return [
             'tenant_id' => 0,
-            'name' => 'Main Stage', 
+            'name' => fake()->name(),
+            'time' => fake()->dateTimeThisMonth(),
+            'duration' => 30,
         ];
     }
 }

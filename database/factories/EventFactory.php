@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\event>
  */
-class eventFactory extends Factory
+class EventFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -19,7 +19,7 @@ class eventFactory extends Factory
         return [
             'tenant_id' => 0,
             'name' => fake()->name(),
-            'description' => fake()->lorem(),
+            //'description' => fake()->lorem(),
             'venue_id' => 0,
             'start' => fake()->dateTimeThisMonth(),
             'end' => fake()->dateTimeThisMonth(),

@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\artist>
  */
-class artistFactory extends Factory
+class ArtistFactory extends Factory
 {
     /**
      * The current password being used by the factory.
@@ -26,7 +26,7 @@ class artistFactory extends Factory
         return [
             'tenant_id' => 0,
             'name' => fake()->name(),
-            'bio' => fake()->lorem(),
+            //'bio' => fake()->lorem(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),

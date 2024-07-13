@@ -10,6 +10,8 @@ class Venue extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    protected $table = 'venue';
+
     /**
      * The attributes that are mass assignable.
      *

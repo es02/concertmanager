@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\venue>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\tenant>
  */
-class venueFactory extends Factory
+class TenantFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,8 +17,7 @@ class venueFactory extends Factory
     public function definition(): array
     {
         return [
-            'tenant_id' => 0,
-            'name' => fake()->name(), 
+            //
         ];
     }
 }

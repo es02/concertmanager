@@ -37,6 +37,7 @@ class DatabaseSeeder extends Seeder
 
         Venue::factory()->create([
             'name' => 'KLT',
+            'email' => 'klt@example.com',
             'capacity' => 80,
             'location' => 'Fortitude Valley',
             'standard_fee' => 150,
@@ -45,6 +46,7 @@ class DatabaseSeeder extends Seeder
 
         Venue::factory()->create([
             'name' => 'BLB',
+            'email' => 'blb@example.com',
             'capacity' => 300,
             'location' => 'Fortitude Valley',
             'standard_fee' => 350,
