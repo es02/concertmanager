@@ -28,8 +28,7 @@ class VenueController extends Controller
     }
 
     public function getVenue($id){
-        $venue = Venue::where('id', $id)
-            ->get();
+        $venue = Venue::find($id);
 
         return Inertia::render('Venue/Show', [
             'venue' => $venue,
