@@ -25,6 +25,7 @@ class ArtistController extends Controller
 
         return Inertia::render('Artist/List', [
             'artists' => $artists,
+            'count' => $count,
         ]);
     }
 

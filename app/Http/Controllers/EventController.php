@@ -22,10 +22,9 @@ class EventController extends Controller
             ->take(10)
             ->get();
 
-            //TODO: # of pages
-
         return Inertia::render('Event/List', [
             'events' => $events,
+            'count' => $count,
         ]);
     }
 

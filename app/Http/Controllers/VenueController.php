@@ -24,6 +24,7 @@ class VenueController extends Controller
 
         return Inertia::render('Venue/List', [
             'venues' => $venues,
+            'count' => $count,
         ]);
     }
 
