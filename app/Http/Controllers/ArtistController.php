@@ -54,7 +54,7 @@ class ArtistController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect('your route')
+            return redirect('Artist/Create')
                         ->withErrors($validator)
                         ->withInput();
         }
