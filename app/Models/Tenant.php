@@ -18,9 +18,9 @@ class Tenant extends Model
      */
     protected $fillable = [
         'name',
-        'fqdn',
+        'fqdn',           // expected to auto fill as tenant_name.master_domain.com
         'plan_id',
-        'payment_token',
+        'payment_token',  // Stripe token for plan payment
         'state',
     ];
 

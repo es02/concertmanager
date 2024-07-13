@@ -23,7 +23,7 @@ class Event extends Model
         'description',
         'start',
         'end',
-        'ticketing_provider',
+        'ticketing_provider', // eg: Oztix, Ticketmaster, Eventbrite, Humanitix, etc
         'free',
         'all_ages',
         'pic_url',

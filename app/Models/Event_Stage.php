@@ -22,8 +22,8 @@ class Event_Stage extends Model
         'venue_id',
         'name',
         'bio',
-        'doors',
-        'close',
+        'doors', // Expected to open/close at the same time as an event
+        'close', // But if it's a second/third stage this may not be the case
         'state',
     ];
 }

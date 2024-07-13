@@ -19,7 +19,7 @@ class Artist extends Authenticatable
      */
     protected $fillable = [
         'tenant_id',
-        'booking_agent_id',
+        'booking_agent_id', // TODO: Implement booking agent (User who manages multiple bands)
         'name',
         'email',
         'password',
