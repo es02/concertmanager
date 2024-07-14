@@ -9,11 +9,9 @@ use Illuminate\Validation\Validator;
 use Inertia\Inertia;
 use Inertia\Response;
 use App\Models\Artist;
-use App\Actions\Fortify\PasswordValidationRules;
 
 class ArtistController extends Controller
 {
-    use PasswordValidationRules;
 
     public function getArtistList($pagenum = 0){
         $count = Artist::count();
@@ -41,17 +39,11 @@ class ArtistController extends Controller
         // due to multitenant architecture we need to check here if the email already exists
         // and reject form validation if it does
 
-        $email_check = Artist::where('tenant_id', 0)
-            ->where('email', '=', $request->email)
-            ->count();
-
         $data = $request->all();
-        $data['email_exists'] = $email_check;
 
         $validator = Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'max:1000', 'declined_if:email_exists,1'],
-            'password' => $this->passwordRules(),
+            'email' => ['required', 'string', 'max:1000'],
         ]);
 
         if ($validator->fails()) {
@@ -64,7 +56,6 @@ class ArtistController extends Controller
             'tenant_id' => 0,
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
             'bio' => $request->bio,
             'genre' => $request->genre,
             'pic_url' => $request->pic_url,
@@ -83,13 +74,12 @@ class ArtistController extends Controller
     public function updateArtist(Request $request, $id){
         $validator = Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'max:1000', 'declined_if:email_exists,1'],
+            'email' => ['required', 'string', 'max:1000'],
         ]);
 
         $artist = Artist::find($id);
         $artist->name = $request->name;
         $artist->email = $request->email;
-        $artist->password = Hash::make($request->password);
         $artist->bio = $request->bio;
         $artist->genre = $request->genre;
         $artist->pic_url = $request->pic_url;
