@@ -33,6 +33,7 @@ class VenueController extends Controller
             'venue' => $venue,
         ]);
     }
+
     public function createVenue(Request $request){
         // due to multitenant architecture we need to check here if the email already exists
         // and reject form validation if it does
