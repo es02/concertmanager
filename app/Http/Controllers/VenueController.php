@@ -12,8 +12,6 @@ use App\Models\Venue;
 
 class VenueController extends Controller
 {
-    use PasswordValidationRules;
-
     public function getVenueList($pagenum = 0){
         $count = Venue::count();
         $venues = Venue::where('state', '!=', 'deleted')
@@ -40,17 +38,11 @@ class VenueController extends Controller
         // due to multitenant architecture we need to check here if the email already exists
         // and reject form validation if it does
 
-        $email_check = Venue::where('tenant_id', 0)
-            ->where('email', '=', $request->email)
-            ->count();
-
         $data = $request->all();
-        $data['email_exists'] = $email_check;
 
         $validator = Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'max:1000', 'declined_if:email_exists,1'],
-            'password' => $this->passwordRules(),
+            'email' => ['required', 'string', 'max:1000'],
         ]);
 
         if ($validator->fails()) {
@@ -63,7 +55,6 @@ class VenueController extends Controller
             'tenant_id' => 0,
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
             'bio' => $request->bio,
             'pic_url' => $request->pic_url,
             'location' => $request->location,
@@ -83,13 +74,12 @@ class VenueController extends Controller
     public function updateVenue(Request $request, $id){
         $validator = Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'max:1000', 'declined_if:email_exists,1'],
+            'email' => ['required', 'string', 'max:1000'],
         ]);
 
         $venue = Venue::find($id);
         $venue->name = $request->name;
         $venue->email = $request->email;
-        $venue->password = Hash::make($request->password);
         $venue->bio = $request->bio;
         $venue->pic_url = $request->pic_url;
         $venue->location = $request->location;
