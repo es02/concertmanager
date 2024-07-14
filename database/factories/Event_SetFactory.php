@@ -18,7 +18,7 @@ class Event_SetFactory extends Factory
     {
         return [
             'tenant_id' => 1,
-            'name' => fake()->name(),
+            'artist_name' => fake()->name(),
             'time' => fake()->dateTimeThisMonth(),
             'duration' => 30,
         ];

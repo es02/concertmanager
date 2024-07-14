@@ -18,7 +18,7 @@ class Event_StageFactory extends Factory
     {
         return [
             'tenant_id' => 1,
-            'name' => 'Main Stage',
+            'stage_name' => 'Main Stage',
         ];
     }
 }
