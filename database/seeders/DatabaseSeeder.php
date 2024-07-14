@@ -38,17 +38,17 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Venue::factory()->create([
-            'name' => 'KLT',
+            'venue_name' => 'KLT',
             'email' => 'klt@example.com',
             'capacity' => 80,
             'location' => 'Fortitude Valley',
             'standard_fee' => 150,
             'fee_type' => 'total',
-            'pic_url' => 'https://discord.com/channels/@me/1130275080295952385/1261900557237489684'
+            'pic_url' => 'https://media.discordapp.net/attachments/1130275080295952385/1261900556893683782/received_695645511298166.png?ex=6694a3f9&is=66935279&hm=4d0ca4ffb971a913d4821b2473c631e8e5301fc61b6b29bd524bfeeea678f9fc&=&format=webp&quality=lossless&width=932&height=700'
         ]);
 
         Venue::factory()->create([
-            'name' => 'BLB',
+            'venue_name' => 'BLB',
             'email' => 'blb@example.com',
             'capacity' => 300,
             'location' => 'Fortitude Valley',

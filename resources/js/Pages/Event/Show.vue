@@ -19,7 +19,7 @@ const props = defineProps(['event']);
                     <span class="font-semibold">End Date: </span>{{ event.end }}
                 </div>
             </div>
-            <figure class="aspect-w-1 aspect-h-1">
+            <figure class="aspect-w-1 aspect-h-1 w-1/2">
                 <img :src="event.pic_url || 'https://i.pravatar.cc/300'" :alt="`${event.name} Picture`"
                     class="h-full object-cover aspect-ratio" />
             </figure>
