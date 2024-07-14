@@ -31,16 +31,20 @@ class EventController extends Controller
 
     public function getEvent($id){
         $event = DB::table('event')
-            // ->join('event_stage', 'event.id', '=', 'event_stage.event_id')
-            // ->join('event_set', 'event.id', '=', 'event_set.event_id')
             ->join('venue', 'event.venue_id', '=', 'venue.id')
-            // ->select('event.*', 'event_stage.*', 'event_set.*')
             ->select('event.*', 'venue.*')
             ->where('event.id', $id)
             ->first();
 
+        $sets = DB::table('event_set')
+            ->join('event_stage', 'event_set.event_id', '=', 'event_stage.event_id')
+            ->select('event_stage.*', 'event_set.*')
+            ->where('event_set.id', $id)
+            ->get();
+
         return Inertia::render('Event/Show', [
             'event' => $event,
+            'sets' => $sets,
         ]);
     }
 
