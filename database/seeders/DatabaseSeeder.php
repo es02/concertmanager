@@ -38,7 +38,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Venue::factory()->create([
-            'name' => 'KLT',
+            'venue_name' => 'KLT',
             'email' => 'klt@example.com',
             'capacity' => 80,
             'location' => 'Fortitude Valley',
@@ -48,7 +48,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Venue::factory()->create([
-            'name' => 'BLB',
+            'venue_name' => 'BLB',
             'email' => 'blb@example.com',
             'capacity' => 300,
             'location' => 'Fortitude Valley',
