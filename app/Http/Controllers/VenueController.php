@@ -12,7 +12,6 @@ use App\Models\Venue;
 
 class VenueController extends Controller
 {
-
     public function getVenueList($pagenum = 0){
         $count = Venue::count();
         $venues = Venue::where('state', '!=', 'deleted')
