@@ -32,6 +32,7 @@ class EventController extends Controller
         $event = DB::table('event')
             ->join('event_stage', 'event.id', '=', 'event_stage.event_id')
             ->join('event_set', 'event.id', '=', 'event_set.event_id')
+            ->join('venue', 'event.venue_id', '=', 'venue.id')
             ->select('event.*', 'event_stage.*', '.*')
             ->where('event.id', $id)
             ->first();
