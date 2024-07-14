@@ -31,6 +31,10 @@ Route::middleware([
     Route::get('/events/{pagenum?}', [EventController::class, 'getEventList']);
     Route::get('/venue/{id}', [VenueController::class, 'getVenue']);
     Route::get('/venues/{pagenum?}', [VenueController::class, 'getVenueList']);
+    Route::get('/venues/create', function () {
+        return Inertia::render('Venue/Create',['laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION]);
+    });
 
     Route::post('/artist/create', [ArtistController::class, 'createArtist']);
     Route::post('/event/create', [EventController::class, 'createEvent']);

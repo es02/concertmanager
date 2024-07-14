@@ -22,7 +22,7 @@ class VenueController extends Controller
             ->take(10)
             ->get();
 
-        return Inertia::render('Venue/VenueList', [
+        return Inertia::render('Venue/List', [
             'venues' => $venues,
             'count' => $count,
         ]);
