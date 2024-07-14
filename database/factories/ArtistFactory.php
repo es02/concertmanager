@@ -24,12 +24,12 @@ class ArtistFactory extends Factory
     public function definition(): array
     {
         return [
-            'tenant_id' => 0,
+            'tenant_id' => 1,
             'name' => fake()->name(),
-            //'bio' => fake()->lorem(),
+            //    'bio' => fake()->lorem(),
             'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
+            //    'email_verified_at' => now(),
+            //    'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
         ];
     }
@@ -40,7 +40,7 @@ class ArtistFactory extends Factory
     public function unverified(): static
     {
         return $this->state(fn (array $attributes) => [
-            'email_verified_at' => null,
+            //    'email_verified_at' => null,
         ]);
     }
 }

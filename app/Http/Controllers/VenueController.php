@@ -24,12 +24,12 @@ class VenueController extends Controller
 
         return Inertia::render('Venue/VenueList', [
             'venues' => $venues,
+            'count' => $count,
         ]);
     }
 
     public function getVenue($id){
-        $venue = Venue::where('id', $id)
-            ->get();
+        $venue = Venue::find($id);
 
         return Inertia::render('Venue/Show', [
             'venue' => $venue,

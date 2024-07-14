@@ -3,6 +3,9 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\ArtistController;
+use App\Http\Controllers\EventController;
+use App\Http\Controllers\VenueController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -21,9 +24,19 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
-    Route::get('/venue', [App\Http\Controllers\VenueController::class, 'getVenueList'])->name('venue');
-    Route::get('/venue/create', function(){
-        return Inertia::render('Venue/Create',[]);
-    } )->name('venue.create');
 
+    Route::get('/artist/{id}', [ArtistController::class, 'getArtist']);
+    Route::get('/artists/{pagenum?}', [ArtistController::class, 'getArtistList']);
+    Route::get('/event/{id}', [EventController::class, 'getEvent']);
+    Route::get('/events/{pagenum?}', [EventController::class, 'getEventList']);
+    Route::get('/venue/{id}', [VenueController::class, 'getVenue']);
+    Route::get('/venues/{pagenum?}', [VenueController::class, 'getVenueList']);
+
+    Route::post('/artist/create', [ArtistController::class, 'createArtist']);
+    Route::post('/event/create', [EventController::class, 'createEvent']);
+    Route::post('/venue/create', [VenueController::class, 'createVenue']);
+    Route::post('/artist/update', [ArtistController::class, 'updateArtist']);
+    Route::post('/event/update', [EventController::class, 'updateEvent']);
+    Route::post('/venue/update', [VenueController::class, 'updateVenue']);
+    Route::post('/event/createSet', [EventController::class, 'createSet']);
 });

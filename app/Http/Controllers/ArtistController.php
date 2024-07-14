@@ -9,6 +9,7 @@ use Illuminate\Validation\Validator;
 use Inertia\Inertia;
 use Inertia\Response;
 use App\Models\Artist;
+use App\Actions\Fortify\PasswordValidationRules;
 
 class ArtistController extends Controller
 {
@@ -24,12 +25,12 @@ class ArtistController extends Controller
 
         return Inertia::render('Artist/List', [
             'artists' => $artists,
+            'count' => $count,
         ]);
     }
 
     public function getArtist($id){
-        $artist = Artist::where('id', $id)
-            ->get();
+        $artist = Artist::find($id);
 
         return Inertia::render('Artist/Show', [
             'artist' => $artist,
@@ -65,12 +66,15 @@ class ArtistController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'bio' => $request->bio,
+            'genre' => $request->genre,
             'pic_url' => $request->pic_url,
             'location' => $request->location,
             'standard_fee' => $request->standard_fee,
             'standard_rider' => $request->standard_rider,
             'tech_specs' => $request->tech_specs,
             'epk_url' => $request->epk_url,
+            'booked_previously' => $request->booked_previously,
+            'formed' => $request->formed,
             'state' => 'active'
         ]);
 
@@ -87,12 +91,15 @@ class ArtistController extends Controller
         $artist->email = $request->email;
         $artist->password = Hash::make($request->password);
         $artist->bio = $request->bio;
+        $artist->genre = $request->genre;
         $artist->pic_url = $request->pic_url;
         $artist->location = $request->location;
         $artist->standard_fee = $request->standard_fee;
         $artist->standard_rider = $request->standard_rider;
         $artist->tech_specs = $request->tech_specs;
         $artist->epk_url = $request->epk_url;
+        $artist->booked_previously = $request->booked_previously;
+        $artists->formed = $request->formed;
         $artist->state = $request->status;
         $artist->save();
         return back()->with('status', 'artist-updated');

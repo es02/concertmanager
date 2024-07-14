@@ -19,11 +19,11 @@ class Plan extends Model
     protected $fillable = [
         'name',
         'price',
-        'period',
+        'period',       // Monthly or Annual
         'trial',
-        'trial_length',
-        'published',
-        'default',
+        'trial_length', // Measured in days
+        'published',    // Do we surface this to customers?
+        'default',      // If no plan is selected should a customer be placed on this one?
         'state',
     ];
 }

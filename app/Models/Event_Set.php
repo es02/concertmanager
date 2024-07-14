@@ -23,9 +23,9 @@ class Event_Set extends Model
         'event_stage_id',
         'artist_id',
         'name',
-        'time',
-        'duration',
-        'sideshow',
+        'time',     // Start of set
+        'duration', // Duration of set in minutes
+        'sideshow', // Can be in a space that isn't the stage and overlap with bands or run in changeover times
         'state',
     ];
 }
