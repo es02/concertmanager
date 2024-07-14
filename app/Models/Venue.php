@@ -21,7 +21,7 @@ class Venue extends Authenticatable
         'tenant_id',
         'user_id',
         'booking_agent_id', // TODO: Implement booking agent (single login to manage multiple bands)
-        'name',
+        'venue_name',
         'email',
         'bio',
         'pic_url',
