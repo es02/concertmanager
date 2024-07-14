@@ -25,7 +25,7 @@ Route::middleware([
         return Inertia::render('Dashboard');
     })->name('dashboard');
     Route::get('/artist/{id}', [ArtistController::class, 'getArtist']);
-    Route::get('/artists/{pagenum?}', [ArtistController::class, 'getArtistList']);
+    Route::get('/artists/{pagenum?}', [ArtistController::class, 'getArtistList'])->name('artists');
     Route::get('/event/{id}', [EventController::class, 'getEvent']);
     Route::get('/events/{pagenum?}', [EventController::class, 'getEventList']);
     Route::get('/venue/{id}', [VenueController::class, 'getVenue']);
