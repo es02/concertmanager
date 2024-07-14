@@ -44,6 +44,7 @@ class DatabaseSeeder extends Seeder
             'location' => 'Fortitude Valley',
             'standard_fee' => 150,
             'fee_type' => 'total',
+            'pic_url' => 'https://discord.com/channels/@me/1130275080295952385/1261900557237489684'
         ]);
 
         Venue::factory()->create([
@@ -55,6 +56,7 @@ class DatabaseSeeder extends Seeder
             'fee_type' => 'minimum',
             'ticket_cut' => 4,
             'cut_type' => 'per_ticket',
+            'pic_url' => 'https://media.discordapp.net/attachments/1130275080295952385/1261900624874836018/189921283_4326652770679202_3043278117418212882_n.png?ex=6694a409&is=66935289&hm=ee3930ede403345284eec615a2c13f62934d9d7309aca81fb9e245a59e790d94&=&format=webp&quality=lossless&width=1100&height=618'
         ]);
 
         Artist::factory()->create([
@@ -64,6 +66,7 @@ class DatabaseSeeder extends Seeder
             'standard_fee' => 100,
             'bio' => 'Ambient noise',
             'genre' => 'Drone Doom',
+            'pic_url' => 'https://media.discordapp.net/attachments/1130275080295952385/1261842414696529930/SymphonyOfPutrescence04.png?ex=66946dd3&is=66931c53&hm=30e8bf1e2e5b7ad91a438619a0ecb26f83f1056dbd1f445b4582451fce81db98&=&format=webp&quality=lossless&width=1878&height=1056',
         ]);
 
         Artist::factory()->create([
@@ -72,7 +75,8 @@ class DatabaseSeeder extends Seeder
             'location' => 'Brisbane',
             'standard_fee' => 300,
             'bio' => 'Here for a waggly good time!',
-            'genre' => 'Childrens'
+            'genre' => 'Childrens',
+            'pic_url' => 'https://media.discordapp.net/attachments/1130275080295952385/1261842485546848366/borodino2.jpg?ex=66946de4&is=66931c64&hm=8979761bcd078560b1db9efa12b7ca0bcf996d9fcd4610728eaa363dd46ecc82&=&format=webp&width=1052&height=700'
         ]);
 
         Artist::factory()->create([
@@ -81,12 +85,16 @@ class DatabaseSeeder extends Seeder
             'location' => 'Brisbane',
             'standard_fee' => 30000,
             'bio' => 'Recently returned from headline performances at such nonexistent festivals as Inala OpenAir and MelonStock Misery Division are here to rock your next event!',
-            'genre' => 'Post Punk'
+            'genre' => 'Post Punk',
+            'pic_url' => 'https://media.discordapp.net/attachments/1130275080295952385/1261842626236125244/gonzales.jpg?ex=66946e05&is=66931c85&hm=c22a859bf3ed8384a73328efb970073b56234c23e3d5d57d07fac5a404c10013&=&format=webp&width=800&height=1202'
         ]);
 
         Event::factory()->create([
             'name' => 'Somewhere Festival',
             'venue_id' => 1,
+            'location' => 'Brisbane',
+            'description' => 'Get ready to rock out at the Somewhere Festival! This electrifying metal event promises bone-crushing riffs, thunderous drums, and an unforgettable atmosphere. Join us for a night of raw energy and powerful performances from some of the genre\'s best bands. Don\'t miss the metal mayhem at Somewhere Festival!',
+            'pic_url' => 'https://media.discordapp.net/attachments/1130275080295952385/1261901339852537978/Poster-Square.png?ex=6694a4b4&is=66935334&hm=31a614d0fcb5559c77e5e8daf440fc80d8cd53df010a6ee57460afcc8beed240&=&format=webp&quality=lossless&width=700&height=700'
         ]);
 
         Event_Stage::factory()->create([
