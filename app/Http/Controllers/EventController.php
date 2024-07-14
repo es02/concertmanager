@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\DB;
 use Illuminate\Validation\Validator;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -32,7 +33,8 @@ class EventController extends Controller
         $event = DB::table('event')
             ->join('event_stage', 'event.id', '=', 'event_stage.event_id')
             ->join('event_set', 'event.id', '=', 'event_set.event_id')
-            ->select('event.*', 'event_stage.*', '.*')
+            ->join('venue', 'event.venue_id', '=', 'venue.id')
+            ->select('event.*', 'event_stage.*', 'event_set.*')
             ->where('event.id', $id)
             ->first();
 
