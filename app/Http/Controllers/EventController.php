@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\DB;
 use Illuminate\Validation\Validator;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -11,7 +12,6 @@ use App\Models\Event;
 use App\Models\Event_Stage;
 use App\Models\Event_Set;
 use App\Models\Venue;
-use
 
 class EventController extends Controller
 {
@@ -34,7 +34,7 @@ class EventController extends Controller
             ->join('event_stage', 'event.id', '=', 'event_stage.event_id')
             ->join('event_set', 'event.id', '=', 'event_set.event_id')
             ->join('venue', 'event.venue_id', '=', 'venue.id')
-            ->select('event.*', 'event_stage.*', '.*')
+            ->select('event.*', 'event_stage.*', 'event_set.*')
             ->where('event.id', $id)
             ->first();
 
