@@ -53,7 +53,7 @@ class VenueController extends Controller
 
         $venue = Venue::Create([
             'tenant_id' => 0,
-            'name' => $request->name,
+            'venue_name' => $request->name,
             'email' => $request->email,
             'bio' => $request->bio,
             'pic_url' => $request->pic_url,
@@ -78,7 +78,7 @@ class VenueController extends Controller
         ]);
 
         $venue = Venue::find($id);
-        $venue->name = $request->name;
+        $venue->venue_name = $request->name;
         $venue->email = $request->email;
         $venue->bio = $request->bio;
         $venue->pic_url = $request->pic_url;

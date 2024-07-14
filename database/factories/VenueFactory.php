@@ -18,7 +18,7 @@ class VenueFactory extends Factory
     {
         return [
             'tenant_id' => 1,
-            'name' => fake()->name(),
+            'venue_name' => fake()->name(),
         ];
     }
 }

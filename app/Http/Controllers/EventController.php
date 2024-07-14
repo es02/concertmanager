@@ -31,10 +31,11 @@ class EventController extends Controller
 
     public function getEvent($id){
         $event = DB::table('event')
-            ->join('event_stage', 'event.id', '=', 'event_stage.event_id')
-            ->join('event_set', 'event.id', '=', 'event_set.event_id')
+            // ->join('event_stage', 'event.id', '=', 'event_stage.event_id')
+            // ->join('event_set', 'event.id', '=', 'event_set.event_id')
             ->join('venue', 'event.venue_id', '=', 'venue.id')
-            ->select('event.*', 'event_stage.*', 'event_set.*')
+            // ->select('event.*', 'event_stage.*', 'event_set.*')
+            ->select('event.*', 'venue.*')
             ->where('event.id', $id)
             ->first();
 
@@ -53,7 +54,7 @@ class EventController extends Controller
 
         $event = Event::create([
             'tenant_id' => 0,
-            'name' => $request->name,
+            'event_name' => $request->name,
             'venue_id' => $request->venue_id,
             'start' => $request->start,
             'end' => $request->end,
@@ -71,7 +72,7 @@ class EventController extends Controller
             'tenant_id' => 0,
             'event_id' => $event->id,
             'venue_id' => $request->venue_id,
-            'name' => 'Main Stage',
+            'stage_name' => 'Main Stage',
             'state' => 'active',
         ]);
     }
@@ -83,7 +84,7 @@ class EventController extends Controller
             'venue_id' => $request->venue_id,
             'event_stage_id' => $request->stage_id,
             'artist_id' => $request->artist_id,
-            'name' => $request->name,
+            'artist_name' => $request->name,
             'time' => $request->time,
             'duration' => $request->duration,
         ]);
