@@ -35,7 +35,6 @@ class VenueController extends Controller
             'venue' => $venue,
         ]);
     }
-
     public function createVenue(Request $request){
         // due to multitenant architecture we need to check here if the email already exists
         // and reject form validation if it does
@@ -54,7 +53,7 @@ class VenueController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect('your route')
+            return redirect('Venue/Create')
                         ->withErrors($validator)
                         ->withInput();
         }
