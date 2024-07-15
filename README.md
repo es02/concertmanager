@@ -9,6 +9,22 @@ It handles:
 - Volunteer Management
 - Performance scheduling across multiple stages/rooms/event spaces and even multiple venues!
 
+### Installation
+
+Once the code is deployed in your chosen location you can use the following to generate a working development environment:
+- composer install
+- npm install
+- npm run build
+- cp .env.example .env
+- php artisan migrate
+- php artisan db:seed
+- php artisan key:generate
+- php artisan serve
+
+If doing development on the front end you may also wish to run:
+- npm run dev
+In a separate terminal.
+
 ### Contributors
 
 - Aimi Hobson - Artictect & Backend Development
