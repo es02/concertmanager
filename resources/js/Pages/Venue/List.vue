@@ -27,7 +27,7 @@ const paginatedVenues = computed(() => {
 });
 
 const goToCreateVenue = () => {
-    router.visit(route('createVenue'));
+    router.visit(route('venue.create'));
 };
 
 const goToEditVenue = (id) => {
@@ -44,7 +44,9 @@ const deleteVenue = (id) => {
 <template>
     <AppLayout title="Venues">
         <h1 class="text-2xl font-semibold text-center pt-10">Venues</h1>
+        <div class="overflow-x-auto m-10 text-right"><Link :href="route('venue.create')">New Venue</Link></div>
         <div class="overflow-x-auto m-10">
+
             <table class="table">
                 <thead>
                     <tr>

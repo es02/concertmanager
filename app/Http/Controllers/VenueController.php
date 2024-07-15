@@ -40,16 +40,10 @@ class VenueController extends Controller
 
         $data = $request->all();
 
-        $validator = Validator::make($data, [
+        $validator = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'max:1000'],
         ]);
-
-        if ($validator->fails()) {
-            return redirect('Venue/Create')
-                        ->withErrors($validator)
-                        ->withInput();
-        }
 
         $venue = Venue::Create([
             'tenant_id' => 0,

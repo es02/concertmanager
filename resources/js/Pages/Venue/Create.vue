@@ -54,6 +54,7 @@
 
   <script>
   import AppLayout from '@/Layouts/AppLayout.vue';
+  import { router } from '@inertiajs/vue3'
 
   export default {
     data() {
@@ -73,7 +74,7 @@
     },
     methods: {
       createVenue() {
-        Inertia.post(this.$route('venue.store'), this.form);
+        router.post('/venue/create', this.form);
       }
     },
     components: {
