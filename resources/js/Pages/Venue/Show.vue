@@ -7,7 +7,6 @@ const props = defineProps(['venue']);
 <template>
     <AppLayout>
         <h1 class="text-2xl font-semibold text-center pt-10">Venue Details</h1>
-        <div class="overflow-x-auto m-10 text-right"><Link :href="route('venue.create')">Update Details</Link></div>
         <div class="card card-side bg-base-100 shadow-xl border m-10 max-w-screen">
             <div class="card-body">
                 <h2 class="card-title">Name: {{ venue.venue_name }}</h2>
@@ -17,11 +16,12 @@ const props = defineProps(['venue']);
                     <p><br>{{ venue.bio }}</p>
                     <p><br><span class="font-semibold">Capacity:</span> {{ venue.capacity || 0 }} </p>
                     <p><span class="font-semibold">Fee:</span> ${{ venue.standard_fee || "Free" }} {{  venue.fee_type }}</p>
-                    <div v-if="venue.ticket_cut !== null"><p><span class="font-semibold">Fee:</span> <div v-if="venue.cut_type == 'per_ticket'">$</div>{{ venue.ticket_cut}} {{ venue.cut_type }}</p></div>
+                    <div v-if="venue.ticket_cut !== null"><p><span class="font-semibold">Fee:</span> <span v-if="venue.cut_type == 'per_ticket'">$</span>{{ venue.ticket_cut}} {{ venue.cut_type }}</p></div>
                     <div v-if="venue.additional_fees !== null"><p><span class="font-semibold">Additional Fees:</span> {{ venue.additional_fees }} </p></div>
                     <div v-if="venue.tech_specs !== null"><p><span class="font-semibold">Tech Specs:</span> {{ venue.tech_specs }} </p></div>
                     <div v-if="venue.backline !== null"><p><span class="font-semibold">Backline:</span> {{ venue.backline }} </p></div>
                 </div>
+                <div class="overflow-x-auto m-10 text-right"><button @click="update = !update">Update</button></div>
             </div>
             <figure class="aspect-w-1 aspect-h-1 w-1/2">
                 <img :src="venue.pic_url || 'https://i.pravatar.cc/300'" :alt="`${venue.venue_name} Profile Picture`"
