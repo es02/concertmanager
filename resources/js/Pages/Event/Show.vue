@@ -25,7 +25,7 @@ const props = defineProps(['event']);
                 <div class="overflow-x-auto m-10 text-right"><button @click="update = !update">Update</button></div>
             </div>
             <figure class="aspect-w-1 aspect-h-1 w-1/2">
-                <img :src="event.pic_url || 'https://i.pravatar.cc/300'" :alt="`${event.name} Picture`"
+                <img :src="event.event_pic_url || 'https://i.pravatar.cc/300'" :alt="`${event.name} Picture`"
                     class="h-full object-cover aspect-ratio" />
             </figure>
         </div>
