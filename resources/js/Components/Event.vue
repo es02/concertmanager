@@ -86,6 +86,8 @@
 <script setup>
 import ApexCharts from 'apexcharts';
 
+const props = defineProps(['event']);
+
 const options = {
   colors: ["#1A56DB", "#FDBA8C"],
   series: [
@@ -191,20 +193,15 @@ const options = {
   },
 }
 
+if(document.getElementById("column-chart") && typeof ApexCharts !== 'undefined') {
+    const chart = new ApexCharts(document.getElementById("column-chart"), options);
+    chart.render();
 
-// if(document.getElementById("column-chart")) {
-//     console.log("Found the cunt");
-// }
-
-// if(document.getElementById("column-chart") && typeof ApexCharts !== 'undefined') {
-//     const chart = new ApexCharts(document.getElementById("column-chart"), options);
-//     chart.render();
-
-// 	// init again when toggling dark mode
-// 	document.addEventListener('dark-mode', function () {
-// 		chart.updateOptions(getMainChartOptions());
-// 	});
-// }
+	// init again when toggling dark mode
+	document.addEventListener('dark-mode', function () {
+		chart.updateOptions(getMainChartOptions());
+	});
+}
 
 
 </script>
