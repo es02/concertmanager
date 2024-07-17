@@ -44,7 +44,7 @@ class DatabaseSeeder extends Seeder
             'location' => 'Fortitude Valley',
             'standard_fee' => 150,
             'fee_type' => 'total',
-            'pic_url' => 'https://media.discordapp.net/attachments/1130275080295952385/1261900556893683782/received_695645511298166.png?ex=6694a3f9&is=66935279&hm=4d0ca4ffb971a913d4821b2473c631e8e5301fc61b6b29bd524bfeeea678f9fc&=&format=webp&quality=lossless&width=932&height=700'
+            'pic_url' => 'https://scontent.fbne8-1.fna.fbcdn.net/v/t39.30808-6/318338413_595318659259896_5735478324142805071_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=f727a1&_nc_ohc=TmHunPyxrbUQ7kNvgGMJF1M&_nc_ht=scontent.fbne8-1.fna&oh=00_AYAkA7vlnAWHWcCLyR4suxDeaxeSzOK02wZJr2dQlkOC4w&oe=669BA06B'
         ]);
 
         Venue::factory()->create([
@@ -56,7 +56,7 @@ class DatabaseSeeder extends Seeder
             'fee_type' => 'minimum',
             'ticket_cut' => 4,
             'cut_type' => 'per_ticket',
-            'pic_url' => 'https://media.discordapp.net/attachments/1130275080295952385/1261900624874836018/189921283_4326652770679202_3043278117418212882_n.png?ex=6694a409&is=66935289&hm=ee3930ede403345284eec615a2c13f62934d9d7309aca81fb9e245a59e790d94&=&format=webp&quality=lossless&width=1100&height=618'
+            'pic_url' => 'https://scontent.fbne8-1.fna.fbcdn.net/v/t39.30808-6/338034733_561269432777374_3107056735531816269_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=833d8c&_nc_ohc=wHHyJVB__YAQ7kNvgGt4qOH&_nc_ht=scontent.fbne8-1.fna&oh=00_AYB8p4KXQk1MEYtWeSUbNeLKpPiDY-Dx56FjPiBYmsOelw&oe=669BA172'
         ]);
 
         Artist::factory()->create([
@@ -66,7 +66,7 @@ class DatabaseSeeder extends Seeder
             'standard_fee' => 100,
             'bio' => 'Ambient noise',
             'genre' => 'Drone Doom',
-            'pic_url' => 'https://media.discordapp.net/attachments/1130275080295952385/1261842414696529930/SymphonyOfPutrescence04.png?ex=66946dd3&is=66931c53&hm=30e8bf1e2e5b7ad91a438619a0ecb26f83f1056dbd1f445b4582451fce81db98&=&format=webp&quality=lossless&width=1878&height=1056',
+            'pic_url' => 'https://scontent.fbne8-1.fna.fbcdn.net/v/t39.30808-6/444225145_907177851422232_7430636100667057655_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=833d8c&_nc_ohc=D5izsIXuoV0Q7kNvgEyOv9t&_nc_ht=scontent.fbne8-1.fna&cb_e2o_trans=q&oh=00_AYA7m_soo-hif4WY19Zk13i3JCceG83ypoTFW82BthNwlA&oe=669BB1A1',
         ]);
 
         Artist::factory()->create([
@@ -76,7 +76,7 @@ class DatabaseSeeder extends Seeder
             'standard_fee' => 300,
             'bio' => 'Here for a waggly good time!',
             'genre' => 'Childrens',
-            'pic_url' => 'https://media.discordapp.net/attachments/1130275080295952385/1261842485546848366/borodino2.jpg?ex=66946de4&is=66931c64&hm=8979761bcd078560b1db9efa12b7ca0bcf996d9fcd4610728eaa363dd46ecc82&=&format=webp&width=1052&height=700'
+            'pic_url' => 'https://scontent.fbne8-1.fna.fbcdn.net/v/t1.6435-9/120040264_930053277483535_6083338566300930881_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=f798df&_nc_ohc=-iluATm7cl4Q7kNvgGJQ2LD&_nc_ht=scontent.fbne8-1.fna&oh=00_AYDiVXkCx02Hqynjj9eOIHLo_OGMiUNWNb0gZJ_VXMxnVA&oe=66BD5D8D'
         ]);
 
         Artist::factory()->create([
@@ -86,15 +86,15 @@ class DatabaseSeeder extends Seeder
             'standard_fee' => 30000,
             'bio' => 'Recently returned from headline performances at such nonexistent festivals as Inala OpenAir and MelonStock Misery Division are here to rock your next event!',
             'genre' => 'Post Punk',
-            'pic_url' => 'https://media.discordapp.net/attachments/1130275080295952385/1261842626236125244/gonzales.jpg?ex=66946e05&is=66931c85&hm=c22a859bf3ed8384a73328efb970073b56234c23e3d5d57d07fac5a404c10013&=&format=webp&width=800&height=1202'
+            'pic_url' => 'https://scontent.fbne8-1.fna.fbcdn.net/v/t39.30808-6/285800945_1335334950288697_3485091587621045446_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=f727a1&_nc_ohc=5WIiezIzJZEQ7kNvgErByRV&_nc_ht=scontent.fbne8-1.fna&oh=00_AYAFM_WyqB9wsMno6jBbImX3yqZY2ztem82eYREiUw6pLA&oe=669BB5CB'
         ]);
 
         Event::factory()->create([
             'name' => 'Somewhere Festival',
-            'venue_id' => 1,
+            'venue_id' => 2,
             'location' => 'Brisbane',
             'description' => 'Get ready to rock out at the Somewhere Festival! This electrifying metal event promises bone-crushing riffs, thunderous drums, and an unforgettable atmosphere. Join us for a night of raw energy and powerful performances from some of the genre\'s best bands. Don\'t miss the metal mayhem at Somewhere Festival!',
-            'pic_url' => 'https://media.discordapp.net/attachments/1130275080295952385/1261901339852537978/Poster-Square.png?ex=6694a4b4&is=66935334&hm=31a614d0fcb5559c77e5e8daf440fc80d8cd53df010a6ee57460afcc8beed240&=&format=webp&quality=lossless&width=700&height=700'
+            'event_pic_url' => 'https://scontent.fbne8-1.fna.fbcdn.net/v/t39.30808-6/451077583_1072396861408561_8124381039737960974_n.png?_nc_cat=111&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=rLbf7fA9T_EQ7kNvgGAlnnE&_nc_ht=scontent.fbne8-1.fna&oh=00_AYBsLhLLxJ-ZHuvBQn_F3GmwLA6pSxJIz7oihO45-wVO6g&oe=669BAC82'
         ]);
 
         Event_Stage::factory()->create([
