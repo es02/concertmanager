@@ -15,6 +15,8 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
+Route::get('/apply/{id}', [ArtistController::class, 'getArtist'])->name('apply');
+Route::post('/apply', [ArtistController::class, 'getArtist'])->name('new.application');
 
 Route::middleware([
     'auth:sanctum',
@@ -31,12 +33,23 @@ Route::middleware([
     Route::get('/events/{pagenum?}', [EventController::class, 'getEventList'])->name('events');
     Route::get('/venue/{id}', [VenueController::class, 'getVenue'])->name('venue');
     Route::get('/venues/{pagenum?}', [VenueController::class, 'getVenueList'])->name('venues');
+    Route::get('/volunteers/{pagenum?}', [ArtistController::class, 'getArtistList'])->name('volunteers'); // TODO:: Create controller endpoint and update me
+    Route::get('/volunteers/{id}', [ArtistController::class, 'getArtist'])->name('volunteer'); // TODO:: Create controller endpoint and update me
+    Route::get('/staff/{pagenum?}', [ArtistController::class, 'getArtistList'])->name('staff'); // TODO:: Create controller endpoint and update me
+    Route::get('/staff/{id}', [ArtistController::class, 'getArtist'])->name('staffmember'); // TODO:: Create controller endpoint and update me
+    Route::get('/media/{pagenum?}', [ArtistController::class, 'getArtistList'])->name('media'); // TODO:: Create controller endpoint and update me
+    Route::get('/media/{id}', [ArtistController::class, 'getArtist'])->name('mediaperson'); // TODO:: Create controller endpoint and update me
+    Route::get('/email/{pagenum?}', [ArtistController::class, 'getArtistList'])->name('emails'); // TODO:: Create controller endpoint and update me
+    Route::get('/email/{id}', [ArtistController::class, 'getArtist'])->name('email'); // TODO:: Create controller endpoint and update me
+    Route::get('/settings', [ArtistController::class, 'getArtistList'])->name('settings'); // TODO:: Create controller endpoint and update me
 
-    Route::post('/artist/create', [ArtistController::class, 'createArtist'])->name('new.artist');
-    Route::post('/event/create', [EventController::class, 'createEvent'])->name('new.event');
-    Route::post('/venue/create', [VenueController::class, 'createVenue'])->name('new.venue');
-    Route::post('/artist/update', [ArtistController::class, 'updateArtist'])->name('update.artist');
-    Route::post('/event/update', [EventController::class, 'updateEvent'])->name('update.event');
-    Route::post('/venue/update', [VenueController::class, 'updateVenue'])->name('update.venue');
-    Route::post('/event/createSet', [EventController::class, 'createSet'])->name('new.artist.set');
+    Route::post('/artist/create', [ArtistController::class, 'createArtist'])->name('artist.new');
+    Route::post('/artist/update', [ArtistController::class, 'updateArtist'])->name('artist.update');
+    Route::post('/artist/apply', [ArtistController::class, 'updateArtist'])->name('artist.apply'); // TODO:: Create controller endpoint and update me
+    Route::post('/event/create', [EventController::class, 'createEvent'])->name('event.new');
+    Route::post('/event/update', [EventController::class, 'updateEvent'])->name('event.update');
+    Route::post('/event/createSet', [EventController::class, 'createSet'])->name('event.set.new'); // TODO:: Create controller endpoint and update me
+    Route::post('/event/createApplication', [EventController::class, 'createSet'])->name('event.form.new'); // TODO:: Create controller endpoint and update me
+    Route::post('/venue/create', [VenueController::class, 'createVenue'])->name('venue.new');
+    Route::post('/venue/update', [VenueController::class, 'updateVenue'])->name('venue.update');
 });
