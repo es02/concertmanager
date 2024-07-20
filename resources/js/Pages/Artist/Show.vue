@@ -16,7 +16,7 @@ const props = defineProps(['artist']);
                     <p><span class="font-semibold">Location:</span> {{ artist.location }} </p>
                     <p><span class="font-semibold">Standard guarentee:</span> ${{ artist.standard_fee }} </p>
                     <p><br>{{ artist.bio }}</p>
-                    <div v-if="artist.standard_rider !== null"><p><span class="font-semibold">Rider:</span> {{ artist.standard_rider }}</p></div>
+                    <div v-if="artist.standard_rider !== null"><p><br><span class="font-semibold">Rider:</span> {{ artist.standard_rider }}</p></div>
                 </div>
                 <div class="overflow-x-auto m-10 text-right"><button @click="update = !update">Update</button></div>
             </div>
