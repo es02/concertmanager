@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('event_ticket_types', function (Blueprint $table) {
             $table->id();
+            $table->integer('tenant_id');
             $table->integer('event_id');
             $table->string('event_ticket_type');
             $table->decimal('ticket_price', total: 8, places: 2)->nullable();
