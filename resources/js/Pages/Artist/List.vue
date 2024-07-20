@@ -1,6 +1,7 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { Link } from '@inertiajs/vue3';
+import { ref, computed } from 'vue';
 
 const props = defineProps(['artists', 'count']);
 
