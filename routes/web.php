@@ -15,8 +15,9 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
-Route::get('/apply/{id}', [ArtistController::class, 'getArtist'])->name('apply');
-Route::post('/apply', [ArtistController::class, 'getArtist'])->name('new.application');
+
+Route::get('/apply/{name}', [EventController::class, 'showApplication'])->name('apply');
+Route::post('/apply', [EventController::class, 'getArtist'])->name('new.application');
 
 Route::middleware([
     'auth:sanctum',

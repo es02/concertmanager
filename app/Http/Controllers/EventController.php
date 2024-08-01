@@ -12,6 +12,9 @@ use App\Models\Event;
 use App\Models\Event_Stage;
 use App\Models\Event_Set;
 use App\Models\Venue;
+use App\Models\Event_Application;
+use App\Models\Event_Application_Field;
+use App\Models\Event_Application_Entry;
 
 class EventController extends Controller
 {
@@ -136,5 +139,29 @@ class EventController extends Controller
         $event = Event::find($id);
         $event->state = $request->status;
         $event->save();
+    }
+
+    public function showApplication($name){
+        // $application = Event_Application::where('name', $name)
+        //     ->first();
+        // $fields = Event_Application_Field::where('event_application_id', $application->id)
+        //     ->get();
+
+        $artist = [
+            'name',
+            'email',
+            'bio',
+            'pic_url',
+            'location',
+            'standard_fee',
+            'standard_rider',
+            'tech_specs',
+            'epk_url',];
+
+        return Inertia::render('Apply/Show', [
+            // 'application' => $application,
+            // 'fields' => $fields,
+            'artist' => $artist,
+        ]);
     }
 }
