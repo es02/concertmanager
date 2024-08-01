@@ -1,7 +1,7 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
 
-const props = defineProps(['application']);
+const props = defineProps(['application', 'fields']);
 </script>
 
 <template>
