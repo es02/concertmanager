@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Validator;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -141,27 +142,18 @@ class EventController extends Controller
         $event->save();
     }
 
-    public function showApplication($name){
-        // $application = Event_Application::where('name', $name)
-        //     ->first();
-        // $fields = Event_Application_Field::where('event_application_id', $application->id)
-        //     ->get();
+    public function showApplication($name, $type = 'artist'){
+        $application = Event_Application::where('name', $name)
+            ->where('type', $type)
+            ->first();
 
-        $artist = [
-            'name',
-            'email',
-            'bio',
-            'pic_url',
-            'location',
-            'standard_fee',
-            'standard_rider',
-            'tech_specs',
-            'epk_url',];
+        $fields = Event_Application_Field::where('event_application_id', $application->id)
+            ->orderBy('order_id', 'asc')
+            ->get();
 
         return Inertia::render('Apply/Show', [
-            // 'application' => $application,
-            // 'fields' => $fields,
-            'artist' => $artist,
+            'application' => $application,
+            'fields' => $fields,
         ]);
     }
 }
