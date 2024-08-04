@@ -19,6 +19,8 @@ class Event_ApplicationFactory extends Factory
         return [
             'tenant_id' => 1,
             'name' => fake()->name(),
+            'open' => fake()->dateTimeThisMonth(),
+            'close' => fake()->dateTimeThisMonth(),
         ];
     }
 }
