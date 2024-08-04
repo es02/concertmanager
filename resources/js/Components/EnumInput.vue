@@ -31,7 +31,7 @@ defineExpose({ focus: () => input.value.focus() });
     >
         <template v-for="(value, index) in fieldValues.replace( /(^.*\[|\].*$)/g, '' ).replace(/ /g,'').split(',')">
             <option v-if="index === 0" selected> {{ value }}</option>
-            <option :value="value"> {{ value }}</option>
+            <option v-else :value="value"> {{ value }}</option>
         </template>
     </select>
 </template>
