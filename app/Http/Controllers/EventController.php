@@ -143,7 +143,7 @@ class EventController extends Controller
     }
 
     public function showApplication($name, $type = 'artist'){
-        $application = Event_Application::where('tenant', 1)
+        $application = Event_Application::where('tenant_id', 1)
             ->where('name', $name)
             ->where('type', $type)
             ->first();
@@ -162,7 +162,8 @@ class EventController extends Controller
     }
 
     public function applyForEvent(Request $request, $name, $type = 'artist'){
-        $application = Event_Application::where('name', $name)
+        $application = Event_Application::where('tenant_id', 1)
+            ->where('name', $name)
             ->where('type', $type)
             ->first();
 
@@ -170,7 +171,7 @@ class EventController extends Controller
             ->orderBy('order_id', 'asc')
             ->get();
 
-        $artist = Artist::where('tenant', 1)
+        $artist = Artist::where('tenant_id', 1)
             ->where('email', $application->email)
             ->count();
 
@@ -190,6 +191,7 @@ class EventController extends Controller
             }
         }
 
+        // if we don't have an artist entry in the DB, be sure to create one
         if ($artist === 0) {
             $artist = Artist::create($artistKeys);
         }
