@@ -143,6 +143,25 @@ class EventController extends Controller
     }
 
     public function showApplication($name, $type = 'artist'){
+        $application = Event_Application::where('tenant', 1)
+            ->where('name', $name)
+            ->where('type', $type)
+            ->first();
+
+        $fields = Event_Application_Field::where('event_application_id', $application->id)
+            ->orderBy('order_id', 'asc')
+            ->get();
+
+        $event = Event::find($application->event_id);
+
+        return Inertia::render('Apply/Show', [
+            'application' => $application,
+            'fields' => $fields,
+            'event' => $event,
+        ]);
+    }
+
+    public function applyForEvent(Request $request, $name, $type = 'artist'){
         $application = Event_Application::where('name', $name)
             ->where('type', $type)
             ->first();
@@ -151,9 +170,28 @@ class EventController extends Controller
             ->orderBy('order_id', 'asc')
             ->get();
 
-        return Inertia::render('Apply/Show', [
-            'application' => $application,
-            'fields' => $fields,
-        ]);
+        $artist = Artist::where('tenant', 1)
+            ->where('email', $application->email)
+            ->count();
+
+        $artistKeys = ['tenant_id' => 1];
+
+        foreach ($fields as $field) {
+            $name = $field->name;
+            $applied = Event_application_Create::create([
+                'tenant_id' => 1,
+                'event_id' => $application->event_id,
+                'event_application_id' => $application->id,
+                'event_application_field_id' => $field->id,
+                'value' => $request->$name,
+            ]);
+            if ($field->mapped_value !== '') {
+                $artistKeys[$field->mapped_value] = $request->$name;
+            }
+        }
+
+        if ($artist === 0) {
+            $artist = Artist::create($artistKeys);
+        }
     }
 }
