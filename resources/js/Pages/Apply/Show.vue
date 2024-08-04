@@ -17,14 +17,15 @@ const props = defineProps(['application', 'fields', 'event']);
 const passwordInput = ref(null);
 const currentPasswordInput = ref(null);
 
-const form = useForm({
-    current_password: '',
-    password: '',
-    password_confirmation: '',
+var keys = {};
+props.fields.forEach((field) =>{
+    keys[field.name.replace(/ /g,'_')] = '';
 });
 
+const form = useForm(keys);
+
 const applyForEvent = () => {
-    form.put(route('new.application'), {
+    form.post(route('new.application'), {
         // errorBag: 'updatePassword',
         preserveScroll: true,
         onSuccess: () => form.reset(),
@@ -59,10 +60,12 @@ const applyForEvent = () => {
                 </template>
 
                 <template #form>
-                    <div v-if="application.state === 'closed'" class="col-span-6 sm:col-span-4"><p><span class="font-semibold">Applications for this event are currently closed.</span><br /></p></div>
-                    <div v-else v-for="field in fields" class="col-span-6 sm:col-span-4">
+                    <div v-if="application.state === 'closed'" class="col-span-6 sm:col-span-4"><p><span class="font-semibold">Applications for this event are currently closed.</span><br /> </p></div>
+                    <div v-if="application.state === 'open'" class="mb-3 text-sm text-gray-800 rounded-lg bg-gray-50 dark:bg-gray-800 dark:text-gray-300"><p><h3>Fields marked with * are mandatory and must be filled in.</h3><br /></p></div>
+
+                    <div v-if="application.state === 'open'" v-for="field in fields" class="col-span-6 sm:col-span-4">
                         <div v-if="field.expected_value === 'string'">
-                            <InputLabel :for="field.name.replace(/ /g,'_')" :value="field.name" />
+                            <InputLabel :for="field.name.replace(/ /g,'_')" :value="field.name" :mandatory="field.mandatory"/>
                             <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">{{ field.description }}</p>
                             <TextInput
                                 :id="field.name.replace(/ /g,'_')"
@@ -74,7 +77,7 @@ const applyForEvent = () => {
                             <InputError :message="form.errors.current_password" class="mt-2" />
                         </div>
                         <div v-if="field.expected_value === 'longText'">
-                            <InputLabel :for="field.name.replace(/ /g,'_')" :value="field.name" />
+                            <InputLabel :for="field.name.replace(/ /g,'_')" :value="field.name" :mandatory="field.mandatory"/>
                             <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">{{ field.description }}</p>
                             <LongTextInput
                                 :id="field.name.replace(/ /g,'_')"
@@ -86,7 +89,7 @@ const applyForEvent = () => {
                             <InputError :message="form.errors.current_password" class="mt-2" />
                         </div>
                         <div v-if="field.expected_value.slice(0, 4) === 'enum'">
-                            <InputLabel :for="field.name.replace(/ /g,'_')" :value="field.name" />
+                            <InputLabel :for="field.name.replace(/ /g,'_')" :value="field.name" :mandatory="field.mandatory"/>
                             <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">{{ field.description }}</p>
                             <EnumInput
                                 :id="field.name.replace(/ /g,'_')"
@@ -99,18 +102,18 @@ const applyForEvent = () => {
                             <InputError :message="form.errors.current_password" class="mt-2" />
                         </div>
                         <div v-if="field.expected_value.slice(0, 3) === 'img'">
-                            <img :src="field.expected_value.replace( /(^.*\[|\].*$)/g, '' )">
+                        <p><br /><img :src="field.expected_value.replace( /(^.*\[|\].*$)/g, '' )" class="h-auto max-w-lg mx-auto"></p>
                         </div>
                     </div>
                 </template>
 
                 <template #actions v-if="application.state !== 'closed'">
                     <ActionMessage :on="form.recentlySuccessful" class="me-3">
-                        Saved.
+                        Applied.
                     </ActionMessage>
 
                     <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                        Save
+                        Apply
                     </PrimaryButton>
                 </template>
             </FormSection>
