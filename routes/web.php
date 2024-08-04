@@ -17,7 +17,7 @@ Route::get('/', function () {
 });
 
 Route::get('/apply/{name}', [EventController::class, 'showApplication'])->name('apply');
-Route::post('/apply', [EventController::class, 'getArtist'])->name('new.application');
+Route::post('/apply', [EventController::class, 'applyForEvent'])->name('new.application');
 
 Route::middleware([
     'auth:sanctum',
@@ -46,7 +46,7 @@ Route::middleware([
 
     Route::post('/artist/create', [ArtistController::class, 'createArtist'])->name('artist.new');
     Route::post('/artist/update', [ArtistController::class, 'updateArtist'])->name('artist.update');
-    Route::post('/artist/apply', [ArtistController::class, 'updateArtist'])->name('artist.apply'); // TODO:: Create controller endpoint and update me
+    Route::post('/artist/apply', [ArtistController::class, 'applyForEvent'])->name('artist.apply'); // TODO:: Add prefill logic to form and use seperate update endpoint
     Route::post('/event/create', [EventController::class, 'createEvent'])->name('event.new');
     Route::post('/event/update', [EventController::class, 'updateEvent'])->name('event.update');
     Route::post('/event/createSet', [EventController::class, 'createSet'])->name('event.set.new'); // TODO:: Create controller endpoint and update me
