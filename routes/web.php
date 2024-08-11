@@ -17,7 +17,7 @@ Route::get('/', function () {
 });
 
 Route::get('/apply/{name}', [EventController::class, 'showApplication'])->name('apply');
-Route::post('/apply', [EventController::class, 'applyForEvent'])->name('new.application');
+Route::post('/apply/{name}', [EventController::class, 'applyForEvent'])->name('new.application');
 
 Route::middleware([
     'auth:sanctum',
