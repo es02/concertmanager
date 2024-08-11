@@ -21,6 +21,7 @@ class Event_Application_Entry extends Model
         'event_id',
         'event_application_id',
         'event_application_field_id',
+        'artist_id',
         'value',
         'state',
     ];
