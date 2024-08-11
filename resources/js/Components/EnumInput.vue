@@ -26,11 +26,11 @@ defineExpose({ focus: () => input.value.focus() });
     <select
         ref="input"
         class="block w-full p-2.5 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
-        :value="fieldValues[1].replace( /(^.*\[|\].*$)/g, '' ).replace(/ /g,'').split(',')"
+        :value="modelValue"
         @input="$emit('update:modelValue', $event.target.value)"
     >
         <template v-for="(value, index) in fieldValues.replace( /(^.*\[|\].*$)/g, '' ).replace(/ /g,'').split(',')">
-            <option v-if="index === 0" :value="value" selected> {{ value }}</option>
+            <option v-if="index === 0" selected> {{ value }}</option>
             <option v-else :value="value"> {{ value }}</option>
         </template>
     </select>
