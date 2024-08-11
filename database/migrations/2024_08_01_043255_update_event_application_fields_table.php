@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('event_application_fields', function (Blueprint $table) {
-            $table->integer('description');
+            $table->string('description');
         });
     }
 
