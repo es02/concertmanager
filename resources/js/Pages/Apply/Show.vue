@@ -1,6 +1,6 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
-import applicationForm from '@/Pages/Apply/Partials/applicationFormTest.vue';
+import applicationForm from '@/Pages/Apply/Partials/applicationForm.vue';
 
 
 const props = defineProps(['application', 'fields', 'event']);

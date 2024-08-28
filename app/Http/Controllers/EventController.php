@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Validator;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -157,7 +159,8 @@ class EventController extends Controller
 
         foreach ($fields as &$field) {
             $tmp = str_replace(" ", "_", $field->name);
-            $field->vmodel = "form." . $tmp;
+            $tmp = str_replace("(s)", "s", $tmp);
+            $field->vmodel = $tmp;
         }
 
         $event = Event::find($application->event_id);
@@ -246,7 +249,7 @@ class EventController extends Controller
             ->where('artist_id', $artist->id)
             ->count();
 
-        if ($count === 0) {
+        if ($entryCount === 0) {
             foreach ($fields as $field) {
                 $name = $field->name;
 

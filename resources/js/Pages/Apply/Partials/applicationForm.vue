@@ -1,48 +1,20 @@
 <script setup>
-import { ref, reactive, computed } from 'vue';
 import { useForm } from '@inertiajs/vue3';
-import AppLayout from '@/Layouts/AppLayout.vue';
 import ActionMessage from '@/Components/ActionMessage.vue';
-import EnumInput from '@/Components/EnumInput.vue';
 import FormSection from '@/Components/FormSection.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
-import LongTextInput from '@/Components/LongTextInput.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
 
 
 const props = defineProps(['application', 'fields']);
 
 var keys = {};
 props.fields.forEach((field) =>{
-    keys[field.name.replace(/ /g,'_')] = '';
+    keys[field.vmodel] = '';
 });
 
 const form = useForm(keys);
-
-// Really bad hack until we can figure out dynamic references
-const refStr = "ref";
-const ref1 = ref(null);
-const ref2 = ref(null);
-const ref3 = ref(null);
-const ref4 = ref(null);
-const ref5 = ref(null);
-const ref6 = ref(null);
-const ref7 = ref(null);
-const ref8 = ref(null);
-const ref9 = ref(null);
-const ref10 = ref(null);
-const ref11 = ref(null);
-const ref12 = ref(null);
-const ref13 = ref(null);
-const ref14 = ref(null);
-const ref15 = ref(null);
-const ref16 = ref(null);
-const ref17 = ref(null);
-const ref18 = ref(null);
-const ref19 = ref(null);
-const ref20 = ref(null);
 
 const applyForEvent = () => {
     form.post(route('new.application', props.application.name), {
@@ -54,6 +26,7 @@ const applyForEvent = () => {
         // },
     });
 };
+
 </script>
 
 
@@ -65,47 +38,50 @@ const applyForEvent = () => {
 
         <template #form>
             <div v-if="application.state === 'closed'" class="col-span-6 sm:col-span-4"><p><span class="font-semibold">Applications for this event are currently closed.</span><br /> </p></div>
-            <!-- <div v-if="application.state === 'open'" class="mb-3 text-sm text-gray-800 rounded-lg bg-gray-50 dark:bg-gray-800 dark:text-gray-300"><p><h3>Fields marked with * are mandatory and must be filled in.</h3><br /></p></div> -->
-
             <div v-if="application.state === 'open'" v-for="field in fields" class="col-span-6 sm:col-span-4">
                 <div v-if="field.expected_value === 'string'">
-                    <InputLabel :for="field.name.replace(/ /g,'_')" :value="field.name" :mandatory="field.mandatory"/>
+                    <InputLabel :for="field.vmodel" :value="field.name" :mandatory="field.mandatory"/>
                     <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">{{ field.description }}</p>
-                    <TextInput
-                        :id="field.name.replace(/ /g,'_')"
-                        :ref="refStr.concat(field.order_id)"
-                        v-model=field.vmodel
+                    <input
+                        :id="field.vmodel"
+                        :ref="keys[field.vmodel]"
+                        v-model="form[field.vmodel]"
+                        placeholder="Enter text"
                         type="text"
-                        class="mt-1 block w-full"
+                        class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
                     />
-                    <InputError :message="form.errors.current_password" class="mt-2" />
+                    <InputError :message="form.errors[field.vmodel]" class="mt-2" />
                 </div>
                 <div v-if="field.expected_value === 'longText'">
-                    <InputLabel :for="field.name.replace(/ /g,'_')" :value="field.name" :mandatory="field.mandatory"/>
+                    <InputLabel :for="field.vmodel" :value="field.name" :mandatory="field.mandatory"/>
                     <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">{{ field.description }}</p>
-                    <LongTextInput
-                        :id="field.name.replace(/ /g,'_')"
-                        :ref="refStr.concat(field.order_id)"
-                        v-model=field.vmodel
+                    <textarea
+                        :id="field.vmodel"
+                        :ref="field.vmodel"
+                        v-model="form[field.vmodel]"
                         type="text"
-                        class="mt-1 block w-full"
-                    />
-                    <InputError :message="form.errors.current_password" class="mt-2" />
+                        class="block p-2.5 w-full text-sm border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
+                    ></textarea>
+                    <InputError :message="form.errors[field.vmodel]" class="mt-2" />
                 </div>
                 <div v-if="field.expected_value.slice(0, 4) === 'enum'">
-                    <InputLabel :for="field.name.replace(/ /g,'_')" :value="field.name" :mandatory="field.mandatory"/>
+                    <InputLabel :for="field.vmodel" :value="field.name" :mandatory="field.mandatory"/>
                     <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">{{ field.description }}</p>
-                    <EnumInput
-                        :id="field.name.replace(/ /g,'_')"
-                        :ref="refStr.concat(field.order_id)"
-                        :fieldValues="field.expected_value"
-                        v-model=field.vmodel
-                        class="mt-1 block w-full"
-                    />
-                    <InputError :message="form.errors.current_password" class="mt-2" />
+                    <select
+                        :id="field.vmodel"
+                        :ref="field.vmodel"
+                        v-model="form[field.vmodel]"
+                        class="block w-full p-2.5 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
+                    >
+                        <template v-for="(value, index) in field.expected_value.replace( /(^.*\[|\].*$)/g, '' ).replace(/ /g,'').split(',')">
+                            <option v-if="index === 0" selected> {{ value }}</option>
+                            <option v-else :value="value"> {{ value }}</option>
+                        </template>
+                    </select>
+                    <InputError :message="form.errors[field.vmodel]" class="mt-2" />
                 </div>
                 <div v-if="field.expected_value.slice(0, 3) === 'img'">
-                    <p><br /><img :src="field.expected_value.replace( /(^.*\[|\].*$)/g, '' )" class="h-auto max-w-lg mx-auto"></p>
+                    <p><br /><img :src="field.expected_value.replace( /(^.*\[|\].*$)/g, '' )" :alt="field.description" class="h-auto max-w-lg mx-auto"></p>
                 </div>
             </div>
         </template>
