@@ -1,11 +1,13 @@
 <script setup>
 import { useForm } from '@inertiajs/vue3';
 import ActionMessage from '@/Components/ActionMessage.vue';
+import EnumInput from '@/Components/EnumInput.vue';
 import FormSection from '@/Components/FormSection.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
+import LongTextInput from '@/Components/LongTextInput.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-
+import TextInput from '@/Components/TextInput.vue';
 
 const props = defineProps(['application', 'fields']);
 
@@ -42,7 +44,7 @@ const applyForEvent = () => {
                 <div v-if="field.expected_value === 'string'">
                     <InputLabel :for="field.vmodel" :value="field.name" :mandatory="field.mandatory"/>
                     <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">{{ field.description }}</p>
-                    <input
+                    <TextInput
                         :id="field.vmodel"
                         :ref="keys[field.vmodel]"
                         v-model="form[field.vmodel]"
@@ -55,29 +57,25 @@ const applyForEvent = () => {
                 <div v-if="field.expected_value === 'longText'">
                     <InputLabel :for="field.vmodel" :value="field.name" :mandatory="field.mandatory"/>
                     <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">{{ field.description }}</p>
-                    <textarea
+                    <LongTextInput
                         :id="field.vmodel"
                         :ref="field.vmodel"
                         v-model="form[field.vmodel]"
                         type="text"
                         class="block p-2.5 w-full text-sm border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
-                    ></textarea>
+                    />
                     <InputError :message="form.errors[field.vmodel]" class="mt-2" />
                 </div>
                 <div v-if="field.expected_value.slice(0, 4) === 'enum'">
                     <InputLabel :for="field.vmodel" :value="field.name" :mandatory="field.mandatory"/>
                     <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">{{ field.description }}</p>
-                    <select
+                    <EnumInput
                         :id="field.vmodel"
                         :ref="field.vmodel"
+                        :fieldValues="field.expected_value"
                         v-model="form[field.vmodel]"
                         class="block w-full p-2.5 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
-                    >
-                        <template v-for="(value, index) in field.expected_value.replace( /(^.*\[|\].*$)/g, '' ).replace(/ /g,'').split(',')">
-                            <option v-if="index === 0" selected> {{ value }}</option>
-                            <option v-else :value="value"> {{ value }}</option>
-                        </template>
-                    </select>
+                    />
                     <InputError :message="form.errors[field.vmodel]" class="mt-2" />
                 </div>
                 <div v-if="field.expected_value.slice(0, 3) === 'img'">
