@@ -16,6 +16,7 @@ Route::get('/', function () {
     ]);
 });
 
+Route::get('apply/success', function () {return Inertia::render('Apply/Success');})->name('success'); // Not really needed but helpful for prototyping/etc
 Route::get('/apply/{name}', [EventController::class, 'showApplication'])->name('apply');
 Route::post('/apply/{name}', [EventController::class, 'applyForEvent'])->name('new.application');
 

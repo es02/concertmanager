@@ -299,5 +299,7 @@ class EventController extends Controller
                 $applied->save();
             }
         }
+
+        return Inertia::render('Apply/Success');
     }
 }
