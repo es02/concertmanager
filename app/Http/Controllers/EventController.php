@@ -147,6 +147,14 @@ class EventController extends Controller
         $event->save();
     }
 
+    public function showCreateApplication($id){
+        $event = Event::find($id);
+
+        return Inertia::render('Apply/Create', [
+            'event' => $event,
+        ]);
+    }
+
     public function showApplication($name, $type = 'artist'){
         $application = Event_Application::where('tenant_id', 1)
             ->where('name', $name)
