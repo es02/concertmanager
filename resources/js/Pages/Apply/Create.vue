@@ -42,7 +42,7 @@ var defaultEntry = {
     entryName: 'Untitled Question',
     entryDescription: '',
     entryMappedField: '',
-    entryMandatory: true,
+    entryMandatory: false,
     entryOptions: {},
 };
 
@@ -66,6 +66,7 @@ function setHasFocus(id) {
 }
 
 function setMandatory(id) {
+    console.log("Setting mandatory for " + id);
     if (entries[id].entryMandatory === true){
         entries[id].entryMandatory = false;
     } else {
@@ -85,8 +86,6 @@ function deleteEntry(id){
 }
 
 function updateEntry(id, entry){
-    console.log("Setting entry " + id + " to:");
-    console.log(entry);
     entries[id].entryType = entry.entryType;
     entries[id].entryName = entry.entryName;
     entries[id].entryDescription = entry.entryDescription;
