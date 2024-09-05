@@ -15,17 +15,19 @@ const props = defineProps(['event']);
 
 var temp = [];
 const entries = reactive(temp);
-var formName;
-var formDescription;
-var formStart;
-var formEnd;
+var formName = '';
+var formDescription = '';
+var formType = 'artist';
+var formStart = '';
+var formEnd = '';
 
 var keys = {
-    name: '',
-    desc: '',
-    start: '',
-    end: '',
-    entries: [],
+    name: ref(formName),
+    type: ref(formType),
+    desc: ref(formDescription),
+    start: ref(formStart),
+    end: ref(formEnd),
+    entries: reactive(temp),
 }
 
 const form = useForm(keys);
@@ -44,7 +46,7 @@ var defaultEntry = {
     entryOptions: {},
 };
 
-temp.push(clone(defaultEntry));
+entries.push(clone(defaultEntry));
 
 function newQuestion() {
     for (const [key, value] of Object.entries(entries)) {
@@ -73,12 +75,30 @@ function setMandatory(id) {
 }
 
 function deleteEntry(id){
+    console.log("deleting entry " + id);
     entries.splice(id, 1);
     entryCount--;
     // re-sync the ids or focus breaks
     for (const [key, value] of Object.entries(entries)) {
         entries[key].id = Number(key);
     }
+}
+
+function updateEntry(id, entry){
+    console.log("Setting entry " + id + " to:");
+    console.log(entry);
+    entries[id].entryType = entry.entryType;
+    entries[id].entryName = entry.entryName;
+    entries[id].entryDescription = entry.entryDescription;
+    entries[id].entryMappedField = entry.entryMappedField;
+}
+
+function addEntryOption(id, option) {
+    entries[id].entryOptions.push(option);
+}
+
+function updateEntryOption(id, optionId, option){
+    entries[id].entryOptions[optionId] = option;
 }
 
 function deleteEntryOption(id,optionId) {
@@ -247,9 +267,12 @@ function clone(obj) {
                         <div :id="entry.id" @click="setHasFocus(entry.id)">
                             <NewFormItem
                                 :entry="entry"
-                                @on:delete="deleteEntry"
-                                @on:deleteEntryOption="deleteEntryOption"
+                                @addEntryOption="addEntryOption"
+                                @delete="deleteEntry"
+                                @deleteEntryOption="deleteEntryOption"
                                 @entryMandatory="setMandatory"
+                                @updateEntry="updateEntry"
+                                @updateEntryOption="updateEntryOption"
                             />
                         </div>
                     </div>

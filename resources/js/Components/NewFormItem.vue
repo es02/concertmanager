@@ -11,12 +11,39 @@ import TextInputIcon from './Icons/TextInputIcon.vue';
 
 const props = defineProps(['entry']);
 
-const mandatory = ref(props.entry.entryMandatory);
+const emit = defineEmits(['delete','addEntryOption','deleteEntryOption','updateEntryOption','updateEntry','entryMandatory','click']);
 
 const truth = 1;
 const lie = 0;
 
-defineEmits(['on:delete','on:addEntryOption','on:deleteEntryOption','update:entryOption','update:entryType','update:entryName','update:entryDescription','entryMandatory','click']);
+const mandatory = ref(props.entry.entryMandatory);
+
+const returnEntry = {
+    entryName: '',
+    entryType: 'text',
+    entryDescription: '',
+    entryMappedField: '',
+}
+
+var options = [];
+
+function addEntryOption(entry) {
+    options.push(entry);
+    let id = options.findLastIndex(x => x === entry);
+    emit('addEntryOption', props.entry.id, id, entry);
+}
+
+function updateEntry() {
+    emit('updateEntry', props.entry.id, returnEntry);
+}
+
+function updateEntryOption(id, entry) {
+    emit('updateEntryOption', props.entry.id, id, entry);
+}
+
+function deleteEntryOption(id) {
+    options.splice(id, 1);
+}
 </script>
 
 <template>
@@ -31,6 +58,8 @@ defineEmits(['on:delete','on:addEntryOption','on:deleteEntryOption','update:entr
                         ref="entryName"
                         placeholder="Untitled Question"
                         type="text"
+                        v-model="returnEntry.entryName"
+                        @input="updateEntry"
                         class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
                     />
                 </p>
@@ -38,6 +67,8 @@ defineEmits(['on:delete','on:addEntryOption','on:deleteEntryOption','update:entr
                     <InputLabel for="entryType" value="Question Type" :mandatory="truth"/>
                     <select
                         id="entryType"
+                        v-model="returnEntry.entryType"
+                        @input="updateEntry"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     >
                         <option value="text" selected><TextInputIcon />Short Answer</option>
@@ -51,6 +82,8 @@ defineEmits(['on:delete','on:addEntryOption','on:deleteEntryOption','update:entr
                         id="entryDescription"
                         ref="entryDescription"
                         type="text"
+                        v-model="returnEntry.entryDescription"
+                        @input="updateEntry"
                         class="block p-2.5 w-full text-sm border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
                     />
                 </p>
@@ -58,6 +91,8 @@ defineEmits(['on:delete','on:addEntryOption','on:deleteEntryOption','update:entr
                     <InputLabel for="entryMap" value="Map to field" :mandatory="lie"/>
                     <select
                         id="entryMap"
+                        v-model="returnEntry.entryMappedField"
+                        @input="updateEntry"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     >
                         <option value="none" selected></option>
@@ -80,7 +115,7 @@ defineEmits(['on:delete','on:addEntryOption','on:deleteEntryOption','update:entr
             </div>
             <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700">
             <div class="text-right">
-                <button type="button" @click="$emit('on:delete', entry.id)" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete</button>
+                <button type="button" @click="$emit('delete', entry.id)" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete</button>
                 | <label class="inline-flex items-center cursor-pointer">
                     <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Required</span>
                     <input type="checkbox" class="sr-only peer" :value="mandatory" @click="$emit('entryMandatory', entry.id)">
@@ -89,7 +124,7 @@ defineEmits(['on:delete','on:addEntryOption','on:deleteEntryOption','update:entr
             </div>
         </div>
         <div v-else class="flex items-center px-4 py-3 bg-gray-50 dark:bg-gray-800 text-end sm:px-6 shadow sm:rounded-bl-md sm:rounded-br-md">
-            <p><span class="font-semibold">{{ entry.entryName }}</span> <span class="text-red-600" v-if="entry.entryMandatory">*</span></p>
+            <p><span class="font-semibold">{{ entry.entryName }}</span> <span class="text-red-600" v-if="mandatory">*</span></p>
             <p>{{ entry.entryDescription }}</p>
         </div>
     </div>
