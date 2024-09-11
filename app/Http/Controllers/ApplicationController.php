@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use App\Models\Artist;
@@ -26,7 +27,76 @@ class ApplicationController extends Controller
 
 
     public function createOrUpdateApplication(Request $request, $id) {
+        $event = Event::find($id);
 
+        // expected_value key:
+        // string, longText, enum[], img[]
+        // dropdown format: enum[<option>, <option>, ...]
+        // img format:      img[<path>]
+
+        $form = Event_Application::Create([
+            'tenant_id' => 1,
+            'event_id' => $id,
+            'name' =>  $request->name,
+            'description' =>  $request->desc,
+            'open' =>  $request->start,
+            'close' =>  $request->end,
+            'type' =>  $request->type,
+            'published' =>  1,
+            'state' =>  'open',
+        ]);
+
+        foreach($request->entries as $field){
+            $mandatory = false;
+            $name = 'image';
+            $mapped = null;
+            $desc = '';
+
+            if (isset($field['entryName'])){
+                $name = $field['entryName'];
+            }
+
+            if (isset($field['entryMandatory'])){
+                $mandatory = $field['entryMandatory'];
+            }
+
+            if (isset($field['entryMappedField'])){
+                $mapped = $field['entryMappedField'];
+            }
+
+            if (isset($field['entryDescription'])){
+                $desc = $field['entryDescription'];
+            }
+
+            if ($field['entryType'] === 'image') {
+                $photo = $field['entryImage']->storePublicly(
+                    'form-images', ['disk' => 'public']
+                );
+                $expected_value = "img[../storage/" . $photo . "]";
+            } elseif ($field['entryType'] === 'dropdown') {
+                $expected_value = "enum[";
+                foreach($field['entryOptions'] as $option) {
+                    $expected_value = $expected_value . $option . ", ";
+                }
+                $expected_value = rtrim($expected_value, ", ") . "]";
+            } elseif ($field['entryType'] === 'text') {
+                $expected_value = 'string';
+            }else {
+                $expected_value = 'longText';
+            }
+
+            Event_Application_Field::Create([
+                'tenant_id' => 1,
+                'event_id' => $id,
+                'event_application_id' => $form->id,
+                'order_id' => $field['id'],
+                'name' => $name,
+                'description' => $desc,
+                'expected_value' => $expected_value,
+                'mapped_value' => $mapped,
+                'mandatory' => $mandatory,
+            ]);
+        }
     }
 
     public function showApplication($name, $type = 'artist'){
@@ -36,6 +106,7 @@ class ApplicationController extends Controller
             ->first();
 
         $fields = Event_Application_Field::where('event_application_id', $application->id)
+            ->where('tenant_id', 1)
             ->orderBy('order_id', 'asc')
             ->get();
 
