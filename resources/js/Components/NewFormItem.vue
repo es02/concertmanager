@@ -23,14 +23,15 @@ const returnEntry = {
     entryType: 'text',
     entryDescription: '',
     entryMappedField: '',
+    entryOptions: [],
 }
 
 var options = [];
 
 function addEntryOption(entry) {
-    options.push(entry);
-    let id = options.findLastIndex(x => x === entry);
-    emit('addEntryOption', props.entry.id, id, entry);
+    returnEntry.entryOptions.push(entry);
+    let id = returnEntry.entryOptions.findLastIndex(x => x === entry);
+   // emit('addEntryOption', props.entry.id, id, entry);
 }
 
 function updateEntry() {
@@ -109,6 +110,28 @@ function deleteEntryOption(id) {
                         <option value="img">Image URL</option>
                     </select>
                 </p>
+                <div v-if="returnEntry.entryType === 'dropdown'" >
+                    <div v-for="(option, index) in returnEntry.entryOptions" :key="index" class="max-w-7xl mx-auto py-3  grid grid-cols-1 gap-10 sm:grid-cols-2">
+                        <p>
+                            <InputLabel :for="index" value="Option"/>
+                            <TextInput
+                                :id="index"
+                                :ref="returnEntry.entryOptions[index]"
+                                placeholder="Untitled Option"
+                                type="text"
+                                v-model="returnEntry.entryOptions[index]"
+                                @input="updateEntry"
+                                class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
+                            />
+                        </p>
+                        <p>
+                            <button type="button" @click="$emit('deleteEntryOption', index)" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete</button>
+                        </p>
+                    </div>
+                    <p>
+                        <button type="button" @click="addEntryOption('Untitled Option')" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Add Option</button>
+                    </p>
+                </div>
             </div>
             <div>
 
@@ -124,8 +147,10 @@ function deleteEntryOption(id) {
             </div>
         </div>
         <div v-else class="flex items-center px-4 py-3 bg-gray-50 dark:bg-gray-800 text-end sm:px-6 shadow sm:rounded-bl-md sm:rounded-br-md">
-            <p><span class="font-semibold">{{ entry.entryName }}</span> <span class="text-red-600" v-if="mandatory">*</span></p>
-            <p>{{ entry.entryDescription }}</p>
+            <p><span class="font-semibold">{{ entry.entryName }} </span> <span class="text-red-600" v-if="entry.entryMandatory">* </span></p>
+            <p>&nbsp; {{ entry.entryDescription }}</p>
+            <p>&nbsp; Mapped Field: {{ entry.entryMappedField }}</p>
+            <p v-if="entry.entryMandatory">&nbsp; Mandatory</p>
         </div>
     </div>
 </template>
