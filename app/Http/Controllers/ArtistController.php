@@ -15,9 +15,15 @@ class ArtistController extends Controller
 
     public function getArtistList($pagenum = 0){
         $count = Artist::count();
+
+        // don't skip ahead a page
+        if ($pagenum !== 0) {
+            $pagenum--;
+        }
+
         $artists = Artist::where('state', '!=', 'deleted')
             ->orderBy('name')
-            ->skip($pagenum*10)
+            ->skip($pagenum * 10)
             ->take(10)
             ->get();
 
