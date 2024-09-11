@@ -21,7 +21,7 @@ const props = defineProps(['artist']);
                 <div class="overflow-x-auto m-10 text-right"><button @click="update = !update">Update</button></div>
             </div>
             <figure class="aspect-w-1 aspect-h-1 w-1/2">
-                <img :src="artist.pic_url || 'https://i.pravatar.cc/300'" :alt="`${artist.name} Profile Picture`"
+                <img :src="artist.pic_url" :alt="`${artist.name} Profile Picture`"
                     class="h-full object-cover aspect-ratio" />
             </figure>
         </div>
