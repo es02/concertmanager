@@ -40,18 +40,51 @@ class EventController extends Controller
         $event = DB::table('event')
             ->join('venue', 'event.venue_id', '=', 'venue.id')
             ->select('event.*', 'venue.*')
+            ->where('event.tenant_id', 1)
             ->where('event.id', $id)
             ->first();
 
         $sets = DB::table('event_set')
             ->join('event_stage', 'event_set.event_id', '=', 'event_stage.event_id')
             ->select('event_stage.*', 'event_set.*')
+            ->where('event_stage.tenant_id', 1)
             ->where('event_set.id', $id)
             ->get();
 
+        $stages = DB::table('event_stage')
+            ->join('venue', 'event_stage.venue_id', '=', 'venue.id')
+            ->select('event_stage.*', 'venue.*')
+            ->where('event_stage.tenant_id', 1)
+            ->where('event_stage.event_id', $id)
+            ->get();
+
+        $forms = Event_Application::where('tenant_id', 1)
+            ->where('event_id', $id)
+            ->get();
+
+        foreach($forms as &$form) {
+            $fields =  Event_Application_Field::where('tenant_id', 1)
+                ->where('event_application_id', $form->id)
+                ->count();
+            $applications = Event_Application_Entry::where('tenant_id', 1)
+                ->where('event_application_id', $form->id)
+                ->count();
+
+            Log::debug('Form: {id} :: {form}, Form Fields: {fields}, Application Records: {records}', ['id' => $form->id, 'form' => $form->name, 'fields' => $fields, 'records' => $applications]);
+
+            // Divide total applications by number of entry fields
+            $count = 0;
+            if ($fields > 0){
+                $count = $applications / $fields;
+            }
+            $form['application_count'] = $count;
+        }
+
         return Inertia::render('Event/Show', [
             'event' => $event,
+            'stages' => $stages,
             'sets' => $sets,
+            'forms' => $forms,
         ]);
     }
 
