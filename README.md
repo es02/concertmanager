@@ -16,6 +16,7 @@ Once the code is deployed in your chosen location you can use the following to g
 - npm install
 - npm run build
 - cp .env.example .env
+- php artisan storage:link
 - php artisan migrate
 - php artisan db:seed
 - php artisan key:generate
