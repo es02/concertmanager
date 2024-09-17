@@ -99,7 +99,13 @@ class ApplicationController extends Controller
         }
     }
 
-    public function showApplication($name, $type = 'artist'){
+    public function deleteApplication($id) {
+        $deleted = Event_Application_Entry::where('event_application_id', $id)->delete();
+        $deleted = Event_Application_Field::where('event_application_id', $id)->delete();
+        $deleted = Event_Application::find($id)->delete();
+    }
+
+    public function showApplicationForm($name, $type = 'artist'){
         $application = Event_Application::where('tenant_id', 1)
             ->where('name', $name)
             ->where('type', $type)
@@ -123,6 +129,38 @@ class ApplicationController extends Controller
             'fields' => $fields,
             'event' => $event,
         ]);
+    }
+
+    public function showApplications($id) {
+        $applications = [];
+        $artist = 0;
+        $rawApplications = Event_Application_Entry::where('tenant_id', 1)
+            ->where('event_application_id', $id)
+            ->get();
+
+        foreach($rawApplications as $application) {
+            if ($application->artist_id !== $artist) {
+                $artist = $application->artist_id;
+            }
+            $field = Event_Application_Field::find($application->event_application_field_id);
+            $applications[$artist][] = [$field->name => $application->value];
+        }
+
+        return Inertia::render('Event/ApplicationList', [
+            'applications' => $applications,
+        ]);
+    }
+
+    public function publishApplication($id) {
+        $form = Event_Application::find($id);
+        $form->published = 1;
+        $form->save();
+    }
+
+    public function unpublishApplication($id) {
+        $form = Event_Application::find($id);
+        $form->published = 0;
+        $form->save();
     }
 
     public function applyForEvent(Request $request, $name, $type = 'artist'){

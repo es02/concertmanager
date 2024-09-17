@@ -18,7 +18,7 @@ Route::get('/', function () {
 });
 
 Route::get('apply/success', function () {return Inertia::render('Apply/Success');})->name('success'); // Not really needed but helpful for prototyping/etc
-Route::get('/apply/{name}', [ApplicationController::class, 'showApplication'])->name('apply');
+Route::get('/apply/{name}', [ApplicationController::class, 'showApplicationForm'])->name('apply');
 Route::post('/apply/{name}', [ApplicationController::class, 'applyForEvent'])->name('new.application');
 
 Route::middleware([
@@ -26,15 +26,14 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', function () {return Inertia::render('Dashboard');})->name('dashboard');
     Route::get('/venue/create', function () {return Inertia::render('Venue/Create');})->name('venue.create');
     Route::get('/artist/{id}', [ArtistController::class, 'getArtist'])->name('artist');
     Route::get('/artists/{pagenum?}', [ArtistController::class, 'getArtistList'])->name('artists');
     Route::get('/event/{id}', [EventController::class, 'getEvent'])->name('event');
     Route::get('/event/createSet/{id}', [EventController::class, 'createSet'])->name('event.set.new'); // TODO:: Create controller endpoint and update me
     Route::get('/event/createApplication/{id}', [ApplicationController::class, 'showCreateApplication'])->name('event.form.new');
+    Route::get('/event/applications/{id}', [ApplicationController::class, 'showApplications'])->name('event.applications');
     Route::get('/events/{pagenum?}', [EventController::class, 'getEventList'])->name('events');
     Route::get('/venue/{id}', [VenueController::class, 'getVenue'])->name('venue');
     Route::get('/venues/{pagenum?}', [VenueController::class, 'getVenueList'])->name('venues');
@@ -55,6 +54,9 @@ Route::middleware([
     Route::post('/event/update', [EventController::class, 'updateEvent'])->name('event.update');
     Route::post('/event/createSet/{id}', [EventController::class, 'createSet'])->name('event.set.new'); // TODO:: Create controller endpoint and update me
     Route::post('/event/createApplication/{id}', [ApplicationController::class, 'createOrUpdateApplication'])->name('event.form.new');
+    Route::post('/event/publishApplication/{id}',[ApplicationController::class, 'publishApplication'])->name('event.form.publish');
+    Route::post('/event/unpublishApplication/{id}',[ApplicationController::class, 'unpublishApplication'])->name('event.form.unpublish');
+    Route::post('/event/deleteApplication/{id}', [ApplicationController::class, 'deleteApplication'])->name('event.form.delete');
     Route::post('/venue/create', [VenueController::class, 'createVenue'])->name('venue.new');
     Route::post('/venue/update', [VenueController::class, 'updateVenue'])->name('venue.update');
 });
