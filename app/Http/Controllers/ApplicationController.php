@@ -13,6 +13,7 @@ use App\Models\Event;
 use App\Models\Event_Application;
 use App\Models\Event_Application_Field;
 use App\Models\Event_Application_Entry;
+use App\Models\Event_Application_Parent;
 use App\Models\User;
 
 class ApplicationController extends Controller
@@ -133,21 +134,34 @@ class ApplicationController extends Controller
 
     public function showApplications($id) {
         $applications = [];
-        $artist = 0;
-        $rawApplications = Event_Application_Entry::where('tenant_id', 1)
-            ->where('event_application_id', $id)
+        $rawApplications = Event_Application_Parent::where('tenant_id', 1)
+            ->where('application_id', $id)
             ->get();
 
-        foreach($rawApplications as $application) {
-            if ($application->artist_id !== $artist) {
-                $artist = $application->artist_id;
+        foreach($rawApplications as $rawApplication) {
+            $apps = Event_Application_Entry::where('tenant_id', 1)
+            ->where('event_application_parent_id', $rawApplication->id)
+            ->get();
+
+            foreach($apps as $application) {
+                $field = Event_Application_Field::find($application->event_application_field_id);
+
+                $name = $field->name;
+                if ($field->mapped_value) {
+                    $name = $field->mapped_value;
+                }
+
+                $applications[$rawApplication->id][$name] = $application->value;
             }
-            $field = Event_Application_Field::find($application->event_application_field_id);
-            $applications[$artist][] = [$field->name => $application->value];
         }
+
+        $count = $rawApplications = Event_Application_Parent::where('tenant_id', 1)
+            ->where('application_id', $id)
+            ->count();
 
         return Inertia::render('Event/ApplicationList', [
             'applications' => $applications,
+            'count' => $count,
         ]);
     }
 
@@ -236,6 +250,11 @@ class ApplicationController extends Controller
             ->first();
         }
 
+        $parent = Event_Application_Parent::create([
+            'tenant_id' => 1,
+            'event_application_id' => $application->id,
+        ]);
+
         $entryCount = Event_Application_Entry::where('tenant_id', 1)
             ->where('artist_id', $artist->id)
             ->count();
@@ -260,6 +279,7 @@ class ApplicationController extends Controller
                     'event_id' => $application->event_id,
                     'event_application_id' => $application->id,
                     'event_application_field_id' => $field->id,
+                    'event_application_parent_id' => $parent->id,
                     'artist_id' => $artist->id,
                     'value' => $request->$name,
                 ]);
