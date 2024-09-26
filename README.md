@@ -21,6 +21,7 @@ Once the code is deployed in your chosen location you can use the following to g
 - php artisan storage:link
 - php artisan migrate
 - php artisan db:seed
+- php artisan db:seed --class=DevelopmentSeeder
 - php artisan key:generate
 - php artisan serve
 
