@@ -45,12 +45,18 @@ class VenueController extends Controller
             'email' => ['required', 'string', 'max:1000'],
         ]);
 
+        $photo = $request->pic_url->storePublicly(
+            'venue-images', ['disk' => 'public']
+        );
+
+        $photo = Storage::url($request->pic_url);
+
         $venue = Venue::Create([
             'tenant_id' => 0,
             'venue_name' => $request->name,
             'email' => $request->email,
             'bio' => $request->bio,
-            'pic_url' => $request->pic_url,
+            'pic_url' => $photo,
             'location' => $request->location,
             'capacity' => $request->capacity,
             'standard_fee' => $request->standard_fee,
@@ -72,10 +78,20 @@ class VenueController extends Controller
         ]);
 
         $venue = Venue::find($id);
+
+        $photo = $venue->pic_url;
+
+        if (isset($request->pic_url)) {
+            $photo = $request->pic_url->storePublicly(
+                'venue-images', ['disk' => 'public']
+            );
+
+            $photo = Storage::url($request->pic_url);
+        }
         $venue->venue_name = $request->name;
         $venue->email = $request->email;
         $venue->bio = $request->bio;
-        $venue->pic_url = $request->pic_url;
+        $venue->pic_url = $photo;
         $venue->location = $request->location;
         $venue->capacity = $request->capacity;
         $venue->standard_fee = $request->standard_fee;

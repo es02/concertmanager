@@ -26,17 +26,17 @@ const paginatedVenues = computed(() => {
     return props.venues.slice(start, end);
 });
 
-const goToCreateVenue = () => {
+function goToCreateVenue() {
     router.visit(route('venue.create'));
 };
 
-const goToEditVenue = (id) => {
+function goToEditVenue(id) {
     router.visit(route('venue.edit', { id }));
 };
 
-const deleteVenue = (id) => {
+function deleteVenue(id) {
     if (confirm('Are you sure you want to delete this venue?')) {
-        router.delete(route('venue.destroy', { id }));
+        router.post(route('venue.destroy', { id }));
     }
 };
 </script>
@@ -44,7 +44,7 @@ const deleteVenue = (id) => {
 <template>
     <AppLayout title="Venues">
         <h1 class="text-2xl font-semibold text-center pt-10">Venues</h1>
-        <div class="overflow-x-auto m-10 text-right"><Link :href="route('venue.create')">New Venue</Link></div>
+        <div class="overflow-x-auto m-10 text-right"><button type="submit" @click="goToCreateVenue()" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Create Venue</button></div>
         <div class="overflow-x-auto m-10">
 
             <table class="table">
@@ -54,6 +54,7 @@ const deleteVenue = (id) => {
                         <th>Name</th>
                         <th>Capacity</th>
                         <th>Location</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -64,6 +65,14 @@ const deleteVenue = (id) => {
                         </td>
                         <td>{{ venue.capacity }}</td>
                         <td>{{ venue.location }}</td>
+                        <td>
+                            <button type="button" @click="goToEditVenue(venue.id)" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-s-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
+                                Edit
+                            </button>
+                            <button type="button" @click="deleteVenue(venue.id)" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
+                                Delete
+                            </button>
+                        </td>
                     </tr>
                 </tbody>
             </table>

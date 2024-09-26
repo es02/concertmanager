@@ -23,6 +23,7 @@ class Artist extends Authenticatable
         'booking_agent_id', // TODO: Implement booking agent (User who manages multiple bands)
         'name',
         'email',
+        'genre',
         'bio',
         'pic_url',
         'location',

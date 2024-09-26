@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\Artist;
 use App\Models\Event;
+use App\Models\Event_Application;
+use App\Models\Event_Application_Field;
 use App\Models\Event_Stage;
 use App\Models\Event_Set;
 use App\Models\Plan;
@@ -35,92 +37,6 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'Admin',
             'email' => 'test@example.com',
-        ]);
-
-        Venue::factory()->create([
-            'venue_name' => 'KLT',
-            'email' => 'klt@example.com',
-            'capacity' => 80,
-            'location' => 'Fortitude Valley',
-            'standard_fee' => 150,
-            'fee_type' => 'total',
-            'pic_url' => 'https://scontent.fbne8-1.fna.fbcdn.net/v/t39.30808-6/318338413_595318659259896_5735478324142805071_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=f727a1&_nc_ohc=TmHunPyxrbUQ7kNvgGMJF1M&_nc_ht=scontent.fbne8-1.fna&oh=00_AYAkA7vlnAWHWcCLyR4suxDeaxeSzOK02wZJr2dQlkOC4w&oe=669BA06B'
-        ]);
-
-        Venue::factory()->create([
-            'venue_name' => 'BLB',
-            'email' => 'blb@example.com',
-            'capacity' => 300,
-            'location' => 'Fortitude Valley',
-            'standard_fee' => 350,
-            'fee_type' => 'minimum',
-            'ticket_cut' => 4,
-            'cut_type' => 'per_ticket',
-            'pic_url' => 'https://scontent.fbne8-1.fna.fbcdn.net/v/t39.30808-6/338034733_561269432777374_3107056735531816269_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=833d8c&_nc_ohc=wHHyJVB__YAQ7kNvgGt4qOH&_nc_ht=scontent.fbne8-1.fna&oh=00_AYB8p4KXQk1MEYtWeSUbNeLKpPiDY-Dx56FjPiBYmsOelw&oe=669BA172'
-        ]);
-
-        Artist::factory()->create([
-            'name' => 'SoP',
-            'email' => 'sop@example.com',
-            'location' => 'Brisbane',
-            'standard_fee' => 100,
-            'bio' => 'Ambient noise',
-            'genre' => 'Drone Doom',
-            'pic_url' => 'https://scontent.fbne8-1.fna.fbcdn.net/v/t39.30808-6/444225145_907177851422232_7430636100667057655_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=833d8c&_nc_ohc=D5izsIXuoV0Q7kNvgEyOv9t&_nc_ht=scontent.fbne8-1.fna&cb_e2o_trans=q&oh=00_AYA7m_soo-hif4WY19Zk13i3JCceG83ypoTFW82BthNwlA&oe=669BB1A1',
-        ]);
-
-        Artist::factory()->create([
-            'name' => 'The Waggles',
-            'email' => 'swaggles@example.com',
-            'location' => 'Brisbane',
-            'standard_fee' => 300,
-            'bio' => 'Here for a waggly good time!',
-            'genre' => 'Childrens',
-            'pic_url' => 'https://scontent.fbne8-1.fna.fbcdn.net/v/t1.6435-9/120040264_930053277483535_6083338566300930881_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=f798df&_nc_ohc=-iluATm7cl4Q7kNvgGJQ2LD&_nc_ht=scontent.fbne8-1.fna&oh=00_AYDiVXkCx02Hqynjj9eOIHLo_OGMiUNWNb0gZJ_VXMxnVA&oe=66BD5D8D'
-        ]);
-
-        Artist::factory()->create([
-            'name' => 'Misery Division',
-            'email' => 'sadness@example.com',
-            'location' => 'Brisbane',
-            'standard_fee' => 30000,
-            'bio' => 'Recently returned from headline performances at such nonexistent festivals as Inala OpenAir and MelonStock Misery Division are here to rock your next event!',
-            'genre' => 'Post Punk',
-            'pic_url' => 'https://scontent.fbne8-1.fna.fbcdn.net/v/t39.30808-6/285800945_1335334950288697_3485091587621045446_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=f727a1&_nc_ohc=5WIiezIzJZEQ7kNvgErByRV&_nc_ht=scontent.fbne8-1.fna&oh=00_AYAFM_WyqB9wsMno6jBbImX3yqZY2ztem82eYREiUw6pLA&oe=669BB5CB'
-        ]);
-
-        Event::factory()->create([
-            'name' => 'Somewhere Festival',
-            'venue_id' => 2,
-            'location' => 'Brisbane',
-            'description' => 'Get ready to rock out at the Somewhere Festival! This electrifying metal event promises bone-crushing riffs, thunderous drums, and an unforgettable atmosphere. Join us for a night of raw energy and powerful performances from some of the genre\'s best bands. Don\'t miss the metal mayhem at Somewhere Festival!',
-            'event_pic_url' => 'https://scontent.fbne8-1.fna.fbcdn.net/v/t39.30808-6/451077583_1072396861408561_8124381039737960974_n.png?_nc_cat=111&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=rLbf7fA9T_EQ7kNvgGAlnnE&_nc_ht=scontent.fbne8-1.fna&oh=00_AYBsLhLLxJ-ZHuvBQn_F3GmwLA6pSxJIz7oihO45-wVO6g&oe=669BAC82'
-        ]);
-
-        Event_Stage::factory()->create([
-            'event_id' => 1,
-            'venue_id' => 1,
-        ]);
-
-        Event_Set::factory()->create([
-            'event_id' => 1,
-            'venue_id' => 1,
-            'event_stage_id' => 1,
-            'artist_id' => 3,
-        ]);
-
-        Event_Set::factory()->create([
-            'event_id' => 1,
-            'venue_id' => 1,
-            'event_stage_id' => 1,
-            'artist_id' => 1,
-        ]);
-
-        Event_Set::factory()->create([
-            'event_id' => 1,
-            'venue_id' => 1,
-            'event_stage_id' => 1,
-            'artist_id' => 2,
         ]);
 
         // Users can have multiple roles

@@ -1,6 +1,6 @@
 <script setup>
-import { Link } from '@inertiajs/vue3'
-import AppLayout from '@/Layouts/AppLayout.vue'
+import AppLayout from '@/Layouts/AppLayout.vue';
+import { ref, computed } from 'vue';
 
 const props = defineProps(['events', 'count']);
 
