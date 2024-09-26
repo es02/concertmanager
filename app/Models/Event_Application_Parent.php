@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Event_Application_Entry extends Model
+class Event_Application_Parent extends Model
 {
     use HasFactory;
 
-    protected $table = 'event_application_entries';
+    protected $table = 'event_application_parent';
 
     /**
      * The attributes that are mass assignable.
@@ -18,12 +18,6 @@ class Event_Application_Entry extends Model
      */
     protected $fillable = [
         'tenant_id',
-        'event_id',
         'event_application_id',
-        'event_application_field_id',
-        'event_application_parent_id',
-        'artist_id',
-        'value',
-        'state',
     ];
 }
