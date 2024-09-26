@@ -4,9 +4,9 @@ import { router } from '@inertiajs/vue3'
 
 const props = defineProps(['event', 'stages', 'sets', 'forms']);
 
-function deleteForm(id) {
-    router.post(`/event/deleteApplication/${id}`);
-}
+function deleteForm(id) { router.post(`/event/deleteApplication/${id}`);}
+function publishForm(id) { router.post(`/event/publishApplication/${id}`);}
+function unPublishForm(id) { router.post(`/event/unpublishApplication/${id}`);}
 </script>
 
 <template>
@@ -52,14 +52,19 @@ function deleteForm(id) {
                     <tr v-for="form in forms" :key="event.id">
                         <td>{{ form.type }}</td>
                         <td>{{ form.name }}</td>
-                        <td>{{ form.application_count }}</td>
+                        <td class="link link-primary">
+                            <a :href="`/event/applications/${form.id}`">{{ form.application_count }}</a>
+                        </td>
                         <td class="link link-primary">
                             <a :href="`/apply/${form.name}`">Form Link</a>
                         </td>
                         <td>
                             <div class="inline-flex rounded-md shadow-sm" role="group">
-                                <button type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-s-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
+                                <button v-if="form.published === 0" @click="publishForm(form.id)" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-s-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
                                     Publish
+                                </button>
+                                <button v-else @click="unPublishForm(form.id)" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-s-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
+                                    UnPublish
                                 </button>
                                 <button type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
                                     Edit
