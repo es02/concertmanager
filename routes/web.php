@@ -33,9 +33,10 @@ Route::middleware([
     Route::get('/event/{id}', [EventController::class, 'getEvent'])->name('event');
     Route::get('/event/createSet/{id}', [EventController::class, 'createSet'])->name('event.set.new'); // TODO:: Create controller endpoint and update me
     Route::get('/event/createApplication/{id}', [ApplicationController::class, 'showCreateApplication'])->name('event.form.new');
-    Route::get('/event/applications/{id}', [ApplicationController::class, 'showApplications'])->name('event.applications');
+    Route::get('/event/applications/{id}/{pagenum?}', [ApplicationController::class, 'showApplications'])->name('event.applications');
     Route::get('/events/{pagenum?}', [EventController::class, 'getEventList'])->name('events');
     Route::get('/venue/{id}', [VenueController::class, 'getVenue'])->name('venue');
+    Route::get('/venue/edit/{id}', [VenueController::class, 'getVenue'])->name('venue.edit');
     Route::get('/venues/{pagenum?}', [VenueController::class, 'getVenueList'])->name('venues');
     Route::get('/volunteers/{pagenum?}', [ArtistController::class, 'getArtistList'])->name('volunteers'); // TODO:: Create controller endpoint and update me
     Route::get('/volunteers/{id}', [ArtistController::class, 'getArtist'])->name('volunteer'); // TODO:: Create controller endpoint and update me
@@ -52,6 +53,7 @@ Route::middleware([
     Route::post('/artist/apply', [ArtistController::class, 'applyForEvent'])->name('artist.apply'); // TODO:: Add prefill logic to form and use seperate update endpoint
     Route::post('/event/create', [EventController::class, 'createEvent'])->name('event.new');
     Route::post('/event/update', [EventController::class, 'updateEvent'])->name('event.update');
+    Route::post('/event/delete', [EventController::class, 'updateEvent'])->name('event.update');
     Route::post('/event/createSet/{id}', [EventController::class, 'createSet'])->name('event.set.new'); // TODO:: Create controller endpoint and update me
     Route::post('/event/createApplication/{id}', [ApplicationController::class, 'createOrUpdateApplication'])->name('event.form.new');
     Route::post('/event/publishApplication/{id}',[ApplicationController::class, 'publishApplication'])->name('event.form.publish');
@@ -59,4 +61,5 @@ Route::middleware([
     Route::post('/event/deleteApplication/{id}', [ApplicationController::class, 'deleteApplication'])->name('event.form.delete');
     Route::post('/venue/create', [VenueController::class, 'createVenue'])->name('venue.new');
     Route::post('/venue/update', [VenueController::class, 'updateVenue'])->name('venue.update');
+    Route::post('/venue/delete', [VenueController::class, 'updateVenue'])->name('venue.destroy');
 });
