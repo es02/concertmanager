@@ -1,13 +1,15 @@
 ## About Concert Manager
 
-Conert Manager is a multi-tenant SaaS platform for managing events. It was built buy a team at the 2024 [Code Network](https://www.codenetwork.co/) [Winter Hackathon](https://www.codenetwork.co/hackathon).
+Conert Manager is a multi-tenant SaaS platform for managing events. It was built by a team at the 2024 [Code Network](https://www.codenetwork.co/) [Winter Hackathon](https://www.codenetwork.co/hackathon).
 
-It handles:
+It handles*:
 - Artist/Performer Management
 - Venue Management
 - Sponsor Management
 - Volunteer Management
 - Performance scheduling across multiple stages/rooms/event spaces and even multiple venues!
+
+* Functionality may not currently be present
 
 ### Installation
 
@@ -28,7 +30,7 @@ In a separate terminal.
 
 ### Contributors
 
-- Aimi Hobson - Artictect & Backend Development
+- Aimi Hobson - Architect & Fullstack Development
 - Farzad Hayat - Front End Development
 - Phat Tran - Front End Development
 - Desmond Lo - Graphic Design & prototyping
