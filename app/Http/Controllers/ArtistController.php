@@ -9,6 +9,8 @@ use Illuminate\Validation\Validator;
 use Inertia\Inertia;
 use Inertia\Response;
 use App\Models\Artist;
+use App\Models\Event_Application_Entry;
+use App\Models\Event_Application_Parent;
 
 class ArtistController extends Controller
 {
@@ -99,6 +101,22 @@ class ArtistController extends Controller
         $artist->state = $request->status;
         $artist->save();
         return back()->with('status', 'artist-updated');
+    }
+
+    public function rate(Request $request, $id, $via = 'artist'){
+        if ($via == 'application') {
+            $parent = Event_Application_Parent::where('tenant_id', 1)
+                ->where('id', $id)
+                ->first();
+            $artist = Event_Application_Entry::where('tenant_id', 1)
+                ->where('event_application_parent_id', $rawApplication->id)
+                ->first();
+            $id = $artist->artist_id;
+        }
+
+        $artist = Artist::find($id);
+        $artist->rating = $request->rating;
+        $artist->save();
     }
 
     public function destroyArtist($id){
