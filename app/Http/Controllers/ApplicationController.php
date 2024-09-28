@@ -252,7 +252,7 @@ class ApplicationController extends Controller
 
         $parent = Event_Application_Parent::create([
             'tenant_id' => 1,
-            'event_application_id' => $application->id,
+            'application_id' => $application->id,
         ]);
 
         $entryCount = Event_Application_Entry::where('tenant_id', 1)
