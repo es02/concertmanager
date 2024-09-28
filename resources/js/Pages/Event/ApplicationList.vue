@@ -11,7 +11,9 @@ const applicationsPerPage = 10;
 
 const numberOfPages = computed(() => Math.ceil(props.count / applicationsPerPage));
 
-var displayedApplication = props.applications[1];
+var displayedApplicationID = 2;
+
+var displayedApplication = props.applications[displayedApplicationID];
 
 const $targetEl = document.getElementById('application-modal');
 
@@ -23,14 +25,15 @@ const options = {
         'bg-gray-900/50 dark:bg-gray-900/80 fixed inset-0 z-40',
     closable: true,
     onHide: () => {
-        console.log('modal is hidden');
+        // console.log('modal is hidden');
     },
-    onShow: (id) => {
-        console.log('modal is shown');
-        displayedApplication = props.applications[id];
+    onShow: () => {
+        // console.log('modal is shown');
+        // displayedApplication = props.applications[id];
     },
-    onToggle: () => {
-        console.log('modal has been toggled');
+    onToggle: (id) => {
+        // console.log('modal has been toggled');
+        // displayedApplication = props.applications[id];
     },
 };
 
@@ -44,7 +47,18 @@ const modal = new Modal($targetEl, options, instanceOptions);
 
 function showModal(id) {
     displayedApplication = props.applications[id];
-    modal.show()
+}
+
+function previous() {
+    if (displayedApplicationID !== 1) {
+        displayedApplicationID--;
+    }
+}
+
+function next() {
+    if (displayedApplicationID !== props.count) {
+        displayedApplicationID++;
+    }
 }
 </script>
 
@@ -64,7 +78,7 @@ function showModal(id) {
                 <tbody>
                     <tr v-for="(application, index) in applications" :key="application.id">
                         <td class="link link-primary">
-                            <a @click="modal.show(index)" data-modal-target="application-modal" data-modal-toggle="application-modal">{{ application.name }}</a>
+                            <a @click="modal.show()" data-modal-target="application-modal" data-modal-toggle="application-modal">{{ application.name }}</a>
                         </td>
                         <td>{{ application.location }}</td>
                         <td>{{ application.genre }}</td>
@@ -94,8 +108,8 @@ function showModal(id) {
             </nav>
         </div>
         <!-- Application Entry Modal modal -->
-        <div id="application-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-            <div class="relative p-4 w-full max-w-md max-h-full">
+        <div id="application-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full p-4 md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div class="relative w-full max-w-4xl max-h-full">
                 <!-- Modal content -->
                 <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                     <!-- Modal header -->
@@ -113,7 +127,26 @@ function showModal(id) {
                     <!-- Modal body -->
                     <div class="p-4 md:p-5">
                         <div v-for="(value, key) in displayedApplication">
-                            <div v-if="key !== 'name'">{{  key }} : {{ value }}</div>
+                            <div v-if="key !== 'name' && value !== null"><span class="font-semibold">{{  key }} :</span> {{ value }}</div>
+                        </div>
+                    </div>
+                    <div class="p-4 md:p-5 text-center">
+                        <div class="inline-flex rounded-md shadow-sm" role="group">
+                            <button @click="previous()" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-s-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
+                                Previous
+                            </button>
+                            <button type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
+                                Reject
+                            </button>
+                            <button type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
+                                Shortlist
+                            </button>
+                            <button type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
+                                Accept
+                            </button>
+                            <button @click="next()" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
+                                Next
+                            </button>
                         </div>
                     </div>
                 </div>
