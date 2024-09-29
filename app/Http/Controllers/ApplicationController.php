@@ -134,6 +134,7 @@ class ApplicationController extends Controller
 
     public function showApplications($id) {
         $applications = [];
+
         $rawApplications = Event_Application_Parent::where('tenant_id', 1)
             ->where('application_id', $id)
             ->get();
@@ -142,6 +143,18 @@ class ApplicationController extends Controller
             $apps = Event_Application_Entry::where('tenant_id', 1)
             ->where('event_application_parent_id', $rawApplication->id)
             ->get();
+
+            $artist = Artist::where('id', $apps[0]->artist_id)->first();
+
+            Log::info('Building application entry for Artist: {id}', ['id' => $artist]);
+
+            $applications[$rawApplication->id]['application_id'] = $rawApplication->id;
+            $applications[$rawApplication->id]['rating'] = $artist->rating;
+            $applications[$rawApplication->id]['shortlisted'] = $rawApplication->shortlisted;
+            $applications[$rawApplication->id]['accepted'] = $rawApplication->accepted;
+            $applications[$rawApplication->id]['rejected'] = $rawApplication->rejected;
+            $applications[$rawApplication->id]['reason'] = $rawApplication->reason;
+
 
             foreach($apps as $application) {
                 $field = Event_Application_Field::find($application->event_application_field_id);
@@ -319,11 +332,14 @@ class ApplicationController extends Controller
             ->where('id', $id)
             ->first();
 
+        Log::info('Toggling Shortlisted status for application: {id}', ['id' => $id]);
+
         // toggle shortlisted
         if ($application->shortlisted === 0) {
             $application->shortlisted = 1;
         } else {
             $application->shortlisted = 0;
         }
+        $application->save();
     }
 }
