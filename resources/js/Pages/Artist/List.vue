@@ -1,6 +1,6 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
-import { Link } from '@inertiajs/vue3';
+import { Link, router } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 
 const props = defineProps(['artists', 'count']);
@@ -10,12 +10,51 @@ const currentPage = ref(1);
 const artistsPerPage = 10;
 
 const numberOfPages = Math.ceil(props.count / artistsPerPage);
+
+var form = {
+    import_csv: '',
+};
+
+const csvInput = ref(null);
+
+function uploadCSV() {
+    console.log('uploading csv');
+    const csv = csvInput.value.files[0];
+
+    if (! csv) return;
+
+    form.import_csv = csv;
+
+    router.post('/artists/import-csv', form);
+};
+
+function downloadCSV() {
+    window.location.href = '/artists/export-csv';
+};
+
+const selectNewCSV = () => {
+    csvInput.value.click();
+};
+
 </script>
 
 <template>
     <AppLayout title="Artists">
         <h1 class="text-2xl font-semibold text-center pt-10">Artists</h1>
+        <div class="overflow-x-auto m-10 text-right">
+            <button type="submit" @click="selectNewCSV()" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Import CSV</button>
+            <button type="submit" @click.prevent="downloadCSV()" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Export CSV</button>
+        </div>
         <div class="overflow-x-auto m-10">
+            <form @submit.prevent="uploadCSV">
+                <input
+                    id="csv"
+                    ref="csvInput"
+                    type="file"
+                    accept=".csv"
+                    class="hidden"
+                    @change="uploadCSV"
+                ></form>
             <table class="table">
                 <thead>
                     <tr>

@@ -29,6 +29,7 @@ Route::middleware([
     Route::get('/dashboard', function () {return Inertia::render('Dashboard');})->name('dashboard');
     Route::get('/venue/create', function () {return Inertia::render('Venue/Create');})->name('venue.create');
     Route::get('/artist/{id}', [ArtistController::class, 'getArtist'])->name('artist');
+    Route::get('/artists/export-csv', [ArtistController::class, 'exportCSV'])->name('artists.getCSV');
     Route::get('/artists/{pagenum?}', [ArtistController::class, 'getArtistList'])->name('artists');
     Route::get('/event/{id}', [EventController::class, 'getEvent'])->name('event');
     Route::get('/event/createSet/{id}', [EventController::class, 'createSet'])->name('event.set.new'); // TODO:: Create controller endpoint and update me
@@ -52,6 +53,7 @@ Route::middleware([
     Route::post('/artist/update', [ArtistController::class, 'updateArtist'])->name('artist.update');
     Route::post('/artist/apply', [ArtistController::class, 'applyForEvent'])->name('artist.apply'); // TODO:: Add prefill logic to form and use seperate update endpoint
     Route::post('/artist/rate/{id}/{type}', [ArtistController::class, 'rate'])->name('artist.rate');
+    Route::post('artists/import-csv', [ArtistController::class, 'importCSV'])->name('artists.putCSV');
     Route::post('/event/create', [EventController::class, 'createEvent'])->name('event.new');
     Route::post('/event/update', [EventController::class, 'updateEvent'])->name('event.update');
     Route::post('/event/delete', [EventController::class, 'updateEvent'])->name('event.update');

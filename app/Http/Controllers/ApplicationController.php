@@ -155,7 +155,7 @@ class ApplicationController extends Controller
             }
         }
 
-        $count = $rawApplications = Event_Application_Parent::where('tenant_id', 1)
+        $count = Event_Application_Parent::where('tenant_id', 1)
             ->where('application_id', $id)
             ->count();
 
@@ -312,5 +312,18 @@ class ApplicationController extends Controller
         }
 
         return Inertia::render('Apply/Success');
+    }
+
+    public function shortlist($id) {
+        $application = Event_Application_Parent::where('tenant_id', 1)
+            ->where('id', $id)
+            ->first();
+
+        // toggle shortlisted
+        if ($application->shortlisted === 0) {
+            $application->shortlisted = 1;
+        } else {
+            $application->shortlisted = 0;
+        }
     }
 }

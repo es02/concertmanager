@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::table('artist', function (Blueprint $table) {
             $table->integer('rating')->default(0);
+            $table->boolean('blacklisted')->default(0);
+            $table->longText('notes')->nullable();
         });
     }
 
@@ -23,6 +25,8 @@ return new class extends Migration
     {
         Schema::table('artist', function (Blueprint $table) {
             $table->dropColumn('rating');
+            $table->dropColumn('blacklisted');
+            $table->dropColumn('notes');
         });
     }
 };

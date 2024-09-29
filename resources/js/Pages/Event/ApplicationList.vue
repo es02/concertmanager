@@ -116,6 +116,8 @@ function next() {
                     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                         <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
                             {{ displayedApplication.name }}
+                            <span v-if="displayedApplication.shortlisted" class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">Shortlisted</span>
+                            <span v-if="displayedApplication.accepted" class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Accepted</span>
                         </h3>
                         <button type="button" class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="application-modal">
                             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -127,7 +129,7 @@ function next() {
                     <!-- Modal body -->
                     <div class="p-4 md:p-5">
                         <div v-for="(value, key) in displayedApplication">
-                            <div v-if="key !== 'name' && value !== null"><span class="font-semibold">{{  key }} :</span> {{ value }}</div>
+                            <div v-if="key !== 'name' && key !== 'shortlisted' && key !== 'accepted' && value !== null"><span class="font-semibold">{{  key }} :</span> {{ value }}</div>
                         </div>
                     </div>
                     <div class="p-4 md:p-5 text-center">
