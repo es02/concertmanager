@@ -57,7 +57,7 @@ function updateEntry() {
 <template>
     <div class="p-3 col-span-2 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
         <div class="col-span-6 sm:col-span-4">
-            <!-- Profile Photo File Input -->
+            <!-- Photo File Input -->
             <input
                 id="photo"
                 ref="photoInput"
