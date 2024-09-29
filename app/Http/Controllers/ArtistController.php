@@ -98,7 +98,10 @@ class ArtistController extends Controller
         $artist->tech_specs = $request->tech_specs;
         $artist->epk_url = $request->epk_url;
         $artist->booked_previously = $request->booked_previously;
-        $artists->formed = $request->formed;
+        $artist->rating = $request->rating;
+        $artist->blacklisted = $request->blacklisted;
+        $artist->formed = $request->formed;
+        $artist->notes = $request->notes;
         $artist->state = $request->status;
         $artist->save();
         return back()->with('status', 'artist-updated');
