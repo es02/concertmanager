@@ -242,15 +242,31 @@ class ArtistController extends Controller
         foreach($chunkdata as $column){
             Log::info('Importing artist: {name}', ['name' => $column[0]]);
 
-            $artistCheck = Artist::Where('tenant', 1)
+            $artistCheck = Artist::Where('tenant_id', 1)
+                ->where('name', $column[0])
+                ->count();
+
+            Log::info('Artist records found: {count}', ['count' => $artistCheck]);
+
+            if ($artistCheck !== 0){
+                Log::info('Artist found - updating');
+                $artist = Artist::Where('tenant_id', 1)
                 ->where('name', $column[0])
                 ->first();
-
-            if ($artistCheck){
-                $artist = $artistCheck;
             } else {
+                Log::info('Artist not found - creating');
                 $artist = new Artist();
                 $artist->tenant_id = 1;
+            }
+
+            $booked = 0;
+            if($column[9] === 'yes' || $column[9] === 'Yes') {
+                $booked = 1;
+            }
+
+            $rating = 0;
+            if (isset($column[11])) {
+                $rating = $column[11];
             }
 
             $artist->name = $column[0];
@@ -262,9 +278,9 @@ class ArtistController extends Controller
             $artist->standard_rider = $column[6];
             $artist->tech_specs = $column[7];
             $artist->epk_url = $column[8];
-            $artist->booked_previously = $column[9];
+            $artist->booked_previously = $booked;
             $artist->formed = $column[10];
-            $artist->rating = $column[11];
+            $artist->rating = $rating;
             $artist->blacklisted = $column[12];
             $artist->notes = $column[13];
             $artist->save();
