@@ -107,7 +107,7 @@ class ApplicationController extends Controller
         $event = $deleted->event_id;
         $deleted->delete();
 
-        return redirect()->route("/event/$event")->with('success', 'Deleted');
+        return redirect()->route("event", $event)->with('success', 'Deleted');
     }
 
     public function showApplicationForm($name, $type = 'artist'){
@@ -188,7 +188,7 @@ class ApplicationController extends Controller
         $form->published = 1;
         $form->save();
 
-        return redirect()->route("/event/$form->event_id")->with('success', 'Published');
+        return redirect()->route("event", $form->event_id)->with('success', 'Published');
     }
 
     public function unpublishApplication($id) {
@@ -196,7 +196,7 @@ class ApplicationController extends Controller
         $form->published = 0;
         $form->save();
 
-        return redirect()->route("/event/$form->event_id")->with('success', 'Unpublished');
+        return redirect()->route("event", $form->event_id)->with('success', 'Unpublished');
     }
 
     public function applyForEvent(Request $request, $name, $type = 'artist'){
@@ -351,7 +351,7 @@ class ApplicationController extends Controller
         }
         $application->save();
 
-        return redirect()->route("/event/applications/$application->application_id")->with('success', 'Shortlisted');
+        return redirect()->route("event.applications", $application->application_id)->with('success', 'Shortlisted');
     }
 
     public function accept($id) {
@@ -369,7 +369,7 @@ class ApplicationController extends Controller
         }
         $application->save();
 
-        return redirect()->route("/event/applications/$application->application_id")->with('success', 'Accepted');
+        return redirect()->route("event.applications", $application->application_id)->with('success', 'Accepted');
     }
 
     public function reject(Request $request, $id) {
@@ -388,6 +388,6 @@ class ApplicationController extends Controller
         }
         $application->save();
 
-        return redirect()->route("/event/applications/$application->application_id")->with('success', 'Rejected');
+        return redirect()->route("event.applications", $application->application_id)->with('success', 'Rejected');
     }
 }
