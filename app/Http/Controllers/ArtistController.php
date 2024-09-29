@@ -167,6 +167,11 @@ class ArtistController extends Controller
                 foreach ($artists as $artist) {
                     Log::info('Exporting artist: {name}', ['name' => $artist->name]);
                     // Extract data from each artist.
+                    $booked = "No";
+                    if ($artist->booked_previously === 1) {
+                        $booked = "Yes";
+                    }
+
                     $data = [
                         isset($artist->name)?               $artist->name                       : '',
                         isset($artist->email)?              $artist->email                      : '',
@@ -177,7 +182,7 @@ class ArtistController extends Controller
                         isset($artist->standard_rider)?     trim($artist->standard_rider,'"')   : '',
                         isset($artist->tech_specs)?         trim($artist->tech_specs,'"')       : '',
                         isset($artist->epk_url)?            $artist->epk_url                    : '',
-                        isset($artist->booked_previously)?  $artist->booked_previously          : '',
+                        $booked,
                         isset($artist->formed)?             $artist->formed                     : '',
                         isset($artist->rating)?             $artist->rating                     : '',
                         isset($artist->blacklisted)?        $artist->blacklisted                : '',
