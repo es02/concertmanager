@@ -24,7 +24,7 @@ class ArtistController extends Controller
             $pagenum--;
         }
 
-        Log::info('Generating artist list sorted by: {sort}', ['sort' => $sortby]);
+        Log::debug('Generating artist list sorted by: {sort}', ['sort' => $sortby]);
 
         ;
 
@@ -173,14 +173,14 @@ class ArtistController extends Controller
 
         $callback = function() use ($filename, $columns) {
             $handle = fopen('php://output', 'w');
-            Log::info('Exporting artist CSV: {name}', ['name' => $filename]);
+            Log::debug('Exporting artist CSV: {name}', ['name' => $filename]);
 
             fputcsv($handle, $columns);
 
              // Fetch and process data in chunks
             Artist::chunk(25, function ($artists) use ($handle) {
                 foreach ($artists as $artist) {
-                    Log::info('Exporting artist: {name}', ['name' => $artist->name]);
+                    Log::debug('Exporting artist: {name}', ['name' => $artist->name]);
                     // Extract data from each artist.
                     $booked = "No";
                     if ($artist->booked_previously === 1) {
@@ -222,7 +222,7 @@ class ArtistController extends Controller
         //read csv file and skip data
         $file = $request->file('import_csv');
         $handle = fopen($file->path(), 'r');
-        Log::info('Importing artist CSV');
+        Log::debug('Importing artist CSV');
 
         //skip the header row
         fgetcsv($handle);
@@ -252,21 +252,21 @@ class ArtistController extends Controller
     public function getchunkdata($chunkdata)
     {
         foreach($chunkdata as $column){
-            Log::info('Importing artist: {name}', ['name' => $column[0]]);
+            Log::debug('Importing artist: {name}', ['name' => $column[0]]);
 
             $artistCheck = Artist::Where('tenant_id', 1)
                 ->where('name', $column[0])
                 ->count();
 
-            Log::info('Artist records found: {count}', ['count' => $artistCheck]);
+            Log::debug('Artist records found: {count}', ['count' => $artistCheck]);
 
             if ($artistCheck !== 0){
-                Log::info('Artist found - updating');
+                Log::debug('Artist found - updating');
                 $artist = Artist::Where('tenant_id', 1)
                 ->where('name', $column[0])
                 ->first();
             } else {
-                Log::info('Artist not found - creating');
+                Log::debug('Artist not found - creating');
                 $artist = new Artist();
                 $artist->tenant_id = 1;
             }

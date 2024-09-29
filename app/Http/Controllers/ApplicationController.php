@@ -146,9 +146,10 @@ class ApplicationController extends Controller
 
             $artist = Artist::where('id', $apps[0]->artist_id)->first();
 
-            Log::info('Building application entry for Artist: {id}', ['id' => $artist]);
+            Log::debug('Building application entry for Artist: {id}', ['id' => $artist]);
 
             $applications[$rawApplication->id]['application_id'] = $rawApplication->id;
+            $applications[$rawApplication->id]['artist'] = $artist->id;
             $applications[$rawApplication->id]['rating'] = $artist->rating;
             $applications[$rawApplication->id]['shortlisted'] = $rawApplication->shortlisted;
             $applications[$rawApplication->id]['accepted'] = $rawApplication->accepted;
@@ -332,7 +333,7 @@ class ApplicationController extends Controller
             ->where('id', $id)
             ->first();
 
-        Log::info('Toggling Shortlisted status for application: {id}', ['id' => $id]);
+        Log::debug('Toggling Shortlisted status for application: {id}', ['id' => $id]);
 
         // toggle shortlisted
         if ($application->shortlisted === 0) {
