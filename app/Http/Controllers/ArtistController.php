@@ -119,17 +119,7 @@ class ArtistController extends Controller
         return back()->with('status', 'artist-updated');
     }
 
-    public function rate(Request $request, $id, $via = 'artist'){
-        if ($via === 'application') {
-            $parent = Event_Application_Parent::where('tenant_id', 1)
-                ->where('id', $id)
-                ->first();
-            $artist = Event_Application_Entry::where('tenant_id', 1)
-                ->where('event_application_parent_id', $rawApplication->id)
-                ->first();
-            $id = $artist->artist_id;
-        }
-
+    public function rate(Request $request, $id){
         $artist = Artist::find($id);
         $artist->rating = $request->rating;
         $artist->save();
