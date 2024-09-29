@@ -83,7 +83,7 @@ function next() {
                         <td>{{ application.location }}</td>
                         <td>{{ application.genre }}</td>
                         <td>
-                            <Rating :rating="artist.rating"></Rating>
+                            <Rating :rating="application.rating"></Rating>
                         </td>
                     </tr>
                 </tbody>
