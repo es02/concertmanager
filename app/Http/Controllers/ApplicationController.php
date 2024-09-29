@@ -103,7 +103,11 @@ class ApplicationController extends Controller
     public function deleteApplication($id) {
         $deleted = Event_Application_Entry::where('event_application_id', $id)->delete();
         $deleted = Event_Application_Field::where('event_application_id', $id)->delete();
-        $deleted = Event_Application::find($id)->delete();
+        $deleted = Event_Application::find($id);
+        $event = $deleted->event_id;
+        $deleted->delete();
+
+        return redirect()->route("/event/$event")->with('success', 'Deleted');
     }
 
     public function showApplicationForm($name, $type = 'artist'){
@@ -183,12 +187,16 @@ class ApplicationController extends Controller
         $form = Event_Application::find($id);
         $form->published = 1;
         $form->save();
+
+        return redirect()->route("/event/$form->event_id")->with('success', 'Published');
     }
 
     public function unpublishApplication($id) {
         $form = Event_Application::find($id);
         $form->published = 0;
         $form->save();
+
+        return redirect()->route("/event/$form->event_id")->with('success', 'Unpublished');
     }
 
     public function applyForEvent(Request $request, $name, $type = 'artist'){
@@ -342,5 +350,44 @@ class ApplicationController extends Controller
             $application->shortlisted = 0;
         }
         $application->save();
+
+        return redirect()->route("/event/applications/$application->application_id")->with('success', 'Shortlisted');
+    }
+
+    public function accept($id) {
+        $application = Event_Application_Parent::where('tenant_id', 1)
+            ->where('id', $id)
+            ->first();
+
+        Log::debug('Toggling Accepted status for application: {id}', ['id' => $id]);
+
+        // toggle accepted
+        if ($application->accepted === 0) {
+            $application->accepted = 1;
+        } else {
+            $application->accepted = 0;
+        }
+        $application->save();
+
+        return redirect()->route("/event/applications/$application->application_id")->with('success', 'Accepted');
+    }
+
+    public function reject(Request $request, $id) {
+        $application = Event_Application_Parent::where('tenant_id', 1)
+            ->where('id', $id)
+            ->first();
+
+        Log::debug('Toggling Accepted status for application: {id}', ['id' => $id]);
+
+        // toggle accepted
+        if ($application->rejected === 0) {
+            $application->rejected = 1;
+            $application->reason = $request->reason;
+        } else {
+            $application->rejected = 0;
+        }
+        $application->save();
+
+        return redirect()->route("/event/applications/$application->application_id")->with('success', 'Rejected');
     }
 }
