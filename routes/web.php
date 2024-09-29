@@ -30,6 +30,7 @@ Route::middleware([
     Route::get('/venue/create', function () {return Inertia::render('Venue/Create');})->name('venue.create');
     Route::get('/artist/{id}', [ArtistController::class, 'getArtist'])->name('artist');
     Route::get('/artists/export-csv', [ArtistController::class, 'exportCSV'])->name('artists.getCSV');
+    Route::get('/artists/{pagenum}/{sortby?}', [ArtistController::class, 'getArtistList'])->name('artists');
     Route::get('/artists/{pagenum?}', [ArtistController::class, 'getArtistList'])->name('artists');
     Route::get('/event/{id}', [EventController::class, 'getEvent'])->name('event');
     Route::get('/event/createSet/{id}', [EventController::class, 'createSet'])->name('event.set.new'); // TODO:: Create controller endpoint and update me

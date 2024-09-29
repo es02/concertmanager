@@ -16,7 +16,7 @@ use App\Models\Event_Application_Parent;
 class ArtistController extends Controller
 {
 
-    public function getArtistList($pagenum = 0){
+    public function getArtistList($pagenum = 0, $sortby = 'name'){
         $count = Artist::count();
 
         // don't skip ahead a page
@@ -24,11 +24,23 @@ class ArtistController extends Controller
             $pagenum--;
         }
 
-        $artists = Artist::where('state', '!=', 'deleted')
-            ->orderBy('name')
-            ->skip($pagenum * 10)
-            ->take(10)
-            ->get();
+        Log::info('Generating artist list sorted by: {sort}', ['sort' => $sortby]);
+
+        ;
+
+        if ($sortby === 'rating') {
+            $artists = Artist::where('state', '!=', 'deleted')
+                ->orderBy($sortby, 'desc')
+                ->skip($pagenum * 10)
+                ->take(10)
+                ->get();
+        } else {
+            $artists = Artist::where('state', '!=', 'deleted')
+                ->orderBy($sortby, 'asc')
+                ->skip($pagenum * 10)
+                ->take(10)
+                ->get();
+        }
 
         return Inertia::render('Artist/List', [
             'artists' => $artists,
