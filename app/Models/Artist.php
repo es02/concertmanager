@@ -32,6 +32,8 @@ class Artist extends Authenticatable
         'tech_specs',
         'epk_url',
         'rating',
+        'blacklisted',
+        'notes',
         'state',
     ];
 }

@@ -21,5 +21,7 @@ class Event_Application_Parent extends Model
         'application_id',
         'shortlisted',
         'accepted',
+        'rejected',
+        'reason',
     ];
 }
