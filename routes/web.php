@@ -53,7 +53,7 @@ Route::middleware([
     Route::post('/artist/create', [ArtistController::class, 'createArtist'])->name('artist.new');
     Route::post('/artist/update', [ArtistController::class, 'updateArtist'])->name('artist.update');
     Route::post('/artist/apply', [ArtistController::class, 'applyForEvent'])->name('artist.apply'); // TODO:: Add prefill logic to form and use seperate update endpoint
-    Route::post('/artist/rate/{id}', [ArtistController::class, 'rate'])->name('artist.rate');
+    Route::post('/artist/rate/{id}/{via}', [ArtistController::class, 'rate'])->name('artist.rate');
     Route::post('/artists/import-csv', [ArtistController::class, 'importCSV'])->name('artists.putCSV');
     Route::post('/event/applications/accept/{id}', [ApplicationController::class, 'shortlist'])->name('application.accept');
     Route::post('/event/applications/reject/{id}', [ApplicationController::class, 'shortlist'])->name('application.reject');
