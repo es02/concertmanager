@@ -125,10 +125,14 @@ class ArtistController extends Controller
                 ->where('id', $id)
                 ->first();
             $artist = Event_Application_Entry::where('tenant_id', 1)
-                ->where('event_application_parent_id', $rawApplication->id)
+                ->where('event_application_parent_id', $parent->id)
                 ->first();
             $id = $artist->artist_id;
         }
+
+        $artist = Artist::find($id);
+        $artist->rating = $request->rating;
+        $artist->save();
     }
 
 

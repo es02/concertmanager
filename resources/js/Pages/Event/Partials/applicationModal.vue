@@ -34,4 +34,5 @@ const props = defineProps(['displayedApplication']);
             <span v-else v-html="value.replace(/\r?\n/g, '<br />')"></span>
         </div>
     </div>
+    <span v-if="displayedApplication['rejected']"><span class="font-semibold">Rejection Reason: </span>{{ displayedApplication.reason }}</span>
 </template>

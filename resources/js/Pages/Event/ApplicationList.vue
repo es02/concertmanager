@@ -3,13 +3,24 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import { ref, computed, reactive } from 'vue';
 import { Modal } from 'flowbite';
 import Rating from '@/Components/Rating.vue';
-import { Link, router } from '@inertiajs/vue3';
+import { Link, router, useForm  } from '@inertiajs/vue3';
 import applicationModal from '@/Pages/Event/Partials/applicationModal.vue';
+import LongTextInput from '@/Components/LongTextInput.vue';
 
 const props = defineProps(['applications', 'count']);
 
 const currentPage = ref(1);
 const applicationsPerPage = 10;
+
+const rejectForm = useForm({
+    _method: 'POST',
+    reason: ''
+});
+
+const rateForm = useForm({
+    _method: 'POST',
+    rating: '',
+});
 
 const numberOfPages = computed(() => Math.ceil(props.count / applicationsPerPage));
 
@@ -24,15 +35,6 @@ const options = {
     backdropClasses:
         'bg-gray-900/50 dark:bg-gray-900/80 fixed inset-0 z-40',
     closable: true,
-    // onHide: () => {
-    //     // console.log('modal is hidden');
-    // },
-    // onShow: (id) => {
-    //     // console.log('modal is shown');
-    // },
-    // onToggle: (id) => {
-    //     // console.log('modal has been toggled');
-    // },
 };
 
 // instance options object
@@ -43,24 +45,15 @@ const instanceOptions = {
 
 const modal = new Modal($targetEl, options, instanceOptions);
 
-function previous() {
-    if (displayedApplicationID !== 1) {
-        displayedApplicationID--;
-    }
-}
-
-function next() {
-    if (displayedApplicationID !== props.count) {
-        displayedApplicationID++;
-    }
-}
-
 function accept(id) {
     router.post(`/event/applications/accept/${id}`);
 }
 
 function reject(id) {
-    // router.post(`/event/applications/reject/${id}`);
+    rejectForm.post(route('application.reject', {id: id}), {
+        preserveScroll: true,
+        onSuccess: () => rejectForm.reset(),
+    });
 }
 
 function shortlist(id) {
@@ -68,9 +61,11 @@ function shortlist(id) {
 }
 
 function rate(id) {
-    // router.post(`/event/applications/shortlist/${id}`);
+    rateForm.post(route('artist.rate', {id: id, via: 'application'}), {
+        preserveScroll: true,
+        onSuccess: () => rateForm.reset(),
+    });
 }
-
 </script>
 
 <template>
@@ -131,14 +126,34 @@ function rate(id) {
             <div class="relative w-full max-w-4xl max-h-full">
                 <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                     <div class="p-4 md:p-5">
-                        <applicationModal :displayedApplication="applications[displayedApplicationID]"></applicationModal>
+                        <applicationModal :displayedApplication="applications[displayedApplicationID]" />
+                        <p>
+                            <select
+                                id="rating"
+                                v-model="rateForm.rating"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            >
+                                <option value="0"><TextInputIcon />0</option>
+                                <option value="1"><LongTextInputIcon />1</option>
+                                <option value="2"><DropdownIcon />2</option>
+                                <option value="3"><DropdownIcon />3</option>
+                                <option value="4"><DropdownIcon />4</option>
+                                <option value="5"><DropdownIcon />5</option>
+                            </select>
+                        </p>
+                        <p>
+                            <LongTextInput
+                                id="rejectionReason"
+                                ref="rejectionReason"
+                                type="text"
+                                v-model="rejectForm.reason"
+                                class="block p-2.5 w-full text-sm border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
+                            />
+                        </p>
                     </div>
                     <div class="inline-flex rounded-md shadow-sm" role="group">
                         <div class="p-4 md:p-5 text-center">
-                            <button @click="previous()" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-s-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
-                                Previous
-                            </button>
-                            <button @click="reject(displayedApplicationID)" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
+                            <button @click="reject(displayedApplicationID)" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-s-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
                                 Reject
                             </button>
                             <button @click="shortlist(displayedApplicationID)" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
@@ -147,11 +162,8 @@ function rate(id) {
                             <button @click="accept(displayedApplicationID)" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
                                 Accept
                             </button>
-                            <button type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
+                            <button @click="rate(displayedApplicationID)" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
                                 Rate
-                            </button>
-                            <button @click="next()" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
-                                Next
                             </button>
                         </div>
                     </div>
