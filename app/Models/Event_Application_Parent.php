@@ -18,6 +18,10 @@ class Event_Application_Parent extends Model
      */
     protected $fillable = [
         'tenant_id',
-        'event_application_id',
+        'application_id',
+        'shortlisted',
+        'accepted',
+        'rejected',
+        'reason',
     ];
 }

@@ -24,7 +24,7 @@ const props = defineProps(['venue']);
                 <div class="overflow-x-auto m-10 text-right"><button @click="update = !update">Update</button></div>
             </div>
             <figure class="aspect-w-1 aspect-h-1 w-1/2">
-                <img :src="venue.pic_url || 'https://i.pravatar.cc/300'" :alt="`${venue.venue_name} Profile Picture`"
+                <img :src="venue.pic_url" :alt="`${venue.venue_name} Profile Picture`"
                     class="h-full object-cover aspect-ratio" />
             </figure>
         </div>

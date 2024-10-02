@@ -31,6 +31,9 @@ class Artist extends Authenticatable
         'standard_rider',
         'tech_specs',
         'epk_url',
+        'rating',
+        'blacklisted',
+        'notes',
         'state',
     ];
 }

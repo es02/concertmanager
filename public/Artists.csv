@@ -1,0 +1,2 @@
+Name *,Email *,Genre,Bio,Location,Standard Fee,Rider,Tech Rider,EPK,Booked Previously,Year Formed,Rating,Blacklisted,Notes
+Example Band,band@example.com,Rock,This is an example band,Wacken,500,2 cases of softdrinks and a bowl of coloured chocolates with the green ones removed.,2x DI Channels,www.example.com/band/epk,No,1994,1,No,This is an example band entry. All columns marked with * are mandatory and must be filled out
