@@ -3,6 +3,9 @@ import {ref, computed, reactive} from 'vue';
 import { useForm } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import draggable from 'vuedraggable'
+import TextInput from '@/Components/TextInput.vue';
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
 
 const props = defineProps({
     tasks: {
@@ -77,7 +80,17 @@ function clone(obj) {
         item-key="order_id">
         <template #item="{element}">
             <div class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-                {{ element.name }}
+                <TextInput
+                        id="entryName"
+                        ref="entryName"
+                        placeholder="Untitled Question"
+                        type="text"
+                        v-model="element.name"
+                        @input="updateEntry"
+                        class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
+                    />
+                <VueDatePicker v-model="element.due" dark />
+                <input type="checkbox" class="sr-only peer" value="element.completed">
             </div>
         </template>
         <template #header>
