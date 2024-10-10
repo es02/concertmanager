@@ -53,21 +53,50 @@ class VenueController extends Controller
 
         $photo = "../storage/" . $photo;
 
+        $description = '';
+        $location = '';
+        $capacity = '';
+        $standard_fee = '';
+        $ticket_cut = '';
+        $pic = '';
+        $cut_type = '';
+        $fee_type = '';
+        $additional_fees = '';
+        $tech_specs = '';
+        $backline = '';
+
+        if($request->bio){$description = $request->bio;}
+        if($request->location){$location = $request->location;}
+        if($request->capacity){$capacity = $request->capacity;}
+        if($request->standard_fee){$standard_fee = $request->standard_fee;}
+        if($request->ticket_cut){$ticket_cut = $request->ticket_cut;}
+        if($request->cut_type){$cut_type = $request->cut_type;}
+        if($request->fee_type){$fee_type = $request->fee_type;}
+        if($request->additional_fees){$additional_fees = $request->additional_fees;}
+        if($request->tech_specs){$tech_specs = $request->tech_specs;}
+        if($request->backline){$backline = $request->backline;}
+        if($request->pic_url){
+            $pic = $request->pic_url->storePublicly(
+                'venue-images', ['disk' => 'public']
+            );
+            $pic = "../storage/" . $photo;
+        }
+
         $venue = Venue::Create([
             'tenant_id' => 0,
             'venue_name' => $request->name,
             'email' => $request->email,
-            'bio' => $request->bio,
-            'pic_url' => $photo,
-            'location' => $request->location,
-            'capacity' => $request->capacity,
-            'standard_fee' => $request->standard_fee,
-            'ticket_cut' => $request->ticket_cut,
-            'cut_type' => $request->cut_type,
-            'fee_type' => $request->fee_type,
-            'additional_fees' => $request->additional_fees,
-            'tech_specs' => $request->tech_specs,
-            'backline' => $request->backline,
+            'bio' => $description,
+            'pic_url' => $pic,
+            'location' => $location,
+            'capacity' => $capacity,
+            'standard_fee' => $standard_fee,
+            'ticket_cut' => $ticket_cut,
+            'cut_type' => $cut_type,
+            'fee_type' => $fee_type,
+            'additional_fees' => $additional_fees,
+            'tech_specs' => $tech_specs,
+            'backline' => $backline,
             'state' => 'active'
         ]);
 
