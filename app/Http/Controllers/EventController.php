@@ -269,8 +269,11 @@ class EventController extends Controller
                         isset($event->location)?            $event->location                : '',
                     ];
 
+                    Log::debug('Exporting data: {data}', ['data' => $data]);
+                    Log::debug('Exporting handle: {handle}', ['handle' => $handle]);
+
                     // Write data to a CSV file.
-                    echo fputcsv($handle, $data);
+                    fputcsv($handle, $data);
                 }
             });
             fclose($handle);

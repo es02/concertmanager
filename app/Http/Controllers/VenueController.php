@@ -198,7 +198,7 @@ class VenueController extends Controller
                     ];
 
                     // Write data to a CSV file.
-                    echo fputcsv($handle, $data);
+                    fputcsv($handle, $data);
                 }
             });
             fclose($handle);
