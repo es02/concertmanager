@@ -34,6 +34,7 @@ Route::middleware([
     Route::get('/artists/export-csv', [ArtistController::class, 'exportCSV'])->name('artists.getCSV');
     Route::get('/artists/{pagenum}/{sortby?}', [ArtistController::class, 'getArtistList'])->name('artists');
     Route::get('/artists/{pagenum?}', [ArtistController::class, 'getArtistList'])->name('artists');
+    Route::get('/emails', [EventController::class, 'getEventList'])->name('emails');
     Route::get('/event/create', [EventController::class, 'showCreateEvent'])->name('event.create');
     Route::get('/event/export-csv', [EventController::class, 'exportCSV'])->name('event.getCSV');
     Route::get('/event/{id}', [EventController::class, 'getEvent'])->name('event');
@@ -41,6 +42,9 @@ Route::middleware([
     Route::get('/event/createApplication/{id}', [ApplicationController::class, 'showCreateApplication'])->name('event.form.new');
     Route::get('/event/applications/{id}/{pagenum?}', [ApplicationController::class, 'showApplications'])->name('event.applications');
     Route::get('/events/{pagenum?}', [EventController::class, 'getEventList'])->name('events');
+    Route::get('/media', [EventController::class, 'getEventList'])->name('media');
+    Route::get('/settings', [EventController::class, 'getEventList'])->name('settings');
+    Route::get('/staff', [EventController::class, 'getEventList'])->name('staff');
     Route::get('/tasks', [TaskController::class, 'getTasks'])->name('tasks');
     Route::get('/venue/create', function () {return Inertia::render('Venue/Create');})->name('venue.create');
     Route::get('/venue/export-csv', [VenueController::class, 'exportCSV'])->name('venue.getCSV');
