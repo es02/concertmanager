@@ -96,19 +96,40 @@ class EventController extends Controller
             'venue_id' => ['required', 'numeric']
         ]);
 
+        $description = '';
+        $provider = '';
+        $free = false;
+        $allAges = false;
+        $pic = '';
+        $ticketUrl = '';
+        $location = '';
+
+        if($request->description){$description = $request->description;}
+        if($request->ticketing_provider){$provider = $request->ticketing_provider;}
+        if($request->free){$free = $request->free;}
+        if($request->all_ages){$allAges = $request->all_ages;}
+        if($request->ticket_url){$ticketUrl = $request->ticket_url;}
+        if($request->location){$location = $request->location;}
+        if($request->pic_url){
+            $pic = $request->pic_url->storePublicly(
+                'event-images', ['disk' => 'public']
+            );
+            $pic = "../storage/" . $photo;
+        }
+
         $event = Event::create([
-            'tenant_id' => 0,
+            'tenant_id' => 1,
             'event_name' => $request->name,
             'venue_id' => $request->venue_id,
             'start' => $request->start,
             'end' => $request->end,
-            'description' => $request->description,
-            'ticketing_provider' => $request->ticketing_provider,
-            'free' => $request->free,
+            'description' => $description,
+            'ticketing_provider' => $provider,
+            'free' => $free,
             'all_ages' => $request->all_ages,
-            'pic_url' => $request->pic_url,
-            'ticket_url' => $request->ticket_url,
-            'location' => $request->location,
+            'pic_url' => $pic,
+            'ticket_url' => $ticketUrl,
+            'location' => $location,
             'state' => 'active'
         ]);
 
