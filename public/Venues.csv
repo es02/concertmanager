@@ -1,0 +1,2 @@
+Name *,Email *,bio,Location,Capacity,Standard Fee,Fee Type,Ticket Cut,Cut Type,Additional Fees,Tech Specs,Backline
+Example,example@example.com,All columns with * must be filled out,Wacken,80,150,total/minimum,0,per_ticket/percentage,None,PA and some lights,"2x 412, 1x410, drumkit"

@@ -1,0 +1,2 @@
+Name *,Venue ID *,Start *,End *,Description,Ticket Provider,Is Free?,Is All Ages?,Ticket Link,Location
+Example Event,1,2024-07-26 20:01:07,2024-07-03 18:58:55,This is an example event,oztix,No,Yes,www.example.com/event/tickets,Wacken
