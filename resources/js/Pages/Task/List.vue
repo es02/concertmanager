@@ -79,18 +79,30 @@ function clone(obj) {
         @end="drag=false"
         item-key="order_id">
         <template #item="{element}">
-            <div class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-                <TextInput
-                        id="entryName"
-                        ref="entryName"
-                        placeholder="Untitled Question"
-                        type="text"
-                        v-model="element.name"
-                        @input="updateEntry"
-                        class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
-                    />
-                <VueDatePicker v-model="element.due" dark />
-                <input type="checkbox" class="sr-only peer" value="element.completed">
+            <div class="block max-w-2xl p-3 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
+                    <p class="mb-3 text-gray-500 dark:text-gray-400">
+                        <label for="entryName" class="block text-gray-700 dark:text-gray-200">Task</label>
+                        <TextInput
+                            id="entryName"
+                            ref="entryName"
+                            placeholder="Untitled Question"
+                            type="text"
+                            v-model="element.name"
+                            @input="updateEntry"
+                            class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
+                        />
+                    </p>
+                    <p class="mb-3 text-gray-500 dark:text-gray-400">
+                        <label for="due" class="block text-gray-700 dark:text-gray-200">Due by</label>
+                        <VueDatePicker id="due" v-model="element.due" dark />
+                    </p>
+                    <p class="mb-3 text-gray-500 dark:text-gray-400">
+                        <label for="completed" class="block text-gray-700 dark:text-gray-200">Completed?</label>
+                        <input id="completed" type="checkbox" class="sr-only peer" :value="element.completed">
+                        <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                    </p>
+                </div>
             </div>
         </template>
         <template #header>
