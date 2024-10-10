@@ -126,7 +126,7 @@ class EventController extends Controller
             'description' => $description,
             'ticketing_provider' => $provider,
             'free' => $free,
-            'all_ages' => $request->all_ages,
+            'all_ages' => $allAges,
             'pic_url' => $pic,
             'ticket_url' => $ticketUrl,
             'location' => $location,
