@@ -8,15 +8,17 @@ use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\VenueController;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+// Route::get('/', function () {
+//     return Inertia::render('Welcome', [
+//         'canLogin' => Route::has('login'),
+//         'canRegister' => Route::has('register'),
+//         'laravelVersion' => Application::VERSION,
+//         'phpVersion' => PHP_VERSION,
+//     ]);
+// });
 
+Route::get('/', function () {return Inertia::render('Dashboard');})->name('dashboard');
+Route::get('/dashboard', function () {return Inertia::render('Dashboard');})->name('dashboard');
 Route::get('apply/success', function () {return Inertia::render('Apply/Success');})->name('success'); // Not really needed but helpful for prototyping/etc
 Route::get('/apply/{name}', [ApplicationController::class, 'showApplicationForm'])->name('apply');
 Route::post('/apply/{name}', [ApplicationController::class, 'applyForEvent'])->name('new.application');
@@ -26,7 +28,6 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', function () {return Inertia::render('Dashboard');})->name('dashboard');
     // Route::get('/artist/create', function () {return Inertia::render('Artist/Create');})->name('artist.create');
     Route::get('/artist/{id}', [ArtistController::class, 'getArtist'])->name('artist');
     Route::get('/artists/export-csv', [ArtistController::class, 'exportCSV'])->name('artists.getCSV');
