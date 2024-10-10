@@ -20,7 +20,7 @@ const props = defineProps(['artist']);
                 </div>
                 <div class="overflow-x-auto m-10 text-right"><button @click="update = !update">Update</button></div>
             </div>
-            <figure class="aspect-w-1 aspect-h-1 w-1/2">
+            <figure class="aspect-w-1 h-auto max-w-sm">
                 <img :src="artist.pic_url" :alt="`${artist.name} Profile Picture`"
                     class="h-full object-cover aspect-ratio" />
             </figure>

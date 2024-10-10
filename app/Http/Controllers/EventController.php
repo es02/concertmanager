@@ -88,6 +88,15 @@ class EventController extends Controller
         ]);
     }
 
+    public function showCreateEvent(){
+        $venues = Venue::where('tenant_id', 1)
+            ->get();
+
+        return Inertia::render('Event/Create', [
+            'venues' => $venues,
+        ]);
+    }
+
     public function createEvent(Request $request){
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -96,19 +105,40 @@ class EventController extends Controller
             'venue_id' => ['required', 'numeric']
         ]);
 
+        $description = '';
+        $provider = '';
+        $free = false;
+        $allAges = false;
+        $pic = '';
+        $ticketUrl = '';
+        $location = '';
+
+        if($request->description){$description = $request->description;}
+        if($request->ticketing_provider){$provider = $request->ticketing_provider;}
+        if($request->free){$free = $request->free;}
+        if($request->all_ages){$allAges = $request->all_ages;}
+        if($request->ticket_url){$ticketUrl = $request->ticket_url;}
+        if($request->location){$location = $request->location;}
+        if($request->pic_url){
+            $pic = $request->pic_url->storePublicly(
+                'event-images', ['disk' => 'public']
+            );
+            $pic = "../storage/" . $pic;
+        }
+
         $event = Event::create([
-            'tenant_id' => 0,
-            'event_name' => $request->name,
+            'tenant_id' => 1,
+            'name' => $request->name,
             'venue_id' => $request->venue_id,
             'start' => $request->start,
             'end' => $request->end,
-            'description' => $request->description,
-            'ticketing_provider' => $request->ticketing_provider,
-            'free' => $request->free,
-            'all_ages' => $request->all_ages,
-            'pic_url' => $request->pic_url,
-            'ticket_url' => $request->ticket_url,
-            'location' => $request->location,
+            'description' => $description,
+            'ticketing_provider' => $provider,
+            'free' => $free,
+            'all_ages' => $allAges,
+            'event_pic_url' => $pic,
+            'ticket_url' => $ticketUrl,
+            'location' => $location,
             'state' => 'active'
         ]);
 
@@ -178,5 +208,157 @@ class EventController extends Controller
         $event = Event::find($id);
         $event->state = $request->status;
         $event->save();
+    }
+
+    public function exportCSV() {
+        $filename = 'events.csv';
+
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => "inline; filename=\"$filename\"",
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0',
+            'X-Accel-Buffering' => 'no'
+        ];
+        Log::info('Exporting event CSV');
+
+        $columns = [
+            'Name *',
+            'Venue ID *',
+            'Start *',
+            'End *',
+            'Description',
+            'Ticket Provider',
+            'Is Free?',
+            'Is All Ages?',
+            'Ticket Link',
+            'Location',
+        ];
+
+        $callback = function() use ($filename, $columns) {
+            $handle = fopen('php://output', 'w');
+            Log::debug('Exporting event CSV: {name}', ['name' => $filename]);
+
+            fputcsv($handle, $columns);
+
+             // Fetch and process data in chunks
+            Event::chunk(25, function ($events) use ($handle) {
+                foreach ($events as $event) {
+                    Log::debug('Exporting event: {name}', ['name' => $event->name]);
+                    // Extract data from each event.
+                    $free = "No";
+                    $aa = "No";
+                    if ($event->free === 1) {
+                        $free = "Yes";
+                    }
+                    if ($event->all_ages === 1) {
+                        $aa = "Yes";
+                    }
+
+                    $data = [
+                        isset($event->name)?                $event->name                    : '',
+                        isset($event->venue_id)?            $event->venue_id                : '',
+                        isset($event->start)?               $event->start                   : '',
+                        isset($event->end)?                 $event->end                     : '',
+                        isset($event->description)?         trim($event->description,'"')   : '',
+                        isset($event->ticketing_provider)?  $event->ticketing_provider      : '',
+                        $free,
+                        $aa,
+                        isset($event->ticket_url)?          $event->ticket_url              : '',
+                        isset($event->location)?            $event->location                : '',
+                    ];
+
+                    Log::debug('Exporting data: {data}', ['data' => $data]);
+                    Log::debug('Exporting handle: {handle}', ['handle' => $handle]);
+
+                    // Write data to a CSV file.
+                    fputcsv($handle, $data);
+                }
+            });
+            fclose($handle);
+        };
+
+        return response()->stream($callback, 200, $headers)->send();
+    }
+
+    public function importCSV(Request $request)
+    {
+        $request->validate([
+            'import_csv' => 'required|mimes:csv',
+        ]);
+        //read csv file and skip data
+        $file = $request->file('import_csv');
+        $handle = fopen($file->path(), 'r');
+        Log::debug('Importing event CSV');
+
+        //skip the header row
+        fgetcsv($handle);
+
+        $chunksize = 25;
+        while(!feof($handle))
+        {
+            $chunkdata = [];
+
+            for($i = 0; $i<$chunksize; $i++)
+            {
+                $data = fgetcsv($handle);
+                if($data === false)
+                {
+                    break;
+                }
+                $chunkdata[] = $data;
+            }
+
+            $this->getchunkdata($chunkdata);
+        }
+        fclose($handle);
+
+        return redirect()->route('events')->with('success', 'Data has been added successfully.');
+    }
+
+    public function getchunkdata($chunkdata)
+    {
+        foreach($chunkdata as $column){
+            Log::debug('Importing event: {name}', ['name' => $column[0]]);
+
+            $eventCheck = Event::Where('tenant_id', 1)
+                ->where('name', $column[0])
+                ->count();
+
+            Log::debug('Event records found: {count}', ['count' => $eventCheck]);
+
+            if ($eventCheck !== 0){
+                Log::debug('Event found - updating');
+                $event = Event::Where('tenant_id', 1)
+                ->where('name', $column[0])
+                ->first();
+            } else {
+                Log::debug('Event not found - creating');
+                $event = new Event();
+                $event->tenant_id = 1;
+            }
+
+            $free = 0;
+            if($column[6] === 'yes' || $column[6] === 'Yes') {
+                $booked = 1;
+            }
+            $aa = 0;
+            if($column[7] === 'yes' || $column[7] === 'Yes') {
+                $booked = 1;
+            }
+
+            $event->name = $column[0];
+            $event->venue_id = $column[1];
+            $event->start = $column[2];
+            $event->end = $column[3];
+            $event->description = $column[4];
+            $event->ticket_provider = $column[5];
+            $event->free = $free;
+            $event->all_ages = $aa;
+            $event->ticket_url = $column[8];
+            $event->location = $column[9];
+            $event->save();
+        }
     }
 }
