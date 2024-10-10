@@ -27,16 +27,18 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/dashboard', function () {return Inertia::render('Dashboard');})->name('dashboard');
-    Route::get('/venue/create', function () {return Inertia::render('Venue/Create');})->name('venue.create');
+    // Route::get('/artist/create', function () {return Inertia::render('Artist/Create');})->name('artist.create');
     Route::get('/artist/{id}', [ArtistController::class, 'getArtist'])->name('artist');
     Route::get('/artists/export-csv', [ArtistController::class, 'exportCSV'])->name('artists.getCSV');
     Route::get('/artists/{pagenum}/{sortby?}', [ArtistController::class, 'getArtistList'])->name('artists');
     Route::get('/artists/{pagenum?}', [ArtistController::class, 'getArtistList'])->name('artists');
+    Route::get('/event/create', [EventController::class, 'showCreateEvent'])->name('event.create');
     Route::get('/event/{id}', [EventController::class, 'getEvent'])->name('event');
     Route::get('/event/createSet/{id}', [EventController::class, 'createSet'])->name('event.set.new'); // TODO:: Create controller endpoint and update me
     Route::get('/event/createApplication/{id}', [ApplicationController::class, 'showCreateApplication'])->name('event.form.new');
     Route::get('/event/applications/{id}/{pagenum?}', [ApplicationController::class, 'showApplications'])->name('event.applications');
     Route::get('/events/{pagenum?}', [EventController::class, 'getEventList'])->name('events');
+    Route::get('/venue/create', function () {return Inertia::render('Venue/Create');})->name('venue.create');
     Route::get('/venue/{id}', [VenueController::class, 'getVenue'])->name('venue');
     Route::get('/venue/edit/{id}', [VenueController::class, 'getVenue'])->name('venue.edit');
     Route::get('/venues/{pagenum?}', [VenueController::class, 'getVenueList'])->name('venues');

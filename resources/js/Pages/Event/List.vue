@@ -1,6 +1,7 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { ref, computed } from 'vue';
+import { Link, router } from '@inertiajs/vue3';
 
 const props = defineProps(['events', 'count']);
 
@@ -8,11 +9,47 @@ const currentPage = ref(1);
 const eventsPerPage = 10;
 
 const numberOfPages = computed(() => Math.ceil(props.count / eventsPerPage));
+
+var form = {
+    import_csv: '',
+};
+
+const csvInput = ref(null);
+
+function uploadCSV() {
+    console.log('uploading csv');
+    const csv = csvInput.value.files[0];
+
+    if (! csv) return;
+
+    form.import_csv = csv;
+
+    router.post('/event/import-csv', form);
+    form.import_csv = '';
+    csvInput.value.value = null;
+};
+
+function downloadCSV() {
+    window.location.href = '/event/export-csv';
+};
+
+const selectNewCSV = () => {
+    csvInput.value.click();
+};
+
+function goToCreateEvent() {
+    router.visit(route('event.create'));
+};
 </script>
 
 <template>
     <AppLayout title="Events">
         <h1 class="text-2xl font-semibold text-center pt-10">Events</h1>
+        <div class="overflow-x-auto m-10 text-right">
+            <button type="submit" @click="goToCreateEvent()" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">New Event</button>
+            <button type="submit" @click="selectNewCSV()" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Import CSV</button>
+            <button type="submit" @click.prevent="downloadCSV()" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Export CSV</button>
+        </div>
         <div class="overflow-x-auto m-10">
             <table class="table">
                 <thead>

@@ -26,7 +26,7 @@ class Event extends Model
         'ticketing_provider', // eg: Oztix, Ticketmaster, Eventbrite, Humanitix, etc
         'free',
         'all_ages',
-        'pic_url',
+        'event_pic_url',
         'ticket_url',
         'location',
         'state',

@@ -88,6 +88,15 @@ class EventController extends Controller
         ]);
     }
 
+    public function showCreateEvent(){
+        $venues = Venue::where('tenant_id', 1)
+            ->get();
+
+        return Inertia::render('Event/Create', [
+            'venues' => $venues,
+        ]);
+    }
+
     public function createEvent(Request $request){
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -114,12 +123,12 @@ class EventController extends Controller
             $pic = $request->pic_url->storePublicly(
                 'event-images', ['disk' => 'public']
             );
-            $pic = "../storage/" . $photo;
+            $pic = "../storage/" . $pic;
         }
 
         $event = Event::create([
             'tenant_id' => 1,
-            'event_name' => $request->name,
+            'name' => $request->name,
             'venue_id' => $request->venue_id,
             'start' => $request->start,
             'end' => $request->end,
@@ -127,7 +136,7 @@ class EventController extends Controller
             'ticketing_provider' => $provider,
             'free' => $free,
             'all_ages' => $allAges,
-            'pic_url' => $pic,
+            'event_pic_url' => $pic,
             'ticket_url' => $ticketUrl,
             'location' => $location,
             'state' => 'active'
