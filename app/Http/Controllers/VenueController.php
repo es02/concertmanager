@@ -83,7 +83,7 @@ class VenueController extends Controller
         }
 
         $venue = Venue::Create([
-            'tenant_id' => 0,
+            'tenant_id' => 1,
             'venue_name' => $request->name,
             'email' => $request->email,
             'bio' => $description,
@@ -141,5 +141,142 @@ class VenueController extends Controller
         $venue = Venue::find($id);
         $venue->state = $request->status;
         $venue->save();
+    }
+
+    public function exportCSV() {
+        $filename = 'venues.csv';
+
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => "inline; filename=\"$filename\"",
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0',
+            'X-Accel-Buffering' => 'no'
+        ];
+        Log::info('Exporting venue CSV');
+
+        $columns = [
+            'Name *',
+            'Email *',
+            'bio',
+            'Location',
+            'Capacity',
+            'Standard Fee',
+            'Fee Type',
+            'Ticket Cut',
+            'Cut Type',
+            'Additional Fees',
+            'Tech Specs',
+            'Backline',
+        ];
+
+        $callback = function() use ($filename, $columns) {
+            $handle = fopen('php://output', 'w');
+            Log::debug('Exporting venue CSV: {name}', ['name' => $filename]);
+
+            fputcsv($handle, $columns);
+
+             // Fetch and process data in chunks
+            Venue::chunk(25, function ($venues) use ($handle) {
+                foreach ($venues as $venue) {
+                    Log::debug('Exporting venue: {name}', ['name' => $venue->venue_name]);
+                    // Extract data from each venue.
+                    $data = [
+                        isset($venue->venue_name)?          $venue->venue_name          : '',
+                        isset($venue->email)?               $venue->email               : '',
+                        isset($venue->bio)?                 trim($venue->bio,'"')       : '',
+                        isset($venue->location)?            $venue->location            : '',
+                        isset($venue->capacity)?            $venue->capacity            : '',
+                        isset($venue->standard_fee)?        $venue->standard_fee        : '',
+                        isset($venue->fee_type)?            $venue->fee_type            : '',
+                        isset($venue->ticket_cut)?          $venue->ticket_cut          : '',
+                        isset($venue->cut_type)?            $venue->cut_type            : '',
+                        isset($venue->additional_fees)?     $venue->additional_fees     : '',
+                        isset($venue->tech_specs)?          $venue->tech_specs          : '',
+                        isset($venue->backline)?            $venue->backline            : '',
+                    ];
+
+                    // Write data to a CSV file.
+                    echo fputcsv($handle, $data);
+                }
+            });
+            fclose($handle);
+        };
+
+        return response()->stream($callback, 200, $headers)->send();
+    }
+
+    public function importCSV(Request $request)
+    {
+        $request->validate([
+            'import_csv' => 'required|mimes:csv',
+        ]);
+        //read csv file and skip data
+        $file = $request->file('import_csv');
+        $handle = fopen($file->path(), 'r');
+        Log::debug('Importing venue CSV');
+
+        //skip the header row
+        fgetcsv($handle);
+
+        $chunksize = 25;
+        while(!feof($handle))
+        {
+            $chunkdata = [];
+
+            for($i = 0; $i<$chunksize; $i++)
+            {
+                $data = fgetcsv($handle);
+                if($data === false)
+                {
+                    break;
+                }
+                $chunkdata[] = $data;
+            }
+
+            $this->getchunkdata($chunkdata);
+        }
+        fclose($handle);
+
+        return redirect()->route('events')->with('success', 'Data has been added successfully.');
+    }
+
+    public function getchunkdata($chunkdata)
+    {
+        foreach($chunkdata as $column){
+            Log::debug('Importing venue: {name}', ['name' => $column[0]]);
+
+            $venueCheck = Venue::Where('tenant_id', 1)
+                ->where('venue_name', $column[0])
+                ->count();
+
+            Log::debug('Venue records found: {count}', ['count' => $venueCheck]);
+
+            if ($venueCheck !== 0){
+                Log::debug('Venue found - updating');
+                $venue = Venue::Where('tenant_id', 1)
+                ->where('venue_name', $column[0])
+                ->first();
+            } else {
+                Log::debug('Venue not found - creating');
+                $venue = new Venue();
+                $venue->tenant_id = 1;
+            }
+
+            $venue->venue_name = $column[0];
+            $venue->email = $column[1];
+            $venue->bio = $column[2];
+            $venue->location = $column[3];
+            $venue->capacity = $column[4];
+            $venue->standard_fee = $column[5];
+            $venue->fee_type = $column[6];
+            $venue->ticket_cut = $column[7];
+            $venue->cut_type = $column[8];
+            $venue->additional_fees = $column[9];
+            $venue->tech_specs = $column[10];
+            $venue->backline = $column[11];
+            $venue->save();
+        }
     }
 }
