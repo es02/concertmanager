@@ -13,7 +13,7 @@ const props = defineProps(['venue']);
                 <div class="mt-4 font-normal flex flex-col justify-between p-4 leading-normal">
                     <p><span class="font-semibold">Email:</span> {{ venue.email }}</p>
                     <p><span class="font-semibold">Location:</span> {{ venue.location }} </p>
-                    <p><br><span v-html="venue.bio.replace(/\r?\n/g, '<br />')"></span></p>
+                    <p v-if="venue.bio !== null"><br><span v-html="venue.bio.replace(/\r?\n/g, '<br />')"></span></p>
                     <p><br><span class="font-semibold">Capacity:</span> {{ venue.capacity || 0 }} </p>
                     <p><span class="font-semibold">Fee:</span> ${{ venue.standard_fee || "Free" }} {{  venue.fee_type }}</p>
                     <div v-if="venue.ticket_cut !== null"><p><span class="font-semibold">Fee:</span> <span v-if="venue.cut_type == 'per_ticket'">$</span>{{ venue.ticket_cut}} {{ venue.cut_type }}</p></div>
