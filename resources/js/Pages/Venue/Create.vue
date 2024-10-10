@@ -1,7 +1,10 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { router } from '@inertiajs/vue3';
+import { onMounted, ref } from 'vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
+
+const photoInput = ref(null);
 
 var form = {
     name: '',
@@ -32,7 +35,7 @@ const updatePhotoPreview = () => {
 
     if (! photo) return;
 
-    this.form.pic_url = photo;
+    form.pic_url = photo;
 };
 </script>
 

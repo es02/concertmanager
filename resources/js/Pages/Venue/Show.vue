@@ -13,13 +13,13 @@ const props = defineProps(['venue']);
                 <div class="mt-4 font-normal flex flex-col justify-between p-4 leading-normal">
                     <p><span class="font-semibold">Email:</span> {{ venue.email }}</p>
                     <p><span class="font-semibold">Location:</span> {{ venue.location }} </p>
-                    <p><br>{{ venue.bio }}</p>
+                    <p><br><span v-html="venue.bio.replace(/\r?\n/g, '<br />')"></span></p>
                     <p><br><span class="font-semibold">Capacity:</span> {{ venue.capacity || 0 }} </p>
                     <p><span class="font-semibold">Fee:</span> ${{ venue.standard_fee || "Free" }} {{  venue.fee_type }}</p>
                     <div v-if="venue.ticket_cut !== null"><p><span class="font-semibold">Fee:</span> <span v-if="venue.cut_type == 'per_ticket'">$</span>{{ venue.ticket_cut}} {{ venue.cut_type }}</p></div>
-                    <div v-if="venue.additional_fees !== null"><p><span class="font-semibold">Additional Fees:</span> {{ venue.additional_fees }} </p></div>
-                    <div v-if="venue.tech_specs !== null"><p><span class="font-semibold">Tech Specs:</span> {{ venue.tech_specs }} </p></div>
-                    <div v-if="venue.backline !== null"><p><span class="font-semibold">Backline:</span> {{ venue.backline }} </p></div>
+                    <div v-if="venue.additional_fees !== null"><p><span class="font-semibold">Additional Fees:</span> <span v-html="venue.additional_fees.replace(/\r?\n/g, '<br />')"></span> </p></div>
+                    <div v-if="venue.tech_specs !== null"><p><span class="font-semibold">Tech Specs:</span> <span v-html="venue.tech_specs.replace(/\r?\n/g, '<br />')"></span> </p></div>
+                    <div v-if="venue.backline !== null"><p><span class="font-semibold">Backline:</span> <span v-html="venue.backline.replace(/\r?\n/g, '<br />')"></span> </p></div>
                 </div>
                 <div class="overflow-x-auto m-10 text-right"><button @click="update = !update">Update</button></div>
             </div>

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Validator;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -49,7 +51,7 @@ class VenueController extends Controller
             'venue-images', ['disk' => 'public']
         );
 
-        $photo = Storage::url($request->pic_url);
+        $photo = "../storage/" . $photo;
 
         $venue = Venue::Create([
             'tenant_id' => 0,
