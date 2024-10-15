@@ -217,12 +217,12 @@ const createForm = () => {
                         <p>
                             <InputLabel for="formStart" value="Applications Open" :mandatory="truth" />
                             <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">Form will be live from this date.</p>
-                            <VueDatePicker v-model="form['start']" dark></VueDatePicker>
+                            <VueDatePicker v-model="form['start']" dark  format="dd/MM/yyyy HH:mm"></VueDatePicker>
                         </p>
                         <p>
                             <InputLabel for="formEnd" value="Applications Close" :mandatory="truth" />
                             <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">Form will no longer accept submissions from this date.</p>
-                            <VueDatePicker v-model="form['end']" dark></VueDatePicker>
+                            <VueDatePicker v-model="form['end']" dark format="dd/MM/yyyy HH:mm"></VueDatePicker>
                         </p>
                     </div>
                 </div>

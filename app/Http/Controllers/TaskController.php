@@ -24,7 +24,16 @@ class TaskController extends Controller
         $taskCount = Task::Where('task_list_id', $taskList->id)
             ->count();
         $tasks = Task::Where('task_list_id', $taskList->id)
+            ->orderBy('order_id', 'asc')
             ->get();
+
+        foreach($tasks as &$task) {
+            $overdue = false;
+            if (Carbon::parse($task->due)->isPast() && $task->completed !== "completed" && $task->completed !== "deleted") {
+                $overdue = true;
+            }
+            $task->overdue = $overdue;
+        }
 
         return Inertia::render('Task/List', [
             'tasks' => $tasks,
@@ -58,11 +67,15 @@ class TaskController extends Controller
         $taskList = TaskList::where('tenant_id', 1)
             ->where('owner_id', $user->id)
             ->first();
+        $tasks = $request->tasks;
 
-        foreach($request->tasks as $taskEntry) {
-            $task = Task::find($taskEntry->id);
-            $task->order_id = $taskEntry->id;
+        $i = 1;
+        foreach($tasks as $taskEntry) {
+            Log::debug('Attempting to find task: {entry}', ['entry' => $taskEntry]);
+            $task = Task::find($taskEntry['id']);
+            $task->order_id = $i;
             $task->save();
+            $i++;
         }
 
         return redirect()->route("tasks")->with('success', 'Added');
@@ -73,9 +86,15 @@ class TaskController extends Controller
         $taskList = TaskList::where('tenant_id', 1)
             ->where('owner_id', $user->id)
             ->first();
+        $name = '.';
+        if($request->name !== '') {
+            $name = $request->name;
+        }
 
         $task = Task::find($request->id);
-        $task->name = $request->name;
+        Log::debug('Attempting to find task: {id}', ['id' => $request->id]);
+        Log::debug('Updating task data; id: {id}, name: {name}, due: {due}, status: {status}', ['id' => $request->id, 'name' => $request->name, 'due' => $request->due, 'status' => $request->completed]);
+        $task->name = $name;
         $task->due = $request->due;
         $task->completed = $request->completed;
         $task->save();
@@ -93,5 +112,136 @@ class TaskController extends Controller
         $task->destroy();
 
         return redirect()->route("tasks")->with('success', 'Deleted');
+    }
+
+    public function exportCSV() {
+        $filename = 'tasks.csv';
+
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => "inline; filename=\"$filename\"",
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0',
+            'X-Accel-Buffering' => 'no'
+        ];
+        Log::info('Exporting task CSV');
+
+        $columns = [
+            'Name *',
+            'Due by *',
+            'Status *',
+            'Order *',
+        ];
+
+        $callback = function() use ($filename, $columns) {
+            $user =  Auth::user();
+            $handle = fopen('php://output', 'w');
+            Log::debug('Exporting task CSV: {name}', ['name' => $filename]);
+
+            $taskList = TaskList::where('tenant_id', 1)
+            ->where('owner_id', $user->id)
+            ->first();
+
+            $count = Task::where('task_list_id', $taskList->id)->count();
+            Log::debug('Total taks to export: {count}', ['count' => $count]);
+
+            fputcsv($handle, $columns);
+
+            // Fetch and process data in chunks
+            Task::where('task_list_id', $taskList->id)->chunk(25, function ($tasks) use ($handle) {
+                Log::debug('Exporting chunk: {chunk}', ['chunk' => $tasks]);
+                foreach ($tasks as $task) {
+                    Log::debug('Exporting task: {name}', ['name' => $task->name]);
+
+                    $data = [
+                        isset($task->name)?             $task->name             : '',
+                        isset($task->due)?              $task->due              : '',
+                        isset($task->completed)?        $task->completed        : '',
+                        isset($task->order_id)?         $task->order_id         : '',
+                    ];
+
+                    Log::debug('Exporting data: {data}', ['data' => $data]);
+                    Log::debug('Exporting handle: {handle}', ['handle' => $handle]);
+
+                    // Write data to a CSV file.
+                    fputcsv($handle, $data);
+                }
+            });
+            fclose($handle);
+        };
+
+        return response()->stream($callback, 200, $headers)->send();
+    }
+
+    public function importCSV(Request $request)
+    {
+        $request->validate([
+            'import_csv' => 'required|mimes:csv',
+        ]);
+        //read csv file and skip data
+        $file = $request->file('import_csv');
+        $handle = fopen($file->path(), 'r');
+        Log::debug('Importing task CSV');
+
+        //skip the header row
+        fgetcsv($handle);
+
+        $chunksize = 25;
+        while(!feof($handle))
+        {
+            $chunkdata = [];
+
+            for($i = 0; $i<$chunksize; $i++)
+            {
+                $data = fgetcsv($handle);
+                if($data === false)
+                {
+                    break;
+                }
+                $chunkdata[] = $data;
+            }
+
+            $this->getchunkdata($chunkdata);
+        }
+        fclose($handle);
+
+        return redirect()->route('tasks')->with('success', 'Data has been added successfully.');
+    }
+
+    public function getchunkdata($chunkdata)
+    {
+        foreach($chunkdata as $column){
+            Log::debug('Importing task: {name}', ['name' => $column[0]]);
+
+            $user =  Auth::user();
+
+            $taskList = TaskList::where('tenant_id', 1)
+            ->where('owner_id', $user->id)
+            ->first();
+
+            $taskCheck = Task::where('task_list_id', $taskList->id)
+                ->where('name', $column[0])
+                ->count();
+
+            Log::debug('Task records found: {count}', ['count' => $taskCheck]);
+
+            if ($taskCheck !== 0){
+                Log::debug('Task found - updating');
+                $task = Task::where('task_list_id', $taskList->id)
+                    ->where('name', $column[0])
+                    ->first();
+            } else {
+                Log::debug('Task not found - creating');
+                $task = new Task();
+                $task->task_list_id = $taskList->id;
+            }
+
+            $task->name = $column[0];
+            $task->due = $column[1];
+            $task->completed = $column[2];
+            $task->order_id = $column[3];
+            $task->save();
+        }
     }
 }

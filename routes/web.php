@@ -45,6 +45,7 @@ Route::middleware([
     Route::get('/media', [EventController::class, 'getEventList'])->name('media');
     Route::get('/settings', [EventController::class, 'getEventList'])->name('settings');
     Route::get('/staff', [EventController::class, 'getEventList'])->name('staff');
+    Route::get('/tasks/export-csv', [TaskController::class, 'exportCSV'])->name('tasks.getCSV');
     Route::get('/tasks', [TaskController::class, 'getTasks'])->name('tasks');
     Route::get('/venue/create', function () {return Inertia::render('Venue/Create');})->name('venue.create');
     Route::get('/venue/export-csv', [VenueController::class, 'exportCSV'])->name('venue.getCSV');
@@ -71,6 +72,7 @@ Route::middleware([
     Route::post('/event/deleteApplication/{id}', [ApplicationController::class, 'deleteApplication'])->name('event.form.delete');
     Route::post('/event/publishApplication/{id}',[ApplicationController::class, 'publishApplication'])->name('event.form.publish');
     Route::post('/event/unpublishApplication/{id}',[ApplicationController::class, 'unpublishApplication'])->name('event.form.unpublish');
+    Route::post('/tasks/import-csv', [TaskController::class, 'importCSV'])->name('tasks.putCSV');
     Route::post('/tasks/create', [TaskController::class, 'newTask'])->name('tasks.new');
     Route::post('/tasks/delete', [TaskController::class, 'deleteTask'])->name('tasks.destroy');
     Route::post('/tasks/reorder', [TaskController::class, 'listReorder'])->name('tasks.reorder');
