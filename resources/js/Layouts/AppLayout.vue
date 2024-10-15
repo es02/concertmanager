@@ -41,7 +41,7 @@ const logout = () => {
                         <div class="flex">
                             <!-- Logo -->
                             <div class="shrink-0 flex items-center">
-                                <Link :href="route('events')">
+                                <Link :href="route('dashboard')">
                                     <ApplicationMark class="block h-9 w-auto" />
                                 </Link>
                             </div>
@@ -57,21 +57,24 @@ const logout = () => {
                                 <NavLink :href="route('venues')" :active="route().current('venues')">
                                     Venues
                                 </NavLink>
-                                <NavLink :href="route('volunteers')" :active="route().current('volunteers')">
+                                <!-- <NavLink :href="route('volunteers')" :active="route().current('volunteers')">
                                     Volunteers
-                                </NavLink>
-                                <NavLink :href="route('staff')" :active="route().current('staff')">
+                                </NavLink> -->
+                                <!-- <NavLink :href="route('staff')" :active="route().current('staff')">
                                     Staff
-                                </NavLink>
-                                <NavLink :href="route('media')" :active="route().current('media')">
+                                </NavLink> -->
+                                <!-- <NavLink :href="route('media')" :active="route().current('media')">
                                     Media
+                                </NavLink> -->
+                                <NavLink :href="route('tasks')" :active="route().current('tasks')">
+                                    Tasks
                                 </NavLink>
-                                <NavLink :href="route('emails')" :active="route().current('emails')">
+                                <!-- <NavLink :href="route('emails')" :active="route().current('emails')">
                                     Email
-                                </NavLink>
-                                <NavLink :href="route('settings')" :active="route().current('settings')">
+                                </NavLink> -->
+                                <!-- <NavLink :href="route('settings')" :active="route().current('settings')">
                                     Settings
-                                </NavLink>
+                                </NavLink> -->
                             </div>
                         </div>
 
