@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('email_thread_id');
             $table->string('api_id'); // gmail_api id to retreive email details
             $table->string('subject');
-            $table->enum('state', ['unread', 'read', 'deleted'])->default('active');
+            $table->enum('state', ['unread', 'read', 'deleted'])->default('unread');
             $table->timestamps();
         });
     }

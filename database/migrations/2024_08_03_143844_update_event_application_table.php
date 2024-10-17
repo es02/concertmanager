@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('event_application', function (Blueprint $table) {
             $table->dateTime('open')->default("2025-05-03 12:00:00");
             $table->dateTime('close')->default("2025-05-04 00:00:00");
-            $table->longText('description')->default(".");
+            $table->longText('description');
         });
     }
 
