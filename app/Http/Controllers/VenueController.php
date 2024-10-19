@@ -17,7 +17,7 @@ class VenueController extends Controller
     public function getVenueList($pagenum = 0){
         $count = Venue::count();
         $venues = Venue::where('state', '!=', 'deleted')
-            ->orderBy('name')
+            ->orderBy('venue_name')
             ->skip($pagenum*10)
             ->take(10)
             ->get();
