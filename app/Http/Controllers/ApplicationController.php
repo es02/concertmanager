@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -35,13 +36,16 @@ class ApplicationController extends Controller
         // dropdown format: enum[<option>, <option>, ...]
         // img format:      img[<path>]
 
+        $start = new Carbon($request->start);
+        $end = new Carbon($request->end);
+
         $form = Event_Application::Create([
             'tenant_id' => 1,
             'event_id' => $id,
             'name' =>  $request->name,
             'description' =>  $request->desc,
-            'open' =>  $request->start,
-            'close' =>  $request->end,
+            'open' =>  $start->toDateTimeString(),
+            'close' =>  $end->toDateTimeString(),
             'type' =>  $request->type,
             'published' =>  1,
             'state' =>  'open',
@@ -236,18 +240,26 @@ class ApplicationController extends Controller
             }
         }
 
+        // Only assume absolute mandatory fields have been set
+        $bio = isset($artistKeys['bio'])?               $artistKeys['bio']    : '';
+        $genre = isset($artistKeys['genre'])?           $artistKeys['genre']    : '';
+        $location = isset($artistKeys['location'])?     $artistKeys['location']    : '';
+        $rider = isset($artistKeys['standard_rider'])?  $artistKeys['standard_rider']    : '';
+        $tech = isset($artistKeys['tech_specs'])?       $artistKeys['tech_specs']    : '';
+        $epk = isset($artistKeys['epk_url'])?           $artistKeys['epk_url']    : '';
+
         // if we don't have an artist entry in the DB, be sure to create one
         if ($artist === 0) {
             $artist = Artist::Create([
                 'tenant_id' => 1,
                 'name' => $artistKeys['name'],
                 'email' => $artistKeys['email'],
-                'bio' => $artistKeys['bio'],
-                'genre' => $artistKeys['genre'],
-                'location' => $artistKeys['location'],
-                'standard_rider' => $artistKeys['standard_rider'],
-                'tech_specs' => $artistKeys['tech_specs'],
-                'epk_url' => $artistKeys['epk_url'],
+                'bio' => $bio,
+                'genre' => $genre,
+                'location' => $location,
+                'standard_rider' => $rider,
+                'tech_specs' => $tech,
+                'epk_url' => $epk,
                 'booked_previously' => false,
                 'state' => 'active'
             ]);

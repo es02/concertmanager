@@ -353,7 +353,7 @@ class EventController extends Controller
             $event->start = $column[2];
             $event->end = $column[3];
             $event->description = $column[4];
-            $event->ticket_provider = $column[5];
+            $event->ticketing_provider = $column[5];
             $event->free = $free;
             $event->all_ages = $aa;
             $event->ticket_url = $column[8];
