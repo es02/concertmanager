@@ -72,7 +72,7 @@ const numberOfPages = computed(() => Math.ceil(props.count / applicationsPerPage
 
 var displayedApplicationID = ref(0);
 if (props.count !== 0) {
-    displayedApplicationID = 1;
+    displayedApplicationID = ref(1);
 }
 
 const $targetEl = document.getElementById('application-modal');
