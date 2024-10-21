@@ -109,6 +109,10 @@ function shortlist(id) {
     router.post(`/event/applications/shortlist/${id}`);
 }
 
+function destroy(id) {
+    router.post(`/event/applications/delete/${id}`);
+}
+
 function rate(id) {
     rateForm.post(route('artist.rate', {id: id, via: 'application'}), {
         preserveScroll: true,
@@ -259,8 +263,11 @@ function sort(sort) {
                             <button @click="accept(applications[displayedApplicationID].application_id)" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
                                 Accept
                             </button>
-                            <button @click="rate(applications[displayedApplicationID].application_id)" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
+                            <button @click="rate(applications[displayedApplicationID].application_id)" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
                                 Rate
+                            </button>
+                            <button @click="destroy(applications[displayedApplicationID].application_id)" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
+                                Delete
                             </button>
                         </div>
                     </div>

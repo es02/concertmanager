@@ -106,6 +106,7 @@ class ApplicationController extends Controller
 
     public function deleteApplication($id) {
         $deleted = Event_Application_Entry::where('event_application_id', $id)->delete();
+        $deleted = Event_Application_Parent::where('application_id', $id)->delete();
         $deleted = Event_Application_Field::where('event_application_id', $id)->delete();
         $deleted = Event_Application::find($id);
         $event = $deleted->event_id;
@@ -479,5 +480,17 @@ class ApplicationController extends Controller
         $application->save();
 
         return redirect()->route("event.applications", $application->application_id)->with('success', '');
+    }
+
+    public function delete($id) {
+        Log::debug('Removing New status for application: {id}', ['id' => $id]);
+
+        $appId = Event_Application_Parent::find($id);
+        $appId = $appId->application_id;
+
+        $deleted = Event_Application_Entry::where('event_application_parent_id', $id)->delete();
+        $deleted = Event_Application_Parent::find($id)->delete();
+
+        return redirect()->route("event.applications", $appId)->with('success', 'Deleted');
     }
 }
