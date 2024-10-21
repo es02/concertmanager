@@ -145,7 +145,7 @@ class ApplicationController extends Controller
 
         $rawApplications = Event_Application_Parent::where('tenant_id', 1)
             ->where('application_id', $id)
-            ->skip($pagenum*10)
+            ->skip($pageNum*10)
             ->take(10)
             ->get();
 
