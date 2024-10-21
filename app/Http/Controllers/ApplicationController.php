@@ -175,11 +175,18 @@ class ApplicationController extends Controller
                 ->skip($pagenum * 10)
                 ->take(10)
                 ->get();
+
+            $count = $rawApplications = Event_Application_Parent::where('tenant_id', 1)
+                ->where($filter, 1)
+                ->count();
         } else {
             $rawApplications = Event_Application_Parent::where('tenant_id', 1)
                 ->skip($pagenum * 10)
                 ->take(10)
                 ->get();
+
+            $count = $rawApplications = Event_Application_Parent::where('tenant_id', 1)
+                ->count();
         }
 
 
@@ -237,8 +244,6 @@ class ApplicationController extends Controller
 
             Log::debug('Built sorted application list: {application}', ['application' => $applications]);
         }
-
-        $count = sizeof($applications);
 
         return Inertia::render('Event/ApplicationList', [
             'applications' => $applications,
