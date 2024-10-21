@@ -65,6 +65,7 @@ Route::middleware([
     Route::post('/artist/rate/{id}/{via}', [ArtistController::class, 'rate'])->name('artist.rate');
     Route::post('/artist/update', [ArtistController::class, 'updateArtist'])->name('artist.update');
     Route::post('/event/applications/accept/{id}', [ApplicationController::class, 'accept'])->name('application.accept');
+    Route::post('/event/applications/delete/{id}', [ApplicationController::class, 'delete'])->name('application.delete');
     Route::post('/event/applications/reject/{id}', [ApplicationController::class, 'reject'])->name('application.reject');
     Route::post('/event/applications/seen/{id}', [ApplicationController::class, 'seen'])->name('application.seen');
     Route::post('/event/applications/shortlist/{id}', [ApplicationController::class, 'shortlist'])->name('application.shortlist');
