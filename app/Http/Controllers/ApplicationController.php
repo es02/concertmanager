@@ -140,19 +140,48 @@ class ApplicationController extends Controller
         ]);
     }
 
-    public function showApplications($id, $pagenum = 0, $sortBy = 'name', $filter = 'none') {
+    public function showApplications($id, $a = 'none', $b = 'id', $c = 0,) {
         $applications = [];
+        $sortby = 'id';
+        $filter = 'none';
+        $pagenum = 0;
+
+        if (is_numeric($a)) {
+            $pagenum = $a;
+        } elseif (is_numeric($b)) {
+            $pagenum = $b;
+
+            if ($a === 'name' || $a === 'location' || $a === 'genre' || $a === 'rating' || $a === 'status') {
+                $sortby = $a;
+            } else {
+                $filter = $a;
+            }
+        } else {
+            $pagenum = $c;
+            $sortby = $b;
+            $filter = $a;
+        }
+
+        Log::debug('Generating event application list for Event: {id}, sorted by: {sort}, filtered by: {filter}, page: {page}', ['id' => $id, 'sort' => $sortby, 'filter' => $filter, 'page' => $pagenum]);
 
         // don't skip ahead a page
         if ($pagenum !== 0) {
             $pagenum--;
         }
 
-        $rawApplications = Event_Application_Parent::where('tenant_id', 1)
-            ->where('application_id', $id)
-            ->skip($pagenum*10)
-            ->take(10)
-            ->get();
+        if($filter !== 'none') {
+            $rawApplications = Event_Application_Parent::where('tenant_id', 1)
+                ->where($filter, 1)
+                ->skip($pagenum * 10)
+                ->take(10)
+                ->get();
+        } else {
+            $rawApplications = Event_Application_Parent::where('tenant_id', 1)
+                ->skip($pagenum * 10)
+                ->take(10)
+                ->get();
+        }
+
 
         foreach($rawApplications as $rawApplication) {
             $apps = Event_Application_Entry::where('tenant_id', 1)
@@ -184,9 +213,32 @@ class ApplicationController extends Controller
             Log::debug('Built application entry: {application}', ['application' => $applications[$rawApplication->id]]);
         }
 
-        $count = Event_Application_Parent::where('tenant_id', 1)
-            ->where('application_id', $id)
-            ->count();
+        if ($sortby !== 'id') {
+            $sort = SORT_ASC;
+            if ($sortby === 'rating' || $sortby === 'status') {
+                $sort = SORT_DESC;
+            }
+
+            $name = array_column($applications, 'name');
+            $location = array_column($applications, 'location');
+            $genre = array_column($applications, 'genre');
+            $rating = array_column($applications, 'rating');
+            $new = array_column($applications, 'new');
+            $accepted = array_column($applications, 'accepted');
+            $shortlisted = array_column($applications, 'shortlisted');
+            $rejected = array_column($applications, 'rejected');
+
+            if ($sortby === 'status') {
+                array_multisort($new, $sort, $accepted, $sort, $shortlisted, $sort, $rejected, $sort, $applications);
+            } else {
+                array_multisort($$sortby, $sort, $applications);
+            }
+
+
+            Log::debug('Built sorted application list: {application}', ['application' => $applications]);
+        }
+
+        $count = sizeof($applications);
 
         return Inertia::render('Event/ApplicationList', [
             'applications' => $applications,
