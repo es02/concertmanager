@@ -140,12 +140,17 @@ class ApplicationController extends Controller
         ]);
     }
 
-    public function showApplications($id, $pageNum = 0, $sortBy = 'name', $filter = 'none') {
+    public function showApplications($id, $pagenum = 0, $sortBy = 'name', $filter = 'none') {
         $applications = [];
+
+        // don't skip ahead a page
+        if ($pagenum !== 0) {
+            $pagenum--;
+        }
 
         $rawApplications = Event_Application_Parent::where('tenant_id', 1)
             ->where('application_id', $id)
-            ->skip($pageNum*10)
+            ->skip($pagenum*10)
             ->take(10)
             ->get();
 
