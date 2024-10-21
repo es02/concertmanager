@@ -25,14 +25,15 @@ const props = defineProps(['displayedApplication']);
     </div>
     <!-- Modal body -->
     <div v-for="(value, key) in displayedApplication">
-        <div v-if="key !== 'name' && key !== 'shortlisted' && key !== 'accepted' && key !== 'rejected' && key !== 'rating' && key !== 'reason' && key !== 'application_id' && value !== null && value !== ''">
+        <div v-if="key !== 'name' && key !== 'shortlisted' && key !== 'accepted' && key !== 'rejected' && key !== 'rating' && key !== 'reason' && key !== 'application_id' && key !== 'new' && value !== null && value !== ''">
             <span class="font-semibold">{{  key }} :</span>
             <span v-if="key.replace(/(\(s\))/, '').slice(-3) === 'URL'">
                 <ul v-for="link in value.split(/\r?\n/g)" class="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
                     <li><a :href="link">{{ link }}</a></li>
                 </ul>
             </span>
-            <!-- <span v-else v-html="value.replace(/\r?\n/g, '<br />')"></span> -->
+            <span v-else-if="key === 'bio'" v-html="value.replace(/\r?\n/g, '<br />')"></span>
+            <span v-else >{{ value }}</span>
         </div>
     </div>
     <span v-if="displayedApplication['rejected']"><span class="font-semibold">Rejection Reason: </span>{{ displayedApplication.reason }}</span>

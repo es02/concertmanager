@@ -9,7 +9,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import LongTextInput from '@/Components/LongTextInput.vue';
 
 const props = defineProps(['applications', 'count']);
-console.log('number of entries: ' + props.count)
+// console.log('number of entries: ' + props.count)
 
 // [0] 'example.com' [1] 'event' [2] 'applications' [3] 'eventID' [4] '$pageNum'/'filter'/'sort'/'search' [5] '$term' [6] '$pageNum'/'sort' [7] '$pageNum'/'$term' [8] '$pageNum'
 const urlPath = router.page.url.split('/');
