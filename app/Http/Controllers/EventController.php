@@ -18,6 +18,7 @@ use App\Models\Venue;
 use App\Models\Event_Application;
 use App\Models\Event_Application_Field;
 use App\Models\Event_Application_Entry;
+use App\Models\Event_Application_Parent;
 use App\Models\User;
 
 class EventController extends Controller
@@ -63,21 +64,19 @@ class EventController extends Controller
             ->get();
 
         foreach($forms as &$form) {
-            $fields =  Event_Application_Field::where('tenant_id', 1)
-                ->where('event_application_id', $form->id)
-                ->count();
-            $applications = Event_Application_Entry::where('tenant_id', 1)
-                ->where('event_application_id', $form->id)
+            $applications = Event_Application_Parent::where('tenant_id', 1)
+                ->where('application_id', $form->id)
                 ->count();
 
-            Log::debug('Form: {id} :: {form}, Form Fields: {fields}, Application Records: {records}', ['id' => $form->id, 'form' => $form->name, 'fields' => $fields, 'records' => $applications]);
+            $new = Event_Application_Parent::where('tenant_id', 1)
+                ->where('application_id', $form->id)
+                ->where('new', 1)
+                ->count();
 
-            // Divide total applications by number of entry fields
-            $count = 0;
-            if ($fields > 0){
-                $count = $applications / $fields;
-            }
-            $form['application_count'] = $count;
+            Log::debug('Form: {id} :: {form}, Application Records: {records}, New Applications: {new}', ['id' => $form->id, 'form' => $form->name,'records' => $applications, 'new' => $new]);
+
+            $form['application_count'] = $applications;
+            $form['new_application_count'] = $new;
         }
 
         return Inertia::render('Event/Show', [

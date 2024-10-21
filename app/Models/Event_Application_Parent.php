@@ -19,6 +19,7 @@ class Event_Application_Parent extends Model
     protected $fillable = [
         'tenant_id',
         'application_id',
+        'new',
         'shortlisted',
         'accepted',
         'rejected',
