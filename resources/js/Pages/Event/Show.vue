@@ -53,7 +53,7 @@ function unPublishForm(id) { router.post(`/event/unpublishApplication/${id}`);}
                         <td>{{ form.type }}</td>
                         <td>{{ form.name }}</td>
                         <td class="link link-primary">
-                            <a :href="`/event/applications/${form.id}`">{{ form.application_count }}</a>
+                            <a :href="`/event/applications/${form.id}`">{{ form.application_count }}</a> <span v-if="form.new_application_count > 0" class="bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">New</span>
                         </td>
                         <td class="link link-primary">
                             <a :href="`/apply/${form.name}`">Form Link</a>

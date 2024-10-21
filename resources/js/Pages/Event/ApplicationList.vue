@@ -10,7 +10,6 @@ import LongTextInput from '@/Components/LongTextInput.vue';
 const props = defineProps(['applications', 'count']);
 
 const currentPage = ref(1);
-
 const applicationsPerPage = 10;
 
 const rejectForm = useForm({
@@ -67,6 +66,12 @@ function rate(id) {
         onSuccess: () => rateForm.reset(),
     });
 }
+
+function seen(id) {
+    if(props.applications[id].new === 1) {
+        router.post(`/event/applications/seen/${id}`);
+    }
+}
 </script>
 
 <template>
@@ -86,7 +91,7 @@ function rate(id) {
                 <tbody>
                     <tr v-for="(application, index) in applications" :key="application.id">
                         <td class="link link-primary">
-                            <a @click="displayedApplicationID=application.application_id; modal.show()" data-modal-target="application-modal" data-modal-toggle="application-modal">{{ application.name }}</a>
+                            <a @click="displayedApplicationID=application.application_id; seen(application.application_id); modal.show()" data-modal-target="application-modal" data-modal-toggle="application-modal">{{ application.name }}</a>
                         </td>
                         <td>{{ application.location }}</td>
                         <td>{{ application.genre }}</td>
@@ -94,10 +99,10 @@ function rate(id) {
                             <Rating :rating="application.rating"></Rating>
                         </td>
                         <td>
+                            <span v-if="application.new" class="bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">New</span>
                             <span v-if="application.shortlisted" class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">Shortlisted</span>
                             <span v-if="application.accepted" class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Accepted</span>
                             <span v-if="application.rejected" class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">Rejected</span>
-
                         </td>
                     </tr>
                 </tbody>

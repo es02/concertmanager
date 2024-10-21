@@ -140,11 +140,13 @@ class ApplicationController extends Controller
         ]);
     }
 
-    public function showApplications($id) {
+    public function showApplications($id, $pageNum = 0, $sortBy = 'name', $filter = 'none') {
         $applications = [];
 
         $rawApplications = Event_Application_Parent::where('tenant_id', 1)
             ->where('application_id', $id)
+            ->skip($pagenum*10)
+            ->take(10)
             ->get();
 
         foreach($rawApplications as $rawApplication) {
@@ -156,6 +158,7 @@ class ApplicationController extends Controller
 
             $applications[$rawApplication->id]['application_id'] = $rawApplication->id;
             $applications[$rawApplication->id]['rating'] = $artist->rating;
+            $applications[$rawApplication->id]['new'] = $rawApplication->new;
             $applications[$rawApplication->id]['shortlisted'] = $rawApplication->shortlisted;
             $applications[$rawApplication->id]['accepted'] = $rawApplication->accepted;
             $applications[$rawApplication->id]['rejected'] = $rawApplication->rejected;
@@ -286,6 +289,7 @@ class ApplicationController extends Controller
         $parent = Event_Application_Parent::create([
             'tenant_id' => 1,
             'application_id' => $application->id,
+            'new' => 1,
         ]);
 
         $entryCount = Event_Application_Entry::where('tenant_id', 1)
@@ -400,5 +404,18 @@ class ApplicationController extends Controller
         $application->save();
 
         return redirect()->route("event.applications", $application->application_id)->with('success', 'Rejected');
+    }
+
+    public function seen($id) {
+        $application = Event_Application_Parent::where('tenant_id', 1)
+            ->where('id', $id)
+            ->first();
+
+        Log::debug('Removing New status for application: {id}', ['id' => $id]);
+
+        $application->new = 0;
+        $application->save();
+
+        return redirect()->route("event.applications", $application->application_id)->with('success', '');
     }
 }
