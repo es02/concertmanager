@@ -278,10 +278,6 @@ class ApplicationController extends Controller
             ->orderBy('order_id', 'asc')
             ->get();
 
-        $artist = Artist::where('tenant_id', 1)
-            ->where('email', $application->email)
-            ->count();
-
         $artistKeys = [];
 
         foreach ($fields as $field) {
@@ -314,6 +310,10 @@ class ApplicationController extends Controller
         $tech = isset($artistKeys['tech_specs'])?       $artistKeys['tech_specs']    : '';
         $epk = isset($artistKeys['epk_url'])?           $artistKeys['epk_url']    : '';
 
+        $artist = Artist::where('tenant_id', 1)
+            ->where('email', $artistKeys['email'])
+            ->count();
+
         // if we don't have an artist entry in the DB, be sure to create one
         if ($artist === 0) {
             $artist = Artist::Create([
@@ -345,7 +345,7 @@ class ApplicationController extends Controller
 
         }else{
             $artist = Artist::where('tenant_id', 1)
-            ->where('email', $application->email)
+            ->where('email', $artistKeys['email'])
             ->first();
         }
 
