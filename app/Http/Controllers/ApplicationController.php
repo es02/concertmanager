@@ -176,7 +176,7 @@ class ApplicationController extends Controller
                 ->take(10)
                 ->get();
 
-            $count = $rawApplications = Event_Application_Parent::where('tenant_id', 1)
+            $count = Event_Application_Parent::where('tenant_id', 1)
                 ->where($filter, 1)
                 ->count();
         } else {
@@ -185,7 +185,7 @@ class ApplicationController extends Controller
                 ->take(10)
                 ->get();
 
-            $count = $rawApplications = Event_Application_Parent::where('tenant_id', 1)
+            $count = Event_Application_Parent::where('tenant_id', 1)
                 ->count();
         }
 
