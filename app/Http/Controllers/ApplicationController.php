@@ -147,9 +147,9 @@ class ApplicationController extends Controller
         $pagenum = 0;
 
         if (is_numeric($a)) {
-            $pagenum = $a;
+            // $pagenum = $a;
         } elseif (is_numeric($b)) {
-            $pagenum = $b;
+            // $pagenum = $b;
 
             if ($a === 'name' || $a === 'location' || $a === 'genre' || $a === 'rating' || $a === 'status') {
                 $sortby = $a;
@@ -157,7 +157,7 @@ class ApplicationController extends Controller
                 $filter = $a;
             }
         } else {
-            $pagenum = $c;
+            // $pagenum = $c;
             $sortby = $b;
             $filter = $a;
         }
@@ -165,15 +165,15 @@ class ApplicationController extends Controller
         Log::debug('Generating event application list for Event: {id}, sorted by: {sort}, filtered by: {filter}, page: {page}', ['id' => $id, 'sort' => $sortby, 'filter' => $filter, 'page' => $pagenum]);
 
         // don't skip ahead a page
-        if ($pagenum !== 0) {
-            $pagenum--;
-        }
+        // if ($pagenum !== 0) {
+        //     $pagenum--;
+        // }
 
         if($filter !== 'none') {
             $rawApplications = Event_Application_Parent::where('tenant_id', 1)
                 ->where($filter, 1)
-                ->skip($pagenum * 10)
-                ->take(10)
+                // ->skip($pagenum * 10)
+                // ->take(10)
                 ->get();
 
             $count = Event_Application_Parent::where('tenant_id', 1)
@@ -181,8 +181,8 @@ class ApplicationController extends Controller
                 ->count();
         } else {
             $rawApplications = Event_Application_Parent::where('tenant_id', 1)
-                ->skip($pagenum * 10)
-                ->take(10)
+            //     ->skip($pagenum * 10)
+            //     ->take(10)
                 ->get();
 
             $count = Event_Application_Parent::where('tenant_id', 1)

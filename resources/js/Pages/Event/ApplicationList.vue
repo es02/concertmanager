@@ -199,7 +199,7 @@ function sort(sort) {
                 </tbody>
             </table>
         </div>
-        <div class="join flex justify-center fixed w-full p-4">
+        <!-- <div class="join flex justify-center fixed w-full p-4">
             <nav aria-label="Page navigation">
                 <ul class="inline-flex -space-x-px text-sm">
                     <li>
@@ -216,7 +216,7 @@ function sort(sort) {
                     </li>
                 </ul>
             </nav>
-        </div>
+        </div> -->
 
         <!-- Application Entry Modal modal -->
         <div v-if="count !==  0" id="application-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full p-4 md:inset-0 h-[calc(100%-1rem)] max-h-full">
