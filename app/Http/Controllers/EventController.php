@@ -25,6 +25,11 @@ class EventController extends Controller
 {
     public function getEventList($pagenum = 0){
         $count = Event::count();
+
+        // don't skip ahead a page
+        if ($pagenum !== 0) {
+            $pagenum--;
+        }
         $events = Event::where('state', '!=', 'deleted')
             ->orderBy('name')
             ->skip($pagenum*10)
