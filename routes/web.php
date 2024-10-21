@@ -40,11 +40,11 @@ Route::middleware([
     Route::get('/event/{id}', [EventController::class, 'getEvent'])->name('event');
     Route::get('/event/createSet/{id}', [EventController::class, 'createSet'])->name('event.set.new'); // TODO:: Create controller endpoint and update me
     Route::get('/event/createApplication/{id}', [ApplicationController::class, 'showCreateApplication'])->name('event.form.new');
-    Route::get('/event/applications/{id}/{pagenum?}', [ApplicationController::class, 'showApplications'])->name('event.applications');
     Route::get('/event/applications/{id}/filter/{filter}/{pagenum?}', [ApplicationController::class, 'showApplications']);
-    Route::get('/event/applications/{id}/sort/{sortBy}/{pagenum?}', [ApplicationController::class, 'showApplications']);
-    Route::get('/event/applications/{id}/filter/{filter}/sort/{sortBy}/{pagenum?}', [ApplicationController::class, 'showApplications']);
+    Route::get('/event/applications/{id}/sort/{sortby}/{pagenum?}', [ApplicationController::class, 'showApplications']);
+    Route::get('/event/applications/{id}/filter/{filter}/sort/{sortby}/{pagenum?}', [ApplicationController::class, 'showApplications']);
     Route::get('/event/applications/{id}/search/{searchTerm}/{pagenum?}', [ApplicationController::class, 'showApplications']);
+    Route::get('/event/applications/{id}/{pagenum?}', [ApplicationController::class, 'showApplications'])->name('event.applications');
     Route::get('/events/{pagenum?}', [EventController::class, 'getEventList'])->name('events');
     Route::get('/media', [EventController::class, 'getEventList'])->name('media');
     Route::get('/settings', [EventController::class, 'getEventList'])->name('settings');

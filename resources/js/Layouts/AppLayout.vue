@@ -12,6 +12,24 @@ defineProps({
     title: String,
 });
 
+const urlPath = router.page.url.split('/');
+var i = 1;
+var tmp = window.location.origin;
+var pageName = 'Home';
+var urlPathList = {'Home': tmp};
+urlPath.forEach((url) => {
+    tmp = tmp + url + '/';
+    // console.log(url);
+    if (isNaN(url)) {
+        pageName = url.charAt(0).toUpperCase() + url.slice(1);
+        urlPathList[pageName] = tmp;
+    }
+    i++;
+});
+// Update last entry to current page
+// It's not 100% accurate but good for most pages
+urlPathList[pageName] = tmp;
+
 const showingNavigationDropdown = ref(false);
 
 const switchToTeam = (team) => {
@@ -314,6 +332,20 @@ const logout = () => {
 
                 </div>
             </nav>
+            <div>
+                <nav class="flex" aria-label="Breadcrumb">
+                    <ol v-for="(url, name) in urlPathList" class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+                        <li class="inline-flex items-center">
+                            <a :href="url" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+                                <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                                </svg>
+                                {{ name }}
+                            </a>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
 
             <!-- Page Heading -->
             <header v-if="$slots.header" class="bg-white dark:bg-gray-800 shadow">
