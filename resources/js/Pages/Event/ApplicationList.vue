@@ -170,6 +170,7 @@ function sort(sort) {
                         <th><a @click="sort('name')" href="#">Name</a></th>
                         <th><a :href="`/event/applications/${eventID}/sort/location/${currentPage}`">Location</a></th>
                         <th><a :href="`/event/applications/${eventID}/sort/genre/${currentPage}`">Genre</a></th>
+                        <th><!--<a :href="`/event/applications/${eventID}/sort/fee/${currentPage}`">-->Fee<!--</a>--></th>
                         <th><a :href="`/event/applications/${eventID}/sort/rating/${currentPage}`">Rating</a></th>
                         <th><a :href="`/event/applications/${eventID}/sort/status/${currentPage}`">Status</a></th>
                     </tr>
@@ -181,9 +182,8 @@ function sort(sort) {
                         </td>
                         <td>{{ application.location }}</td>
                         <td>{{ application.genre }}</td>
-                        <td>
-                            <Rating :rating="application.rating"></Rating>
-                        </td>
+                        <td v-html="application.fee.slice(0,40)"></td>
+                        <td><Rating :rating="application.rating"></Rating></td>
                         <td>
                             <span v-if="application.new" class="badge badge-neutral gap-2">New</span>
                             <span v-if="application.accepted" class="badge badge-success gap-2">Accepted</span>
