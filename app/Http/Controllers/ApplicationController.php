@@ -310,8 +310,9 @@ class ApplicationController extends Controller
         $tech = isset($artistKeys['tech_specs'])?       $artistKeys['tech_specs']    : '';
         $epk = isset($artistKeys['epk_url'])?           $artistKeys['epk_url']    : '';
 
+        // Use name rather than email as booking agents/managers use the same email for multiple acts
         $artist = Artist::where('tenant_id', 1)
-            ->where('email', $artistKeys['email'])
+            ->where('name', $artistKeys['name'])
             ->count();
 
         // if we don't have an artist entry in the DB, be sure to create one
