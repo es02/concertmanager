@@ -78,6 +78,7 @@ function goToCreateArtist() {
                         <th><a :href="`/artists/${currentPage}/name`">Name</a></th>
                         <th><a :href="`/artists/${currentPage}/genre`">Genre</a></th>
                         <th><a :href="`/artists/${currentPage}/location`">Location</a></th>
+                        <th><!--<a :href="`/event/applications/${eventID}/sort/fee/${currentPage}`">-->Fee<!--</a>--></th>
                         <th><a :href="`/artists/${currentPage}/rating`">Rating</a></th>
                     </tr>
                 </thead>
