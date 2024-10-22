@@ -82,7 +82,7 @@ function destroy(){
                     <p><span class="font-semibold">Location:</span> {{ artist.location }} </p>
                     <p><span class="font-semibold">Fee:</span> <span v-if="!isNaN(artist.standard_fee)">$</span>{{ artist.standard_fee }} </p>
                     <p><br /></p>
-                    <p class="italic" v-if="artist.bio !== ''" v-html="artist.bio.replace(/\r?\n/g, '<br />')"></p>
+                    <p class="italic" v-if="artist.bio !== '' && artist.bio !== null" v-html="artist.bio.replace(/\r?\n/g, '<br />')"></p>
                     <div v-if="artist.standard_rider !== null"><p><br><span class="font-semibold">Hospitality Rider:</span> {{ artist.standard_rider }}</p></div>
                     <p v-if="artist.tech_specs !== ''"><span class="font-semibold">Tech Rider:</span> {{ artist.tech_specs }}</p>
                     <p v-if="artist.epk_url !== ''"><span class="font-semibold">EPK:</span> <a :href="artist.epk_url">{{ artist.epk_url }}</a></p>
