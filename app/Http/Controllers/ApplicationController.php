@@ -155,12 +155,12 @@ class ApplicationController extends Controller
             if ($a === 'name' || $a === 'location' || $a === 'genre' || $a === 'rating' || $a === 'status') {
                 $sortby = $a;
             } else {
-                $filter = $a;
+                if(isset($a) && $a !== 'undefined'){$filter = $a;}
             }
         } else {
             // $pagenum = $c;
-            $sortby = $b;
-            $filter = $a;
+            if(isset($b) && $b !== 'undefined'){$sortby = $b;}
+            if(isset($a) && $a !== 'undefined'){$filter = $a;}
         }
 
         Log::debug('Generating event application list for Event: {id}, sorted by: {sort}, filtered by: {filter}, page: {page}', ['id' => $id, 'sort' => $sortby, 'filter' => $filter, 'page' => $pagenum]);
@@ -196,10 +196,15 @@ class ApplicationController extends Controller
             ->where('event_application_parent_id', $rawApplication->id)
             ->get();
 
+            $rating = 0;
+
             $artist = Artist::where('id', $apps[0]->artist_id)->first();
+            if(isset($artist->rating)){
+                $rating = $artist->rating;
+            }
 
             $applications[$rawApplication->id]['application_id'] = $rawApplication->id;
-            $applications[$rawApplication->id]['rating'] = $artist->rating;
+            $applications[$rawApplication->id]['rating'] = $rating;
             $applications[$rawApplication->id]['new'] = $rawApplication->new;
             $applications[$rawApplication->id]['shortlisted'] = $rawApplication->shortlisted;
             $applications[$rawApplication->id]['accepted'] = $rawApplication->accepted;
@@ -241,10 +246,9 @@ class ApplicationController extends Controller
             } else {
                 array_multisort($$sortby, $sort, $applications);
             }
-
-
-            Log::debug('Built sorted application list: {application}', ['application' => $applications]);
         }
+
+        Log::debug('Built sorted application list: {application}', ['application' => $applications]);
 
         return Inertia::render('Event/ApplicationList', [
             'applications' => $applications,
