@@ -1,15 +1,28 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { ref, computed, reactive } from 'vue';
-import { Modal } from 'flowbite';
 import Rating from '@/Components/Rating.vue';
 import { Link, router, useForm  } from '@inertiajs/vue3';
 import applicationModal from '@/Pages/Event/Partials/applicationModal.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import LongTextInput from '@/Components/LongTextInput.vue';
+import { FwbButton, FwbModal } from 'flowbite-vue'
 
 const props = defineProps(['applications', 'count']);
-// console.log('number of entries: ' + props.count)
+console.log('number of entries: ' + props.count)
+console.log('applications: ');
+console.log(props.applications);
+
+const isShowModal = ref(false)
+
+function closeModal () {
+    isShowModal.value = false
+}
+function showModal (index) {
+    displayedApplicationID=index;
+    seen(props.applications[index].application_id);
+    isShowModal.value = true
+}
 
 // [0] 'example.com' [1] 'event' [2] 'applications' [3] 'eventID' [4] '$pageNum'/'filter'/'sort'/'search' [5] '$term' [6] '$pageNum'/'sort' [7] '$pageNum'/'$term' [8] '$pageNum'
 const urlPath = router.page.url.split('/');
@@ -71,28 +84,6 @@ const rateForm = useForm({
 const numberOfPages = computed(() => Math.ceil(props.count / applicationsPerPage));
 
 var displayedApplicationID = ref(0);
-if (props.count !== 0) {
-    displayedApplicationID = ref(1);
-}
-
-const $targetEl = document.getElementById('application-modal');
-
-// options with default values
-const options = {
-    placement: 'top-center',
-    backdrop: 'dynamic',
-    backdropClasses:
-        'bg-gray-900/50 dark:bg-gray-900/80 fixed inset-0 z-40',
-    closable: true,
-};
-
-// instance options object
-const instanceOptions = {
-  id: 'application-modal',
-  override: true
-};
-
-const modal = new Modal($targetEl, options, instanceOptions);
 
 function accept(id) {
     router.post(`/event/applications/accept/${id}`);
@@ -129,7 +120,7 @@ function seen(id) {
 function filter() {
     console.log('filtering by: ' + sortby.value)
     if (sortby.value !== 'none') {
-        if (sortBy.value !== '') {
+        if (sortBy.value !== '' && sortBy.value !== 'undefined') {
             router.get(`/event/applications/${eventID}/filter/${sortby.value}/sort/${sortBy.value}/${currentPage.value}`);
         } else {
             router.get(`/event/applications/${eventID}/filter/${sortby.value}/${currentPage.value}`);
@@ -186,7 +177,7 @@ function sort(sort) {
                 <tbody>
                     <tr v-for="(application, index) in applications" :key="application.id">
                         <td class="link link-primary">
-                            <a @click="displayedApplicationID=index; seen(application.application_id); modal.show()" data-modal-target="application-modal" data-modal-toggle="application-modal">{{ application.name }}</a>
+                            <a @click="showModal(index)" data-modal-target="application-modal" data-modal-toggle="application-modal">{{ application.name }}</a>
                         </td>
                         <td>{{ application.location }}</td>
                         <td>{{ application.genre }}</td>
@@ -194,10 +185,10 @@ function sort(sort) {
                             <Rating :rating="application.rating"></Rating>
                         </td>
                         <td>
-                            <span v-if="application.new" class="bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">New</span>
-                            <span v-if="application.accepted" class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Accepted</span>
-                            <span v-if="application.shortlisted" class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">Shortlisted</span>
-                            <span v-if="application.rejected" class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">Rejected</span>
+                            <span v-if="application.new" class="badge badge-neutral gap-2">New</span>
+                            <span v-if="application.accepted" class="badge badge-success gap-2">Accepted</span>
+                            <span v-if="application.shortlisted" class="badge badge-warning gap-2">Shortlisted</span>
+                            <span v-if="application.rejected" class="badge badge-error gap-2">Rejected</span>
                         </td>
                     </tr>
                 </tbody>
@@ -223,56 +214,76 @@ function sort(sort) {
         </div> -->
 
         <!-- Application Entry Modal modal -->
-        <div v-if="count !==  0" id="application-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full p-4 md:inset-0 h-[calc(100%-1rem)] max-h-full">
-            <div class="relative w-full max-w-4xl max-h-full">
-                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                    <div class="p-4 md:p-5">
-                        <applicationModal :displayedApplication="applications[displayedApplicationID]" />
-                        <p>
-                            <select
-                                id="rating"
-                                v-model="rateForm.rating"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            >
-                                <option value="0">0</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                            </select>
-                        </p>
-                        <p>
-                            <LongTextInput
-                                id="rejectionReason"
-                                ref="rejectionReason"
-                                type="text"
-                                v-model="rejectForm.reason"
-                                class="block p-2.5 w-full text-sm border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
-                            />
-                        </p>
-                    </div>
-                    <div class="inline-flex rounded-md shadow-sm" role="group">
-                        <div class="p-4 md:p-5 text-center">
-                            <button @click="reject(applications[displayedApplicationID].application_id)" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-s-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
-                                Reject
-                            </button>
-                            <button @click="shortlist(applications[displayedApplicationID].application_id)" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
-                                Shortlist
-                            </button>
-                            <button @click="accept(applications[displayedApplicationID].application_id)" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
-                                Accept
-                            </button>
-                            <button @click="rate(applications[displayedApplicationID].application_id)" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
-                                Rate
-                            </button>
-                            <button @click="destroy(applications[displayedApplicationID].application_id)" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
-                                Delete
-                            </button>
-                        </div>
+        <fwb-modal v-if="isShowModal" @close="closeModal">
+            <template #header>
+            <div class="flex items-center text-lg">
+                {{ applications[displayedApplicationID].name }}&nbsp;
+                <Rating :rating="applications[displayedApplicationID].rating"></Rating>&nbsp;&nbsp;
+                <span v-if="applications[displayedApplicationID].new" class="badge badge-neutral gap-2">New</span>&nbsp;
+                <span v-if="applications[displayedApplicationID].accepted" class="badge badge-success gap-2">Accepted</span>&nbsp;
+                <span v-if="applications[displayedApplicationID].shortlisted" class="badge badge-warning gap-2">Shortlisted</span>&nbsp;
+                <span v-if="applications[displayedApplicationID].rejected" class="badge badge-error gap-2">Rejected</span>&nbsp;
+            </div>
+            </template>
+            <template #body>
+                <div v-for="(value, key) in applications[displayedApplicationID]">
+                    <div v-if="key !== 'name' && key !== 'shortlisted' && key !== 'accepted' && key !== 'rejected' && key !== 'rating' && key !== 'reason' && key !== 'application_id' && key !== 'new' && value !== null && value !== ''">
+                        <span class="font-semibold">{{  key }} :</span>
+                        <span v-if="key.replace(/(\(s\))/, '').slice(-3) === 'URL'">
+                            <ul v-for="link in value.split(/\r?\n/g)" class="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
+                                <li><a :href="link">{{ link }}</a></li>
+                            </ul>
+                        </span>
+                        <span v-else-if="key === 'bio'" v-html="value.replace(/\r?\n/g, '<br />')"></span>
+                        <span v-else >{{ value }}</span>
                     </div>
                 </div>
-            </div>
-        </div>
+                <span v-if="applications[displayedApplicationID]['rejected']"><span class="font-semibold">Rejection Reason: </span>{{ applications[displayedApplicationID].reason }}</span>
+                <p>
+                    <select
+                        id="rating"
+                        v-model="rateForm.rating"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    >
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </p>
+                <p>
+                    <LongTextInput
+                        id="rejectionReason"
+                        ref="rejectionReason"
+                        type="text"
+                        v-model="rejectForm.reason"
+                        class="block p-2.5 w-full text-sm border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
+                    />
+                </p>
+            </template>
+            <template #footer>
+                <div class="inline-flex rounded-md shadow-sm " role="group">
+                    <div class="p-4 md:p-5 text-center">
+                        <fwb-button @click="reject(applications[displayedApplicationID].application_id)" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-s-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
+                            Reject
+                        </fwb-button>
+                        <fwb-button @click="shortlist(applications[displayedApplicationID].application_id)" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
+                            Shortlist
+                        </fwb-button>
+                        <fwb-button @click="accept(applications[displayedApplicationID].application_id)" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
+                            Accept
+                        </fwb-button>
+                        <fwb-button @click="rate(applications[displayedApplicationID].application_id)" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
+                            Rate
+                        </fwb-button>
+                        <fwb-button @click="destroy(applications[displayedApplicationID].application_id)" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
+                            Delete
+                        </fwb-button>
+                    </div>
+                </div>
+            </template>
+        </fwb-modal>
     </AppLayout>
 </template>
