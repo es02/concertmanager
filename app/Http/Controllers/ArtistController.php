@@ -90,20 +90,31 @@ class ArtistController extends Controller
             'state' => 'active'
         ]);
 
+        return redirect()->route("artist", $artist->id)->with('success', 'Created');
     }
 
-    public function updateArtist(Request $request, $id){
-        $validator = Validator::make($data, [
+    public function updateArtist(Request $request){
+        $validator = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'max:1000'],
         ]);
 
+        $id = $request->id;
         $artist = Artist::find($id);
+
+        if($request->pic_url !== '' && $request->pic_url !== $artist->pic_url) {
+            $photo = $request->pic_url->storePublicly(
+            'artist-images', ['disk' => 'public']
+        );
+
+        $photo = "../storage/" . $photo;
+        }
+
         $artist->name = $request->name;
         $artist->email = $request->email;
         $artist->bio = $request->bio;
         $artist->genre = $request->genre;
-        $artist->pic_url = $request->pic_url;
+        $artist->pic_url = $photo;
         $artist->location = $request->location;
         $artist->standard_fee = $request->standard_fee;
         $artist->standard_rider = $request->standard_rider;
@@ -114,7 +125,7 @@ class ArtistController extends Controller
         $artist->blacklisted = $request->blacklisted;
         $artist->formed = $request->formed;
         $artist->notes = $request->notes;
-        $artist->state = $request->status;
+        // $artist->state = $request->status;
         $artist->save();
         return back()->with('status', 'artist-updated');
     }
@@ -133,14 +144,16 @@ class ArtistController extends Controller
         $artist = Artist::find($id);
         $artist->rating = $request->rating;
         $artist->save();
+
+        return redirect()->route("artist", $id)->with('success', 'Rated');
     }
 
 
 
     public function destroyArtist($id){
-        $artist = Artist::find($id);
-        $artist->state = $request->status;
-        $artist->save();
+        $artist = Artist::find($id)->delete();
+
+        return redirect()->route("artists", 1)->with('success', 'Deleted');
     }
 
     public function exportCSV() {
