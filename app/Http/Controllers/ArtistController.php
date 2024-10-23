@@ -102,12 +102,12 @@ class ArtistController extends Controller
         $id = $request->id;
         $artist = Artist::find($id);
 
-        if($request->pic_url !== '' && $request->pic_url !== null && $request->pic_url !== $artist->pic_url) {
+        if(is_uploaded_file($request->pic_url)) {
             $photo = $request->pic_url->storePublicly(
-            'artist-images', ['disk' => 'public']
-        );
+                'artist-images', ['disk' => 'public']
+            );
 
-        $photo = "../storage/" . $photo;
+            $photo = "../storage/" . $photo;
         }
 
         $artist->name = $request->name;
