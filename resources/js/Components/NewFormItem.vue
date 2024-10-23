@@ -101,10 +101,10 @@ function deleteEntryOption(id) {
                         <option value="email">Email</option>
                         <option value="bio">Bio</option>
                         <option value="location">Location</option>
-                        <option value="fee">Fee</option>
-                        <option value="rider">Hospitality Rider</option>
-                        <option value="tech">Technical Rider</option>
-                        <option value="epk">EPK URL</option>
+                        <option value="standard_fee">Fee</option>
+                        <option value="standard_rider">Hospitality Rider</option>
+                        <option value="tech_specs">Technical Rider</option>
+                        <option value="epk_url">EPK URL</option>
                         <option value="genre">Genre(s)</option>
                         <option value="formed">Date Formed</option>
                         <option value="img">Image URL</option>
