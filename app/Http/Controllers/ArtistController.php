@@ -145,7 +145,7 @@ class ArtistController extends Controller
         $artist->rating = $request->rating;
         $artist->save();
 
-        return redirect()->route("artist", $id)->with('success', 'Rated');
+        return back()->with('status', 'artist-rated');
     }
 
 
