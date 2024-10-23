@@ -1,17 +1,15 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
-import { ref, computed, reactive } from 'vue';
+import { ref, computed } from 'vue';
 import Rating from '@/Components/Rating.vue';
-import { Link, router, useForm  } from '@inertiajs/vue3';
-import applicationModal from '@/Pages/Event/Partials/applicationModal.vue';
-import InputLabel from '@/Components/InputLabel.vue';
+import { router, useForm  } from '@inertiajs/vue3';
 import LongTextInput from '@/Components/LongTextInput.vue';
 import { FwbButton, FwbModal } from 'flowbite-vue'
 
 const props = defineProps(['applications', 'count']);
-console.log('number of entries: ' + props.count)
-console.log('applications: ');
-console.log(props.applications);
+// console.log('number of entries: ' + props.count)
+// console.log('applications: ');
+// console.log(props.applications);
 
 const isShowModal = ref(false)
 
@@ -118,7 +116,7 @@ function seen(id) {
 }
 
 function filter() {
-    console.log('filtering by: ' + sortby.value)
+    // console.log('filtering by: ' + sortby.value)
     if (sortby.value !== 'none') {
         if (sortBy.value !== '' && sortBy.value !== 'undefined') {
             router.get(`/event/applications/${eventID}/filter/${sortby.value}/sort/${sortBy.value}/${currentPage.value}`);
