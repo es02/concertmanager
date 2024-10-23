@@ -313,6 +313,7 @@ class ApplicationController extends Controller
         $rider = isset($artistKeys['standard_rider'])?  $artistKeys['standard_rider']    : '';
         $tech = isset($artistKeys['tech_specs'])?       $artistKeys['tech_specs']    : '';
         $epk = isset($artistKeys['epk_url'])?           $artistKeys['epk_url']    : '';
+        $fee = isset($artistKeys['standard_fee'])?      $artistKeys['standard_fee']    : '';
 
         // Use name rather than email as booking agents/managers use the same email for multiple acts
         $artist = Artist::where('tenant_id', 1)
@@ -329,6 +330,7 @@ class ApplicationController extends Controller
                 'genre' => $genre,
                 'location' => $location,
                 'standard_rider' => $rider,
+                'standard_fee' => $fee,
                 'tech_specs' => $tech,
                 'epk_url' => $epk,
                 'booked_previously' => false,
