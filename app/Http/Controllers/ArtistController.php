@@ -102,7 +102,7 @@ class ArtistController extends Controller
         $id = $request->id;
         $artist = Artist::find($id);
 
-        if($request->pic_url !== '' && $request->pic_url !== $artist->pic_url) {
+        if($request->pic_url !== '' && $request->pic_url !== null && $request->pic_url !== $artist->pic_url) {
             $photo = $request->pic_url->storePublicly(
             'artist-images', ['disk' => 'public']
         );
