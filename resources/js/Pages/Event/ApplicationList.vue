@@ -216,7 +216,7 @@ function sort(sort) {
         <fwb-modal v-if="isShowModal" @close="closeModal">
             <template #header>
             <div class="flex items-center text-lg">
-                {{ applications[displayedApplicationID].name }}&nbsp;
+                <a :href="`/artist/${applications[displayedApplicationID].artist}`">{{ applications[displayedApplicationID].name }}</a>&nbsp;
                 <Rating :rating="applications[displayedApplicationID].rating"></Rating>&nbsp;&nbsp;
                 <span v-if="applications[displayedApplicationID].new" class="badge badge-neutral gap-2">New</span>&nbsp;
                 <span v-if="applications[displayedApplicationID].accepted" class="badge badge-success gap-2">Accepted</span>&nbsp;
