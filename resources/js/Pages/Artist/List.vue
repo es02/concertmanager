@@ -95,6 +95,7 @@ function goToCreateArtist() {
                         <td>{{ artist.genre }}</td>
                         <td>{{ artist.location }}</td>
                         <td v-if="artist.standard_fee !== null" v-html="artist.standard_fee.slice(0,40)"></td>
+                        <td v-else></td>
                         <td><Rating :rating="artist.rating"></Rating></td>
                     </tr>
                 </tbody>
