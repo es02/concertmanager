@@ -182,7 +182,7 @@ function sort(sort) {
                         </td>
                         <td>{{ application.location }}</td>
                         <td>{{ application.genre }}</td>
-                        <td v-if="application.fee !== null"  v-html="application.fee.slice(0,40)"></td>
+                        <td v-if="application.standard_fee !== null"  v-html="application.standard_fee.slice(0,40)"></td>
                         <td v-else></td>
                         <td><Rating :rating="application.rating"></Rating></td>
                         <td>
