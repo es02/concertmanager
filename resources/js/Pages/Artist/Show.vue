@@ -68,14 +68,14 @@ function destroy(){
 <template>
     <AppLayout title="Artist Profile">
         <h1 class="text-2xl font-semibold text-center pt-10">Artist Details</h1>
-        <div class="card card-side bg-base-100 shadow-xl border m-10 max-w-screen">
+        <div class="card lg:card-side bg-base-100 shadow-xl border m-10 max-w-screen">
             <div class="card-body">
                 <h2 class="card-title">{{ artist.name }}
                     <Rating :rating="artist.rating"></Rating>
                     <span v-if="artist.booked_previously === 1" class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Previously Booked</span>
                     <span v-if="artist.blacklisted === 1 || artist.blacklisted === 'Yes'" class="bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">Blacklisted</span>
                 </h2>
-                <div class="mt-4 font-normal flex flex-col justify-between p-4 leading-normal">
+                <div class="mt-3 font-normal flex flex-col justify-between p-3 leading-normal">
                     <p v-if="artist.formed !== null && artist.formed !== ''"><span class="font-semibold">Formed:</span> {{ artist.formed }}</p>
                     <p><span class="font-semibold">Email:</span> {{ artist.email }}</p>
                     <p><span class="font-semibold">Genre:</span> {{ artist.genre }}</p>
