@@ -210,6 +210,7 @@ class ApplicationController extends Controller
             $applications[$rawApplication->id]['accepted'] = $rawApplication->accepted;
             $applications[$rawApplication->id]['rejected'] = $rawApplication->rejected;
             $applications[$rawApplication->id]['reason'] = $rawApplication->reason;
+            $applications[$rawApplication->id]['artist'] = $artist->id;
 
 
             foreach($apps as $application) {
