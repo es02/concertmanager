@@ -307,13 +307,13 @@ class ApplicationController extends Controller
         }
 
         // Only assume absolute mandatory fields have been set
-        $bio = isset($artistKeys['bio'])?               $artistKeys['bio']    : '';
-        $genre = isset($artistKeys['genre'])?           $artistKeys['genre']    : '';
-        $location = isset($artistKeys['location'])?     $artistKeys['location']    : '';
-        $rider = isset($artistKeys['standard_rider'])?  $artistKeys['standard_rider']    : '';
-        $tech = isset($artistKeys['tech_specs'])?       $artistKeys['tech_specs']    : '';
-        $epk = isset($artistKeys['epk_url'])?           $artistKeys['epk_url']    : '';
-        $fee = isset($artistKeys['standard_fee'])?      $artistKeys['standard_fee']    : '';
+        $bio = isset($artistKeys['bio'])?               $artistKeys['bio']              : '';
+        $genre = isset($artistKeys['genre'])?           $artistKeys['genre']            : '';
+        $location = isset($artistKeys['location'])?     $artistKeys['location']         : '';
+        $rider = isset($artistKeys['standard_rider'])?  $artistKeys['standard_rider']   : '';
+        $tech = isset($artistKeys['tech_specs'])?       $artistKeys['tech_specs']       : '';
+        $epk = isset($artistKeys['epk_url'])?           $artistKeys['epk_url']          : '';
+        $fee = isset($artistKeys['standard_fee'])?      $artistKeys['standard_fee']     : '';
 
         // Use name rather than email as booking agents/managers use the same email for multiple acts
         $artist = Artist::where('tenant_id', 1)
