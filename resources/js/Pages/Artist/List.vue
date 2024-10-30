@@ -4,6 +4,7 @@ import { Link, router } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 import Rating from '@/Components/Rating.vue';
 import { FwbPagination } from 'flowbite-vue'
+import SearchInput from "@/Components/SearchInput.vue";
 
 const props = defineProps(['artists', 'count']);
 
@@ -22,8 +23,13 @@ var sortByURL = computed(() => {
 });
 
 function changePage(page){
-    // console.log(page);
-    router.get(`/artists/${page}`);
+    console.log(props.artists.path.split('/').slice(-1)[0]);
+    if (props.artists.path.split('/').slice(-1)[0] == 'artist') {
+        // assume search
+        router.get(props.artists.path.concat(`?page=${page}`));
+    } else {
+        router.get(`/artists/${page}`);
+    }
 }
 
 var form = {
@@ -63,6 +69,7 @@ function goToCreateArtist() {
     <AppLayout title="Artists">
         <h1 class="text-2xl font-semibold text-center pt-10">Artists</h1>
         <div class="overflow-x-auto m-10 text-right">
+            <search-input route-name="artist.search" />
             <button type="submit" @click="goToCreateArtist()" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">New Artist</button>
             <button type="submit" @click="selectNewCSV()" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Import CSV</button>
             <button type="submit" @click.prevent="downloadCSV()" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Export CSV</button>
@@ -85,9 +92,26 @@ function goToCreateArtist() {
                         <th><a :href="`/artists/${currentPage}/location`">Location</a></th>
                         <th><!--<a :href="`/event/applications/${eventID}/sort/fee/${currentPage}`">-->Fee<!--</a>--></th>
                         <th><a :href="`/artists/${currentPage}/rating`">Rating</a></th>
+                        <td></td>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody v-if="artists.data">
+                    <tr v-for="artist in artists.data" :key="artist.id">
+                        <td class="link link-primary">
+                            <Link :href="`/artist/${artist.id}`">{{ artist.name }}</Link>
+                        </td>
+                        <td>{{ artist.genre }}</td>
+                        <td>{{ artist.location }}</td>
+                        <td v-if="artist.standard_fee !== null" v-html="artist.standard_fee.slice(0,40)"></td>
+                        <td v-else></td>
+                        <td><Rating :rating="artist.rating"></Rating></td>
+                        <td>
+                            <span v-if="artist.booked_previously === 1" class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Previously Booked</span>
+                            <span v-if="artist.blacklisted === 1 || artist.blacklisted === 'Yes'" class="bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">Blacklisted</span>
+                        </td>
+                    </tr>
+                </tbody>
+                <tbody v-else>
                     <tr v-for="artist in artists" :key="artist.id">
                         <td class="link link-primary">
                             <Link :href="`/artist/${artist.id}`">{{ artist.name }}</Link>
@@ -97,6 +121,10 @@ function goToCreateArtist() {
                         <td v-if="artist.standard_fee !== null" v-html="artist.standard_fee.slice(0,40)"></td>
                         <td v-else></td>
                         <td><Rating :rating="artist.rating"></Rating></td>
+                        <td>
+                            <span v-if="artist.booked_previously === 1" class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Previously Booked</span>
+                            <span v-if="artist.blacklisted === 1 || artist.blacklisted === 'Yes'" class="bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">Blacklisted</span>
+                        </td>
                     </tr>
                 </tbody>
             </table>
