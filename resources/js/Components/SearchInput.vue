@@ -5,9 +5,9 @@
 import { ref, watch } from 'vue';
 import { router } from '@inertiajs/vue3';
 import { debounce } from 'lodash';
-import { useAttrs } from 'vue'
+// import { useAttrs } from 'vue'
 
-const attrs = useAttrs()
+// const attrs = useAttrs()
 
 const props = defineProps({
   routeName: {
@@ -16,7 +16,7 @@ const props = defineProps({
   },
 });
 
-console.log(attrs.search);
+// console.log(attrs.search);
 
 // if(props.jetstream.search){
 //     console.log(props.jetstream.search);
