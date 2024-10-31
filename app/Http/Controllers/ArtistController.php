@@ -48,6 +48,28 @@ class ArtistController extends Controller
         ]);
     }
 
+    public function search(Request $request): Response {
+        $search = $request->search;
+
+        $artists = Artist::query()
+            // when we have a search value, see if it matches anything in an artist model:
+            ->when($search,
+                fn ($query) => $query->where('name', 'LIKE', '%'.$search.'%')
+                    ->orWhere('email', 'LIKE', '%'.$search.'%')
+                    ->orWhere('location', 'LIKE', '%'.$search.'%')
+                    ->orWhere('genre', 'LIKE', '%'.$search.'%')
+            )
+            ->paginate();
+
+        return Inertia::render('Artist/List', [
+            'artists' => $artists,
+            'count' => $artists->total(),
+            // and return the search value as a page prop to inertia/vue.
+            // This is the value we watch in the data() property of the SearchInput.vue component.
+            'search' => $search,
+        ]);
+    }
+
     public function getArtist($id){
         $artist = Artist::find($id);
 

@@ -34,6 +34,7 @@ Route::middleware([
     Route::get('/artists/export-csv', [ArtistController::class, 'exportCSV'])->name('artists.getCSV');
     Route::get('/artists/{pagenum}/{sortby?}', [ArtistController::class, 'getArtistList'])->name('artists');
     Route::get('/artists/{pagenum?}', [ArtistController::class, 'getArtistList'])->name('artists');
+    Route::get('/search/artist', [ArtistController::class, 'search'])->name('artist.search');
     Route::get('/emails', [EventController::class, 'getEventList'])->name('emails');
     Route::get('/event/create', [EventController::class, 'showCreateEvent'])->name('event.create');
     Route::get('/event/export-csv', [EventController::class, 'exportCSV'])->name('event.getCSV');
