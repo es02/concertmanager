@@ -87,7 +87,7 @@ function destroy(){
                     <p v-if="artist.tech_specs !== ''"><span class="font-semibold">Tech Rider:</span> {{ artist.tech_specs }}</p>
                     <p v-if="artist.epk_url !== ''"><span class="font-semibold">EPK:</span> <a :href="artist.epk_url">{{ artist.epk_url }}</a></p>
                     <p><br /></p>
-                    <p><span class="font-semibold">Notes:</span> {{ artist.notes }} </p>
+                    <p><span class="font-semibold">Notes: </span> <span v-if="artist.notes !== '' && artist.notes !== null" v-html="artist.notes.replace(/\r?\n/g, '<br />')"></span></p>
                 </div>
                 <div class="overflow-x-auto m-10 text-right">
                     <fwb-button @click="showModal" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Update</fwb-button>
