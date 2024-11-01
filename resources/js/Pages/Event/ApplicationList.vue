@@ -226,7 +226,7 @@ function sort(sort) {
             </template>
             <template #body>
                 <div v-for="(value, key) in applications[displayedApplicationID]">
-                    <div v-if="key !== 'name' && key !== 'shortlisted' && key !== 'accepted' && key !== 'rejected' && key !== 'rating' && key !== 'reason' && key !== 'application_id' && key !== 'new' && key !== 'artist' && value !== null && value !== ''">
+                    <div class="py-1" v-if="key !== 'name' && key !== 'shortlisted' && key !== 'accepted' && key !== 'rejected' && key !== 'rating' && key !== 'reason' && key !== 'application_id' && key !== 'new' && key !== 'artist' && value !== null && value !== ''">
                         <span class="font-semibold">{{  key }} :</span>
                         <span v-if="key.replace(/(\(s\))/, '').slice(-3) === 'URL'">
                             <ul v-for="link in value.split(/\r?\n/g)" class="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">

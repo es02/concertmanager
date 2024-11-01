@@ -6,13 +6,11 @@ import Rating from '@/Components/Rating.vue';
 import { FwbPagination } from 'flowbite-vue'
 import SearchInput from "@/Components/SearchInput.vue";
 
+const truth = true;
+
 const props = defineProps(['artists', 'count']);
 
-const artistsPerPage = 10;
 const sortBy = router.page.url.split('/');
-const currentPage = ref(sortBy[2]);
-
-const pages = computed(() => Math.ceil(props.count / artistsPerPage));
 
 var sortByURL = computed(() => {
     if (sortBy[3]) {
@@ -22,13 +20,18 @@ var sortByURL = computed(() => {
     }
 });
 
+const currentPage = ref(sortBy[2]);
+const artistsPerPage = 10;
+const numberOfPages = Math.ceil(props.count / artistsPerPage);
+
 function changePage(page){
-    console.log(props.artists.path.split('/').slice(-1)[0]);
-    if (props.artists.path.split('/').slice(-1)[0] == 'artist') {
+    console.log(page);
+    var pageSort = sortByURL.value;
+    if (props.artists.path && props.artists.path.split('/').slice(-1)[0] == 'artist') {
         // assume search
         router.get(props.artists.path.concat(`?page=${page}`));
     } else {
-        router.get(`/artists/${page}`);
+        router.get(`/artists/${page}${pageSort}`);
     }
 }
 
@@ -128,9 +131,19 @@ function goToCreateArtist() {
                     </tr>
                 </tbody>
             </table>
-        </div>
-        <div class="join flex justify-center fixed w-full p-4">
-            <fwb-pagination v-model="sortBy[2]" :total-pages="pages" :slice-length="artistsPerPage" @update:model-value="changePage($event)"></fwb-pagination>
+            <div class="join flex justify-center fixed w-full p-4">
+                <fwb-pagination
+                    v-model="currentPage"
+                    :enableFirstAndLastButtons="truth"
+                    nextLabel="Next"
+                    previousLabel="Prev"
+                    :total-pages="numberOfPages"
+                    :total-items="count"
+                    :slice-length="artistsPerPage"
+                    @update:model-value="changePage($event)"
+                ></fwb-pagination>
+            </div>
+            <br/><br/>
         </div>
     </AppLayout>
 </template>
