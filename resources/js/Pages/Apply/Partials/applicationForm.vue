@@ -8,6 +8,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import LongTextInput from '@/Components/LongTextInput.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
+import { FwbAlert } from 'flowbite-vue'
 
 const props = defineProps(['application', 'fields']);
 
@@ -17,9 +18,21 @@ props.fields.forEach((field) =>{
 });
 
 const form = useForm(keys);
+var formErrors = false;
 
 const applyForEvent = () => {
-    form.post(route('new.application', props.application.name), {
+    formErrors = false;
+
+    props.fields.forEach((field) =>{
+        if (field.mandatory && form[field.vmodel] == ''){
+            form.errors[field.vmodel] = 'Please provide an answer.';
+            formErrors = true;
+        } else {
+            form.errors[field.vmodel] = '';
+        }
+    });
+    if (formErrors === false){
+        form.post(route('new.application', props.application.name), {
         // errorBag: 'applyForEvent',
         preserveScroll: true,
         onSuccess: () => form.reset(),
@@ -27,6 +40,8 @@ const applyForEvent = () => {
             //
         // },
     });
+    }
+
 };
 
 </script>
@@ -84,6 +99,10 @@ const applyForEvent = () => {
             </div>
         </template>
         <template #actions>
+            <fwb-alert v-show="formErrors" type="danger">
+                Please ensure all mandatory fields are filled before submitting.
+            </fwb-alert>
+
             <ActionMessage :on="form.recentlySuccessful" class="me-3">
                 Applied.
             </ActionMessage>
