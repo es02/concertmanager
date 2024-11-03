@@ -132,7 +132,7 @@ class VenueController extends Controller
         $venue->additional_fees = $request->additional_fees;
         $venue->tech_specs = $request->tech_specs;
         $venue->backline = $request->backline;
-        $venue->state = $request->status;
+        // $venue->state = $request->status;
         $venue->save();
         return back()->with('status', 'venue-updated');
     }

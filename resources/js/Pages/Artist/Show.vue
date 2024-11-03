@@ -4,13 +4,13 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import Rating from '@/Components/Rating.vue';
 import { ref } from 'vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
-import { FwbCard, FwbButton, FwbModal, FwbFileInput, FwbInput, FwbTextarea, FwbCheckbox, FwbSelect } from 'flowbite-vue'
+import { FwbButton, FwbModal, FwbFileInput, FwbInput, FwbTextarea, FwbCheckbox, FwbSelect } from 'flowbite-vue'
 
 const props = defineProps(['artist']);
 
 const photoInput = ref(null);
 
-const isShowModal = ref(false)
+const isShowModal = ref(false);
 
 const ratings = [
   { value: '0', name: '0 Stars' },
