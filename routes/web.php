@@ -87,6 +87,6 @@ Route::middleware([
     Route::post('/tasks/update', [TaskController::class, 'updateTask'])->name('tasks.update');
     Route::post('/venue/import-csv', [VenueController::class, 'importCSV'])->name('venue.putCSV');
     Route::post('/venue/create', [VenueController::class, 'createVenue'])->name('venue.new');
-    Route::post('/venue/delete', [VenueController::class, 'updateVenue'])->name('venue.destroy');
+    Route::post('/venue/delete', [VenueController::class, 'destroyVenue'])->name('venue.destroy');
     Route::post('/venue/update', [VenueController::class, 'updateVenue'])->name('venue.update');
 });
