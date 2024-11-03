@@ -50,6 +50,8 @@ class EventController extends Controller
             ->where('event.id', $id)
             ->first();
 
+        $event->id = $id;
+
         $sets = DB::table('event_set')
             ->join('event_stage', 'event_set.event_id', '=', 'event_stage.event_id')
             ->select('event_stage.*', 'event_set.*')
@@ -62,6 +64,11 @@ class EventController extends Controller
             ->select('event_stage.*', 'venue.*')
             ->where('event_stage.tenant_id', 1)
             ->where('event_stage.event_id', $id)
+            ->get();
+
+        $venues = Venue::where('state', '!=', 'deleted')
+            ->where('tenant_id', 1)
+            ->orderBy('venue_name')
             ->get();
 
         $forms = Event_Application::where('tenant_id', 1)
@@ -89,6 +96,7 @@ class EventController extends Controller
             'stages' => $stages,
             'sets' => $sets,
             'forms' => $forms,
+            'venues' => $venues,
         ]);
     }
 
@@ -173,13 +181,15 @@ class EventController extends Controller
         $set->delete();
     }
 
-    public function updateEvent(Request $request, $id){
+    public function updateEvent(Request $request){
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'start' => ['required', 'date'],
             'end' => ['required', 'date'],
             'venue_id' => ['required', 'numeric']
         ]);
+
+        $id = $request->id;
 
         $event = Event::find($id);
         if ($event->venue_id !== $request->venue_id) {
@@ -192,20 +202,53 @@ class EventController extends Controller
             }
         }
 
+        Log::debug('Updating event: {event} with data: {data}', ['event' => $event->name, 'data' => $request]);
+
+        $photo = $event->event_pic_url;
+
+        if(is_uploaded_file($request->event_pic_url)) {
+            $photo = $request->event_pic_url->storePublicly(
+                'event-images', ['disk' => 'public']
+            );
+
+            $photo = "../storage/" . $photo;
+        }
+
+        // Handle non-mandatory fields
+        $ticketProvider = '';
+        $ticketUrl = '';
+        $location = '';
+        $description = '';
+
+        if($request->ticketing_provider){
+            $ticketProvider = $request->ticketing_provider;
+        }
+        if($request->ticketUrl){
+            $ticketUrl = $request->ticket_url;
+        }
+        if($request->location){
+            $location = $request->location;
+        }
+        if($request->description){
+            $description = $request->description;
+        }
+
+        Log::debug('Setting event venue id to: {venue}', ['venue' => $request->venue_id]);
+
         $event->name = $request->name;
         $event->venue_id = $request->venue_id;
         $event->start = $request->start;
         $event->end = $request->end;
-        $event->description = $request->description;
-        $event->ticketing_provider = $request->ticketing_provider;
+        $event->description = $description;
+        $event->ticketing_provider = $ticketProvider;
         $event->free = $request->free;
         $event->all_ages = $request->all_ages;
-        $event->pic_url = $request->pic_url;
-        $event->ticket_url = $request->ticket_url;
-        $event->location = $request->location;
-        $event->state = $request->status;
-
+        $event->event_pic_url = $photo;
+        $event->ticket_url = $ticketUrl;
+        $event->location = $location;
+        // $event->state = $request->state;
         $event->save();
+        return back()->with('status', 'event-updated');
     }
 
     public function destroyEvent($id){

@@ -73,7 +73,7 @@ Route::middleware([
     Route::post('/event/applications/shortlist/{id}', [ApplicationController::class, 'shortlist'])->name('application.shortlist');
     Route::post('/event/import-csv', [EventController::class, 'importCSV'])->name('event.putCSV');
     Route::post('/event/create', [EventController::class, 'createEvent'])->name('event.new');
-    Route::post('/event/delete', [EventController::class, 'updateEvent'])->name('event.update');
+    Route::post('/event/delete/{id}', [EventController::class, 'destroyEvent'])->name('event.destroy');
     Route::post('/event/update', [EventController::class, 'updateEvent'])->name('event.update');
     Route::post('/event/createApplication/{id}', [ApplicationController::class, 'createOrUpdateApplication'])->name('event.form.new');
     Route::post('/event/createSet/{id}', [EventController::class, 'createSet'])->name('event.set.new'); // TODO:: Create controller endpoint and update me
@@ -85,7 +85,6 @@ Route::middleware([
     Route::post('/tasks/delete', [TaskController::class, 'deleteTask'])->name('tasks.destroy');
     Route::post('/tasks/reorder', [TaskController::class, 'listReorder'])->name('tasks.reorder');
     Route::post('/tasks/update', [TaskController::class, 'updateTask'])->name('tasks.update');
-    Route::post('/event/deleteApplication/{id}', [ApplicationController::class, 'deleteApplication'])->name('event.form.delete');
     Route::post('/venue/import-csv', [VenueController::class, 'importCSV'])->name('venue.putCSV');
     Route::post('/venue/create', [VenueController::class, 'createVenue'])->name('venue.new');
     Route::post('/venue/delete', [VenueController::class, 'updateVenue'])->name('venue.destroy');
