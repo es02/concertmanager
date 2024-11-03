@@ -117,6 +117,7 @@ class ArtistController extends Controller
 
     public function updateArtist(Request $request){
         $validator = $request->validate([
+            'id' => ['required', 'numeric'],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'max:1000'],
         ]);

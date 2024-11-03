@@ -332,7 +332,7 @@ const logout = () => {
 
                 </div>
             </nav>
-            <div>
+            <!-- <div>
                 <nav class="flex" aria-label="Breadcrumb">
                     <ol v-for="(url, name) in urlPathList" class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
                         <li class="inline-flex items-center">
@@ -345,7 +345,7 @@ const logout = () => {
                         </li>
                     </ol>
                 </nav>
-            </div>
+            </div> -->
 
             <!-- Page Heading -->
             <header v-if="$slots.header" class="bg-white dark:bg-gray-800 shadow">

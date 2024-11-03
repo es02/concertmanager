@@ -47,12 +47,6 @@ class VenueController extends Controller
             'email' => ['required', 'string', 'max:1000'],
         ]);
 
-        $photo = $request->pic_url->storePublicly(
-            'venue-images', ['disk' => 'public']
-        );
-
-        $photo = "../storage/" . $photo;
-
         $description = '';
         $location = '';
         $capacity = '';
@@ -75,7 +69,8 @@ class VenueController extends Controller
         if($request->additional_fees){$additional_fees = $request->additional_fees;}
         if($request->tech_specs){$tech_specs = $request->tech_specs;}
         if($request->backline){$backline = $request->backline;}
-        if($request->pic_url){
+
+        if(is_uploaded_file($request->pic_url)){
             $pic = $request->pic_url->storePublicly(
                 'venue-images', ['disk' => 'public']
             );
@@ -102,24 +97,35 @@ class VenueController extends Controller
 
     }
 
-    public function updateVenue(Request $request, $id){
-        $validator = Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
+    public function updateVenue(Request $request){
+        $validator = $request->validate([
+            'id' => ['required', 'numeric'],
+            'venue_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'max:1000'],
         ]);
 
+        $id = $request->id;
+
         $venue = Venue::find($id);
+
+        Log::debug('Updating venue: {venue}', ['venue' => $venue->venue_name]);
 
         $photo = $venue->pic_url;
 
-        if (isset($request->pic_url)) {
+        if (is_uploaded_file($request->pic_url)) {
             $photo = $request->pic_url->storePublicly(
                 'venue-images', ['disk' => 'public']
             );
 
-            $photo = Storage::url($request->pic_url);
+            $photo = "../storage/" . $photo;
         }
-        $venue->venue_name = $request->name;
+
+        $cut_type = null;
+        $fee_type = null;
+        if($request->cut_type !== ''){$cut_type = $request->cut_type;}
+        if($request->fee_type !== ''){$fee_type = $request->fee_type;}
+
+        $venue->venue_name = $request->venue_name;
         $venue->email = $request->email;
         $venue->bio = $request->bio;
         $venue->pic_url = $photo;
@@ -127,17 +133,18 @@ class VenueController extends Controller
         $venue->capacity = $request->capacity;
         $venue->standard_fee = $request->standard_fee;
         $venue->ticket_cut = $request->ticket_cut;
-        $venue->cut_type = $request->cut_type;
-        $venue->fee_type = $request->fee_type;
+        $venue->cut_type = $cut_type;
+        $venue->fee_type = $fee_type;
         $venue->additional_fees = $request->additional_fees;
         $venue->tech_specs = $request->tech_specs;
         $venue->backline = $request->backline;
-        $venue->state = $request->status;
+        // $venue->state = $request->status;
         $venue->save();
         return back()->with('status', 'venue-updated');
     }
 
     public function destroyVenue($id){
+        Log::debug('Deleting venue: {venue}', ['venue' => $id]);
         $venue = Venue::find($id);
         $venue->state = $request->status;
         $venue->save();

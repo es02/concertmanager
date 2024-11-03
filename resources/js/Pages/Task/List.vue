@@ -47,7 +47,6 @@ var updateForm = useForm({
 
 // build tasklist on pageload
 for (const [key, value] of Object.entries(props.tasks)) {
-    console.log('rebuilding list');
     taskList.tasks.push(clone(value));
 }
 
@@ -67,7 +66,6 @@ var form = {
 const csvInput = ref(null);
 
 function uploadCSV() {
-    console.log('uploading csv');
     const csv = csvInput.value.files[0];
 
     if (! csv) return;
