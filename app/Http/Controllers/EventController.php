@@ -183,6 +183,7 @@ class EventController extends Controller
 
     public function updateEvent(Request $request){
         $request->validate([
+            'id' => ['required', 'numeric'],
             'name' => ['required', 'string', 'max:255'],
             'start' => ['required', 'date'],
             'end' => ['required', 'date'],
