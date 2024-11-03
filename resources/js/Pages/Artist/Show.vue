@@ -133,7 +133,7 @@ function destroy(){
             </div>
         </fwb-card></div> -->
 
-        <!-- Application Entry Modal modal -->
+        <!-- Artist Update Modal modal -->
         <fwb-modal v-if="isShowModal" @close="closeModal" position="center">
             <template #header>
                 <div class="flex items-center text-lg">

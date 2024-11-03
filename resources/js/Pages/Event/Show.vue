@@ -117,7 +117,7 @@ function updateEvent() {
             </table>
             </div>
         </div>
-        <!-- Application Entry Modal modal -->
+        <!-- Event Update Modal modal -->
         <fwb-modal v-if="isShowModal" @close="closeModal" position="center">
             <template #header>
                 <div class="flex items-center text-lg">
