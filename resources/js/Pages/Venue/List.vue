@@ -99,7 +99,7 @@ function deleteVenue(id) {
                 </thead>
                 <tbody>
                     <tr v-for="venue in paginatedVenues" :key="venue.id">
-                        <!-- <td>{{ venue.id }}</td> -->
+                        <td><!-- {{ venue.id }} --></td>
                         <td class="link link-primary">
                             <Link :href="`/venue/${venue.id}`">{{ venue.venue_name }}</Link>
                         </td>
