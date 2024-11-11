@@ -30,7 +30,6 @@ var form = {
     pic_url: props.artist.pic_url,
     location: props.artist.location,
     booked_previously: props.artist.booked_previously,
-    blacklisted: props.artist.blacklisted,
     standard_fee: props.artist.standard_fee,
     standard_rider: props.artist.standard_rider,
     epk_url: props.artist.epk_url,
