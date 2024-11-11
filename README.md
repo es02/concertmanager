@@ -2,6 +2,9 @@
 
 Conert Manager is a multi-tenant SaaS platform for managing events. It was built by a team at the 2024 [Code Network](https://www.codenetwork.co/) [Winter Hackathon](https://www.codenetwork.co/hackathon).
 
+This is not production-ready software and may introduce breaking changes at any time.
+USE AT YOUR OWN RISK.
+
 It handles*:
 - Artist/Performer Management
 - Venue Management
@@ -24,10 +27,8 @@ Once the code is deployed in your chosen location you can use the following to g
 - php artisan db:seed --class=DevelopmentSeeder
 - php artisan key:generate
 - php artisan serve
-
-If doing development on the front end you may also wish to run:
+In a separate terminal:
 - npm run dev
-In a separate terminal.
 
 ### Contributors
 
@@ -39,7 +40,7 @@ In a separate terminal.
 
 ## Security Vulnerabilities
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Aimi Hobson via [minervavine@gmail.com](mailto:minervavine@gmail.com). All security vulnerabilities will be promptly addressed.
+If you discover a security vulnerability within Laravel, please send an e-mail to Aimi Hobson via [minervavine@gmail.com](mailto:minervavine@gmail.com). All security vulnerabilities will be promptly triaged.
 
 ## License
 
