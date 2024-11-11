@@ -1,10 +1,7 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { router } from '@inertiajs/vue3';
-import { ref } from 'vue';
-import { FwbButton, FwbModal, FwbFileInput, FwbInput, FwbTextarea, FwbCheckbox, FwbSelect } from 'flowbite-vue'
-
-const photoInput = ref(null);
+import { FwbButton, FwbFileInput, FwbInput, FwbTextarea, FwbCheckbox, FwbSelect } from 'flowbite-vue'
 
 const ratings = [
   { value: '0', name: '0 Stars' },
@@ -48,7 +45,7 @@ function createArtist() {
       <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg p-6">
-            <form @submit.prevent="createVenue">
+            <form @submit.prevent="createArtist">
                 <fwb-input v-model="form.name" label="Artist name" required />
                 <fwb-select v-model="form.rating" :options="ratings" label="Rate artist" />
                 <fwb-input v-model="form.email" label="Contact email" required />
