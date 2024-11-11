@@ -116,7 +116,7 @@ class ArtistController extends Controller
             'state' => 'active'
         ]);
 
-        return redirect()->route("artist", $artist->id)->with('success', 'Created');
+        return redirect()->route("artist", $artist->id)->with('status', 'Created');
     }
 
     public function updateArtist(Request $request){
