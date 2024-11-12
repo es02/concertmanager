@@ -45,7 +45,7 @@ function createArtist() {
       <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg p-6">
-            <form @submit.prevent="createArtist">
+            <!-- <form @submit.prevent="createArtist"> -->
                 <fwb-input v-model="form.name" label="Artist name" required />
                 <fwb-select v-model="form.rating" :options="ratings" label="Rate artist" />
                 <fwb-input v-model="form.email" label="Contact email" required />
@@ -63,7 +63,7 @@ function createArtist() {
                 <div class="mb-4">
                     <fwb-button type="submit" @click="createArtist()">Create Artist</fwb-button>
                 </div>
-            </form>
+            <!-- </form> -->
           </div>
         </div>
       </div>
