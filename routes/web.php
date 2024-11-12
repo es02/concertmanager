@@ -29,7 +29,7 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    // Route::get('/artist/create', function () {return Inertia::render('Artist/Create');})->name('artist.create');
+    Route::get('/artist/create', function () {return Inertia::render('Artist/Create');})->name('artist.create');
     Route::get('/artist/{id}', [ArtistController::class, 'getArtist'])->name('artist');
     Route::get('/artists/export-csv', [ArtistController::class, 'exportCSV'])->name('artists.getCSV');
     Route::get('/artists/{pagenum}/{sortby?}', [ArtistController::class, 'getArtistList'])->name('artists');

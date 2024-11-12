@@ -3,7 +3,6 @@ import { router } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import Rating from '@/Components/Rating.vue';
 import { ref } from 'vue';
-import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { FwbButton, FwbModal, FwbFileInput, FwbInput, FwbTextarea, FwbCheckbox, FwbSelect } from 'flowbite-vue'
 
 const props = defineProps(['artist']);
@@ -31,7 +30,6 @@ var form = {
     pic_url: props.artist.pic_url,
     location: props.artist.location,
     booked_previously: props.artist.booked_previously,
-    blacklisted: props.artist.blacklisted,
     standard_fee: props.artist.standard_fee,
     standard_rider: props.artist.standard_rider,
     epk_url: props.artist.epk_url,
@@ -61,8 +59,6 @@ function updateArtist() {
 function destroy(){
     router.post(`/artist/delete/${props.artist.id}`);
 }
-
-
 </script>
 
 <template>
@@ -99,39 +95,6 @@ function destroy(){
                     class="h-full object-cover aspect-ratio" />
             </figure>
         </div>
-
-        <!-- <div class="card card-side bg-base-100 shadow-xl border m-10 max-w-screen">
-        <fwb-card
-            :img-alt="`${artist.name} Profile Picture`"
-            :img-src="artist.pic_url"
-            variant="horizontal"
-        >
-            <div class="p-5">
-                <h2 class="card-title">{{ artist.name }}
-                    <Rating :rating="artist.rating"></Rating>
-                    <span v-if="artist.booked_previously === 1" class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Previously Booked</span>
-                    <span v-if="artist.blacklisted === 1 || artist.blacklisted === 'Yes'" class="bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">Blacklisted</span>
-                </h2>
-                <div class="mt-4 font-normal flex flex-col justify-between p-4 leading-normal">
-                    <p v-if="artist.formed !== null && artist.formed !== ''"><span class="font-semibold">Formed:</span> {{ artist.formed }}</p>
-                    <p><span class="font-semibold">Email:</span> {{ artist.email }}</p>
-                    <p><span class="font-semibold">Genre:</span> {{ artist.genre }}</p>
-                    <p><span class="font-semibold">Location:</span> {{ artist.location }} </p>
-                    <p><span class="font-semibold">Fee:</span> <span v-if="!isNaN(artist.standard_fee)">$</span>{{ artist.standard_fee }} </p>
-                    <p><br /></p>
-                    <p class="italic" v-if="artist.bio !== ''" v-html="artist.bio.replace(/\r?\n/g, '<br />')"></p>
-                    <div v-if="artist.standard_rider !== null"><p><br><span class="font-semibold">Hospitality Rider:</span> {{ artist.standard_rider }}</p></div>
-                    <p v-if="artist.tech_specs !== ''"><span class="font-semibold">Tech Rider:</span> {{ artist.tech_specs }}</p>
-                    <p v-if="artist.epk_url !== ''"><span class="font-semibold">EPK:</span> <a :href="artist.epk_url">{{ artist.epk_url }}</a></p>
-                    <p><br /></p>
-                    <p><span class="font-semibold">Notes:</span> {{ artist.notes }} </p>
-                </div>
-                <div class="overflow-x-auto m-10 text-right">
-                    <fwb-button @click="showModal" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Update</fwb-button>
-                    <button @click="destroy()" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete</button>
-                </div>
-            </div>
-        </fwb-card></div> -->
 
         <!-- Artist Update Modal modal -->
         <fwb-modal v-if="isShowModal" @close="closeModal" position="center">

@@ -84,15 +84,19 @@ class ArtistController extends Controller
 
         $data = $request->all();
 
-        $validator = Validator::make($data, [
+        $validator = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'max:1000'],
         ]);
 
-        if ($validator->fails()) {
-            return redirect('Artist/Create')
-                        ->withErrors($validator)
-                        ->withInput();
+        $photo = '';
+
+        if(is_uploaded_file($request->pic_url)) {
+            $photo = $request->pic_url->storePublicly(
+                'artist-images', ['disk' => 'public']
+            );
+
+            $photo = "../storage/" . $photo;
         }
 
         $artist = Artist::Create([
@@ -101,7 +105,7 @@ class ArtistController extends Controller
             'email' => $request->email,
             'bio' => $request->bio,
             'genre' => $request->genre,
-            'pic_url' => $request->pic_url,
+            'pic_url' => $photo,
             'location' => $request->location,
             'standard_fee' => $request->standard_fee,
             'standard_rider' => $request->standard_rider,
@@ -112,7 +116,7 @@ class ArtistController extends Controller
             'state' => 'active'
         ]);
 
-        return redirect()->route("artist", $artist->id)->with('success', 'Created');
+        return redirect()->route("artist", $artist->id)->with('status', 'Created');
     }
 
     public function updateArtist(Request $request){
