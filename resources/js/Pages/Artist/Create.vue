@@ -31,7 +31,7 @@ var form = {
 };
 
 function createArtist() {
-    router.post('/artist/create', this.form);
+    router.post('/artist/create', form);
 };
 </script>
 
