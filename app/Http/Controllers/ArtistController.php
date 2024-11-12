@@ -100,7 +100,7 @@ class ArtistController extends Controller
         }
 
         $artist = Artist::Create([
-            'tenant_id' => 0,
+            'tenant_id' => 1,
             'name' => $request->name,
             'email' => $request->email,
             'bio' => $request->bio,
@@ -111,7 +111,9 @@ class ArtistController extends Controller
             'standard_rider' => $request->standard_rider,
             'tech_specs' => $request->tech_specs,
             'epk_url' => $request->epk_url,
+            'rating' => $request->rating,
             'booked_previously' => $request->booked_previously,
+            'blacklisted' => $request->blacklisted,
             'formed' => $request->formed,
             'state' => 'active'
         ]);
