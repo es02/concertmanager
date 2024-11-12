@@ -36,7 +36,7 @@ function createArtist() {
 </script>
 
 <template>
-    <AppLayout title="Create Venue">
+    <AppLayout title="Create Artist">
       <template #header>
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
           Create Artist
@@ -51,12 +51,12 @@ function createArtist() {
                 <fwb-input v-model="form.email" label="Contact email" required />
                 <fwb-checkbox v-model="form.booked_previously" label="Booked previously?" />
                 <fwb-input v-model="form.genre" label="Genre(s)" required />
-                <fwb-input v-model="form.location" label="Location" required />
+                <fwb-input v-model="form.location" label="Location"  />
                 <fwb-input v-model="form.standard_fee" label="Fee" />
                 <fwb-textarea v-model="form.bio" :rows="2" label="Bio" placeholder="Tell us about your band..." />
                 <fwb-textarea v-model="form.standard_rider" :rows="2" label="Hospitality Rider" placeholder="Any rider requirements?" />
                 <fwb-textarea v-model="form.tech_specs" :rows="2" label="Tech Rider" placeholder="Any tech requirements, eg: DI, IEM, etc" />
-                <fwb-input v-model="form.epk_url" label="EPK link" required />
+                <fwb-input v-model="form.epk_url" label="EPK link"  />
                 <fwb-file-input v-model="form.pic_url" label="Upload band photo" />
                 <fwb-checkbox v-model="form.blacklisted" label="Blacklisted?" />
                 <fwb-textarea v-model="form.notes" :rows="2" label="Notes" />
