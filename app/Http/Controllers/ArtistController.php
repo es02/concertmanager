@@ -115,6 +115,7 @@ class ArtistController extends Controller
             'booked_previously' => $request->booked_previously,
             'blacklisted' => $request->blacklisted,
             'formed' => $request->formed,
+            'notes' => $request->notes,
             'state' => 'active'
         ]);
 
