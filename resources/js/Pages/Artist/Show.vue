@@ -7,8 +7,6 @@ import { FwbButton, FwbModal, FwbFileInput, FwbInput, FwbTextarea, FwbCheckbox, 
 
 const props = defineProps(['artist']);
 
-const photoInput = ref(null);
-
 const isShowModal = ref(false);
 
 const ratings = [
@@ -40,8 +38,13 @@ var form = {
     state: props.artist.state,
 };
 
-if (form.blacklisted === '') {
-    form.blacklisted = 0;
+form.blacklisted = false;
+form.booked_previously = false;
+if (props.artist.blacklisted === 1 || props.artist.blacklisted === '1' || props.artist.blacklisted === 'Yes') {
+    form.blacklisted = true;
+}
+if (props.artist.booked_previously === 1 || props.artist.booked_previously === '1' || props.artist.booked_previously ==='Yes') {
+    form.booked_previously = true;
 }
 
 function closeModal () {
@@ -68,8 +71,8 @@ function destroy(){
             <div class="card-body">
                 <h2 class="card-title">{{ artist.name }}
                     <Rating :rating="artist.rating"></Rating>
-                    <span v-if="artist.booked_previously === 1" class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Previously Booked</span>
-                    <span v-if="artist.blacklisted === 1 || artist.blacklisted === 'Yes'" class="bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">Blacklisted</span>
+                    <span v-show="form.booked_previously" class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Previously Booked</span>
+                    <span v-show="form.blacklisted" class="bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">Blacklisted</span>
                 </h2>
                 <div class="mt-3 font-normal flex flex-col justify-between p-3 leading-normal">
                     <p v-if="artist.formed !== null && artist.formed !== ''"><span class="font-semibold">Formed:</span> {{ artist.formed }}</p>
