@@ -8,7 +8,7 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 
-defineProps({
+const props = defineProps({
     title: String,
 });
 
@@ -84,15 +84,15 @@ const logout = () => {
                                 <!-- <NavLink :href="route('media')" :active="route().current('media')">
                                     Media
                                 </NavLink> -->
-                                <NavLink :href="route('tasks')" :active="route().current('tasks')">
+                                <NavLink v-if="$page.props.isGod" :href="route('tasks')" :active="route().current('tasks')">
                                     Tasks
                                 </NavLink>
-                                <!-- <NavLink :href="route('emails')" :active="route().current('emails')">
+                                <!-- <NavLink v-if="$page.props.isGod" :href="route('emails')" :active="route().current('emails')">
                                     Email
                                 </NavLink> -->
-                                <!-- <NavLink :href="route('settings')" :active="route().current('settings')">
+                                <NavLink v-if="$page.props.isGod" :href="route('settings')" :active="route().current('settings')">
                                     Settings
-                                </NavLink> -->
+                                </NavLink>
                             </div>
                         </div>
 
@@ -242,6 +242,33 @@ const logout = () => {
                     <div class="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
                             Dashboard
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink :href="route('events')" :active="route().current('events')">
+                            Events
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink :href="route('artists')" :active="route().current('Artists')">
+                            Artists
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink :href="route('venues')" :active="route().current('venues')">
+                            Venues
+                        </ResponsiveNavLink>
+                        <!-- <ResponsiveNavLink :href="route('volunteers')" :active="route().current('volunteers')">
+                            Volunteers
+                        </ResponsiveNavLink> -->
+                        <!-- <ResponsiveNavLink :href="route('staff')" :active="route().current('staff')">
+                            Staff
+                        </ResponsiveNavLink> -->
+                        <!-- <ResponsiveNavLink :href="route('media')" :active="route().current('media')">
+                            Media
+                        </ResponsiveNavLink> -->
+                        <ResponsiveNavLink v-if="$page.props.isGod" :href="route('tasks')" :active="route().current('tasks')">
+                            Tasks
+                        </ResponsiveNavLink>
+                        <!-- <ResponsiveNavLink v-if="$page.props.isGod" :href="route('emails')" :active="route().current('emails')">
+                            Email
+                        </ResponsiveNavLink> -->
+                        <ResponsiveNavLink v-if="$page.props.isGod" :href="route('settings')" :active="route().current('settings')">
+                            Settings
                         </ResponsiveNavLink>
                     </div>
 

@@ -27,16 +27,21 @@ class DatabaseSeeder extends Seeder
         Plan::factory()->create([
             'name' => 'Default',
             'price' => 0,
+            'default' => 1,
+            'state' => 'active',
         ]);
+
+        $url = str_replace(['http://', 'https://', 'HTTP://', 'HTTPS://'], '', env('APP_URL', 'example.com'));
 
         Tenant::factory()->create([
             'name' => 'Default',
-            'fqdn' => 'example.com',
+            'fqdn' => $url,
+            'state' => 'active',
         ]);
 
-        User::factory()->create([
+        $user = User::factory()->create([
             'name' => 'Admin',
-            'email' => 'test@example.com',
+            'email' => env('MAIL_FROM_ADDRESS', 'test@example.com'),
         ]);
 
         // Users can have multiple roles
@@ -94,5 +99,7 @@ class DatabaseSeeder extends Seeder
         $permission->assignRole($god);
         $permission = Permission::create(['name' => 'edit all task']);
         $permission->assignRole($god);
+
+        $user->assignRole('god');
     }
 }
