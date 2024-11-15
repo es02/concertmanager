@@ -6,6 +6,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\ArtistController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\VenueController;
 
@@ -48,7 +49,7 @@ Route::middleware([
     Route::get('/event/applications/{id}/{pagenum?}', [ApplicationController::class, 'showApplications'])->name('event.applications');
     Route::get('/events/{pagenum?}', [EventController::class, 'getEventList'])->name('events');
     Route::get('/media', [EventController::class, 'getEventList'])->name('media');
-    Route::get('/settings', [EventController::class, 'getEventList'])->name('settings');
+    Route::get('/settings', [SettingsController::class, 'getSettings'])->name('settings');
     Route::get('/staff', [EventController::class, 'getEventList'])->name('staff');
     Route::get('/tasks/export-csv', [TaskController::class, 'exportCSV'])->name('tasks.getCSV');
     Route::get('/tasks', [TaskController::class, 'getTasks'])->name('tasks');
@@ -80,6 +81,7 @@ Route::middleware([
     Route::post('/event/deleteApplication/{id}', [ApplicationController::class, 'deleteApplication'])->name('event.form.delete');
     Route::post('/event/publishApplication/{id}',[ApplicationController::class, 'publishApplication'])->name('event.form.publish');
     Route::post('/event/unpublishApplication/{id}',[ApplicationController::class, 'unpublishApplication'])->name('event.form.unpublish');
+    Route::post('/settings/update', [SettingsController::class, 'updateTenantData'])->name('settings.update');
     Route::post('/tasks/import-csv', [TaskController::class, 'importCSV'])->name('tasks.putCSV');
     Route::post('/tasks/create', [TaskController::class, 'newTask'])->name('tasks.new');
     Route::post('/tasks/delete', [TaskController::class, 'deleteTask'])->name('tasks.destroy');
