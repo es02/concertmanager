@@ -69,16 +69,14 @@ class TaskController extends Controller
             ->first();
         $tasks = $request->tasks;
 
-        $i = 1;
         foreach($tasks as $taskEntry) {
             Log::debug('Attempting to find task: {entry}', ['entry' => $taskEntry]);
             $task = Task::find($taskEntry['id']);
-            $task->order_id = $i;
+            $task->order_id = $taskEntry['task_list_id'];
             $task->save();
-            $i++;
         }
 
-        return redirect()->route("tasks")->with('success', 'Added');
+        return redirect()->route("tasks")->with('success', 'Reordered');
     }
 
     public function updateTask(Request $request) {

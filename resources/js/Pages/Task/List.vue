@@ -1,11 +1,15 @@
 <script setup>
-import {ref, computed, reactive} from 'vue';
+import {ref, computed, reactive, nextTick} from 'vue';
 import { useForm, router  } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import draggable from 'vuedraggable'
 import TextInput from '@/Components/TextInput.vue';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
+// import { useAttrs } from 'vue'
+
+// const attrs = useAttrs();
+// console.log(attrs.auth.user);
 
 const props = defineProps({
     tasks: {
@@ -94,11 +98,12 @@ function addTask() {
     });
 }
 
-function updateEntry(updateTask) {
-    updateForm.id = updateTask.id;
-    updateForm.name = updateTask.name;
-    updateForm.due = updateTask.due;
-    updateForm.completed = updateTask.completed;    // for some stupid reason this holds the previous value, despite updatetask showing the correct one in console.log
+function updateEntry(field, data, task) {
+    updateForm.id = task.id;
+    updateForm.name = task.name;
+    updateForm.due = task.due;
+    updateForm.completed = task.completed;
+    updateForm[field] = data;
 
     updateForm.post(route('tasks.update'), {
         preserveScroll: true,
@@ -106,7 +111,16 @@ function updateEntry(updateTask) {
     });
 }
 
-function reorderTasks() {
+async function reorderTasks() {
+    var i = 1;
+    // wait 500ms for the DOM to catch up with the changes.
+    // may need increasing for larger task lists
+    await new Promise(r => setTimeout(r, 500));
+    taskList.tasks.forEach((task) => {
+        task.task_list_id = i;
+        console.log(task.name+': '+i);
+        i++;
+    });
     taskList.post(route('tasks.reorder'), {
         preserveScroll:true
     })
@@ -137,27 +151,27 @@ function clone(obj) {
             <div class="block max-w-2xl p-3 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
                 <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                     <p class="mb-3 text-gray-500 dark:text-gray-400">
-                        <label for="entryName" class="block text-gray-700 dark:text-gray-200">Task <span v-if="element.overdue == true" class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">Overdue</span></label>
+                        <label :for="element.id+'_name'" class="block text-gray-700 dark:text-gray-200">Task <span v-if="element.overdue == true" class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">Overdue</span></label>
                         <TextInput
-                            id="entryName"
+                            :id="element.id+'_name'"
                             ref="entryName"
                             placeholder="Untitled Question"
                             type="text"
                             v-model="element.name"
-                            @input="updateEntry(element)"
+                            @input="updateEntry('name', $event.target.value, element)"
                             class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
                         />
                     </p>
                     <p class="mb-3 text-gray-500 dark:text-gray-400">
-                        <label for="due" class="block text-gray-700 dark:text-gray-200">Due by</label>
-                        <VueDatePicker id="due" v-model="element.due" dark format="dd/MM/yyyy HH:mm" />
+                        <label class="block text-gray-700 dark:text-gray-200">Due by</label>
+                        <VueDatePicker :id="element.id+'_due'" v-model="element.due" @input="updateEntry('due', $event.target.value, element)" dark format="dd/MM/yyyy HH:mm" />
                     </p>
                     <p class="mb-3 text-gray-500 dark:text-gray-400">
-                        <label for="completed" class="block text-gray-700 dark:text-gray-200">Completed?</label>
+                        <label :for="element.id+'_completed'" class="block text-gray-700 dark:text-gray-200">Completed?</label>
                         <select
-                            id="completed"
+                            :id="element.id+'_completed'"
                             v-model="element.completed"
-                            @input="updateEntry(element)"
+                            @input="updateEntry('completed', $event.target.value, element)"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         >
                             <option value="new">New</option>
