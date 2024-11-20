@@ -19,7 +19,7 @@ use App\Http\Controllers\VenueController;
 //     ]);
 // });
 
-Route::get('/', function () {return Inertia::render('Dashboard');})->name('dashboard');
+Route::get('/', function () {return Inertia::render('Dashboard');})->name('home');
 Route::get('/dashboard', function () {return Inertia::render('Dashboard');})->name('dashboard');
 Route::get('apply/success', function () {return Inertia::render('Apply/Success');})->name('success'); // Not really needed but helpful for prototyping/etc
 Route::get('/apply/{name}', [ApplicationController::class, 'showApplicationForm'])->name('apply');
