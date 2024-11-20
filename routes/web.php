@@ -33,14 +33,14 @@ Route::middleware([
     Route::get('/artist/create', function () {return Inertia::render('Artist/Create');})->name('artist.create');
     Route::get('/artist/{id}', [ArtistController::class, 'getArtist'])->name('artist');
     Route::get('/artists/export-csv', [ArtistController::class, 'exportCSV'])->name('artists.getCSV');
-    Route::get('/artists/{pagenum}/{sortby?}', [ArtistController::class, 'getArtistList'])->name('artists');
+    Route::get('/artists/{pagenum}/{sortby?}', [ArtistController::class, 'getArtistList']);
     Route::get('/artists/{pagenum?}', [ArtistController::class, 'getArtistList'])->name('artists');
     Route::get('/search/artist', [ArtistController::class, 'search'])->name('artist.search');
     Route::get('/emails', [EventController::class, 'getEventList'])->name('emails');
     Route::get('/event/create', [EventController::class, 'showCreateEvent'])->name('event.create');
     Route::get('/event/export-csv', [EventController::class, 'exportCSV'])->name('event.getCSV');
     Route::get('/event/{id}', [EventController::class, 'getEvent'])->name('event');
-    Route::get('/event/createSet/{id}', [EventController::class, 'createSet'])->name('event.set.new'); // TODO:: Create controller endpoint and update me
+    Route::get('/event/createSet/{id}', [EventController::class, 'createSet'])->name('event.set.create'); // TODO:: Create controller endpoint and update me
     Route::get('/event/createApplication/{id}', [ApplicationController::class, 'showCreateApplication'])->name('event.form.new');
     Route::get('/event/applications/{id}/filter/{filter}/{pagenum?}', [ApplicationController::class, 'showApplications']);
     Route::get('/event/applications/{id}/sort/{sortby}/{pagenum?}', [ApplicationController::class, 'showApplications']);
