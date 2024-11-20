@@ -6,10 +6,6 @@ import draggable from 'vuedraggable'
 import TextInput from '@/Components/TextInput.vue';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
-// import { useAttrs } from 'vue'
-
-// const attrs = useAttrs();
-// console.log(attrs.auth.user);
 
 const props = defineProps({
     tasks: {
@@ -118,7 +114,6 @@ async function reorderTasks() {
     await new Promise(r => setTimeout(r, 500));
     taskList.tasks.forEach((task) => {
         task.task_list_id = i;
-        console.log(task.name+': '+i);
         i++;
     });
     taskList.post(route('tasks.reorder'), {
