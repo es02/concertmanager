@@ -190,8 +190,8 @@ class ApplicationController extends Controller
                 ->count();
         }
 
-
         foreach($rawApplications as $rawApplication) {
+            Log::debug('Getting details for Application {id}', ['id' => $rawApplication->id]);
             $apps = Event_Application_Entry::where('tenant_id', 1)
             ->where('event_application_parent_id', $rawApplication->id)
             ->get();
@@ -292,6 +292,12 @@ class ApplicationController extends Controller
             $name = str_replace(" ", "_", $name);
 
             $value = $request->$name;
+
+            // Someone managed to get an empty form response in.
+            // This bricks the application list so make sure mandatory fields are validated server-side as well as client-side.
+            if ($field->mandatory == 1 && $value == '') {
+                return back()->with('error', 'missing field');
+            }
 
             Log::debug('Processing field {name} with value {value}', ['name' => $name, 'value' => $value]);
 
