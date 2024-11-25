@@ -359,7 +359,7 @@ class ApplicationController extends Controller
 
         }else{
             $artist = Artist::where('tenant_id', 1)
-            ->where('email', $artistKeys['email'])
+            ->where('name', $artistKeys['name'])
             ->first();
         }
 
