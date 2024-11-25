@@ -192,6 +192,15 @@ class ApplicationController extends Controller
 
         foreach($rawApplications as $rawApplication) {
             Log::debug('Getting details for Application {id}', ['id' => $rawApplication->id]);
+
+            $check = Event_Application_Entry::where('tenant_id', 1)
+                ->where('event_application_parent_id', $rawApplication->id)
+                ->count();
+
+            if($check === 0) {
+                continue;
+            }
+
             $apps = Event_Application_Entry::where('tenant_id', 1)
             ->where('event_application_parent_id', $rawApplication->id)
             ->get();
