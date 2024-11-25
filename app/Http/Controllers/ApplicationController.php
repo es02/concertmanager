@@ -372,17 +372,19 @@ class ApplicationController extends Controller
             ->first();
         }
 
-        $parent = Event_Application_Parent::create([
-            'tenant_id' => 1,
-            'application_id' => $application->id,
-            'new' => 1,
-        ]);
-
         $entryCount = Event_Application_Entry::where('tenant_id', 1)
             ->where('artist_id', $artist->id)
             ->count();
 
         if ($entryCount === 0) {
+
+            // Only create a new parent entry if there is not an existing entry
+            $parent = Event_Application_Parent::create([
+                'tenant_id' => 1,
+                'application_id' => $application->id,
+                'new' => 1,
+            ]);
+
             foreach ($fields as $field) {
                 $name = $field->name;
 
