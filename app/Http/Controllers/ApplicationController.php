@@ -433,7 +433,13 @@ class ApplicationController extends Controller
 
                 $applied->value = $value;
                 $applied->save();
+
+                $parent = $applied->event_application_parent_id;
             }
+
+            // Notify admin that an entry has been updated
+            $parent = Event_Application_Parent::find($parent);
+            $parent->new = 1;
         }
 
         return Inertia::render('Apply/Success');
