@@ -23,7 +23,7 @@ var form = {
 };
 
 function createVenue() {
-    router.post('/venue/create', this.form);
+    router.post('/venue/create', form);
 };
 
 const selectNewPhoto = () => {
