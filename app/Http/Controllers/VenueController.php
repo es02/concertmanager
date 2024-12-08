@@ -16,6 +16,12 @@ class VenueController extends Controller
 {
     public function getVenueList($pagenum = 0){
         $count = Venue::count();
+
+        // don't skip ahead a page
+        if ($pagenum !== 0) {
+            $pagenum--;
+        }
+
         $venues = Venue::where('state', '!=', 'deleted')
             ->orderBy('venue_name')
             ->skip($pagenum*10)
