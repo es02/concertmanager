@@ -50,7 +50,7 @@ class VenueController extends Controller
         $description = '';
         $location = '';
         $capacity = '';
-        $standard_fee = '';
+        $standard_fee = 0;
         $ticket_cut = '';
         $pic = '';
         $cut_type = '';
@@ -74,7 +74,7 @@ class VenueController extends Controller
             $pic = $request->pic_url->storePublicly(
                 'venue-images', ['disk' => 'public']
             );
-            $pic = "../storage/" . $photo;
+            $pic = "../storage/" . $pic;
         }
 
         $venue = Venue::Create([
