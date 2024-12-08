@@ -50,7 +50,7 @@ class VenueController extends Controller
         $description = '';
         $location = '';
         $capacity = '';
-        $standard_fee = '';
+        $standard_fee = 0;
         $ticket_cut = '';
         $pic = '';
         $cut_type = '';
