@@ -47,17 +47,17 @@ class VenueController extends Controller
             'email' => ['required', 'string', 'max:1000'],
         ]);
 
-        $description = '';
-        $location = '';
-        $capacity = '';
-        $standard_fee = 0;
-        $ticket_cut = '';
-        $pic = '';
-        $cut_type = '';
-        $fee_type = '';
-        $additional_fees = '';
-        $tech_specs = '';
-        $backline = '';
+        $description = null;
+        $location = null;
+        $capacity = null;
+        $standard_fee = null;
+        $ticket_cut = null;
+        $pic = null;
+        $cut_type = null;
+        $fee_type = null;
+        $additional_fees = null;
+        $tech_specs = null;
+        $backline = null;
 
         if($request->bio){$description = $request->bio;}
         if($request->location){$location = $request->location;}
@@ -271,18 +271,41 @@ class VenueController extends Controller
                 $venue->tenant_id = 1;
             }
 
+            $description = null;
+            $location = null;
+            $capacity = null;
+            $standard_fee = null;
+            $ticket_cut = null;
+            $pic = null;
+            $cut_type = null;
+            $fee_type = null;
+            $additional_fees = null;
+            $tech_specs = null;
+            $backline = null;
+
+            if($column[2]){$description = $column[2];}
+            if($column[3]){$location = $column[3];}
+            if($column[4]){$capacity = $column[4];}
+            if($column[5]){$standard_fee = $column[5];}
+            if($column[7]){$ticket_cut = $column[7];}
+            if($column[8]){$cut_type = $column[8];}
+            if($column[6]){$fee_type = $column[6];}
+            if($column[9]){$additional_fees = $column[9];}
+            if($column[10]){$tech_specs = $column[10];}
+            if($column[11]){$backline = $column[11];}
+
             $venue->venue_name = $column[0];
             $venue->email = $column[1];
-            $venue->bio = $column[2];
-            $venue->location = $column[3];
-            $venue->capacity = $column[4];
-            $venue->standard_fee = $column[5];
-            $venue->fee_type = $column[6];
-            $venue->ticket_cut = $column[7];
-            $venue->cut_type = $column[8];
-            $venue->additional_fees = $column[9];
-            $venue->tech_specs = $column[10];
-            $venue->backline = $column[11];
+            $venue->bio = $description;
+            $venue->location = $location;
+            $venue->capacity = $capacity;
+            $venue->standard_fee = $standard_fee;
+            $venue->fee_type = $fee_type;
+            $venue->ticket_cut = $ticket_cut;
+            $venue->cut_type = $cut_type;
+            $venue->additional_fees = $additional_fees;
+            $venue->tech_specs = $tech_specs;
+            $venue->backline = $backline;
             $venue->save();
         }
     }
