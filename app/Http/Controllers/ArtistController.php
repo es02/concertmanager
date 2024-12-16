@@ -26,8 +26,6 @@ class ArtistController extends Controller
 
         Log::debug('Generating artist list sorted by: {sort}', ['sort' => $sortby]);
 
-        ;
-
         if ($sortby === 'rating') {
             $artists = Artist::where('state', '!=', 'deleted')
                 ->orderBy($sortby, 'desc')
