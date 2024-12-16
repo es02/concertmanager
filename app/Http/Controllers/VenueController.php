@@ -151,8 +151,8 @@ class VenueController extends Controller
 
     public function destroyVenue($id){
         Log::debug('Deleting venue: {venue}', ['venue' => $id]);
-        $venue = Venue::find($id);
-        $venue->destroy();
+        $venue = Venue::find($id)->delete();
+        return back()->with('status', 'venue-deleted');
     }
 
     public function exportCSV() {
