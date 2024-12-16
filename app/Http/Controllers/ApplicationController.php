@@ -514,7 +514,7 @@ class ApplicationController extends Controller
     }
 
     public function delete($id) {
-        Log::debug('Removing New status for application: {id}', ['id' => $id]);
+        Log::debug('Removing application: {id}', ['id' => $id]);
 
         $appId = Event_Application_Parent::find($id);
         $appId = $appId->application_id;
