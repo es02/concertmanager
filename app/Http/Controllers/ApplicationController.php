@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
+use App\Http\Controllers\EmailController;
 use App\Models\Artist;
 use App\Models\Event;
 use App\Models\Event_Application;
@@ -523,5 +524,66 @@ class ApplicationController extends Controller
         $deleted = Event_Application_Parent::find($id)->delete();
 
         return redirect()->route("event.applications", $appId)->with('success', 'Deleted');
+    }
+
+    // resend the application received email
+    public function resendConfirmation($id) {
+        Log::debug('Re-sending application received email for application: {id}', ['id' => $id]);
+
+        $rawApplication = Event_Application_Parent::find($id);
+        $app = Event_Application::find($rawApplication->application_id);
+        $type = $app->type;
+
+        $event = Event::find($app->event_id);
+
+        Log::debug('Getting details for Application {id}', ['id' => $rawApplication->id]);
+
+        $apps = Event_Application_Entry::where('tenant_id', 1)
+        ->where('event_application_parent_id', $rawApplication->id)
+        ->get();
+
+        $rating = 0;
+
+        $artist = Artist::where('id', $apps[0]->artist_id)->first();
+        if(isset($artist->rating)){
+            $rating = $artist->rating;
+        }
+
+        // $items['application_id'] = $rawApplication->id;
+        // $items['rating'] = $rating;
+        // $items['new'] = $rawApplication->new;
+        // $items['shortlisted'] = $rawApplication->shortlisted;
+        // $items['accepted'] = $rawApplication->accepted;
+        // $items['rejected'] = $rawApplication->rejected;
+        // $items['reason'] = $rawApplication->reason;
+        // $items['artist'] = $artist->id;
+
+        foreach($apps as $application) {
+            $field = Event_Application_Field::find($application->event_application_field_id);
+
+            $name = $field->name;
+            if ($field->name === 'image') {
+                continue;
+            }
+
+            $items[$name] = $application->value;
+        }
+
+        Log::debug('Built application entry: {application}', ['application' => $items]);
+
+        $email = new EmailController;
+
+        $to = 'test@example.com';
+        $template = 'test';
+        $data = [
+            'name' => $artist->name,
+            'event' => $event->name,
+            'applicationType' => $type,
+            'items' => $items,
+        ];
+
+        $email->sendEmail($to, $template, $data);
+
+        //return redirect()->route("event.applications", $appId)->with('success', 'Re-sent');
     }
 }

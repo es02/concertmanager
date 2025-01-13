@@ -24,6 +24,21 @@ const currentPage = ref(sortBy[2]);
 const artistsPerPage = 10;
 const numberOfPages = Math.ceil(props.count / artistsPerPage);
 
+const paginatedArtists = computed(() => {
+    var start = (currentPage.value - 1) * artistsPerPage;
+    if (currentPage.value === undefined) {
+        start = parseInt("0")
+    }
+    const end = start + artistsPerPage;
+    if (props.artists === undefined) {
+        return {};
+    }
+    if (props.artists.data) {
+        return props.artists.data;
+    }
+    return props.artists.slice(start, end);
+});
+
 function changePage(page){
     console.log(page);
     var pageSort = sortByURL.value;
@@ -98,24 +113,8 @@ function goToCreateArtist() {
                         <td></td>
                     </tr>
                 </thead>
-                <tbody v-if="artists.data">
-                    <tr v-for="artist in artists.data" :key="artist.id">
-                        <td class="link link-primary">
-                            <Link :href="`/artist/${artist.id}`">{{ artist.name }}</Link>
-                        </td>
-                        <td>{{ artist.genre }}</td>
-                        <td>{{ artist.location }}</td>
-                        <td v-if="artist.standard_fee !== null" v-html="artist.standard_fee.slice(0,40)"></td>
-                        <td v-else></td>
-                        <td><Rating :rating="artist.rating"></Rating></td>
-                        <td>
-                            <span v-if="artist.booked_previously === 1" class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Previously Booked</span>
-                            <span v-if="artist.blacklisted === 1 || artist.blacklisted === 'Yes'" class="bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">Blacklisted</span>
-                        </td>
-                    </tr>
-                </tbody>
-                <tbody v-else>
-                    <tr v-for="artist in artists" :key="artist.id">
+                <tbody>
+                    <tr v-for="artist in paginatedArtists" :key="artist.id">
                         <td class="link link-primary">
                             <Link :href="`/artist/${artist.id}`">{{ artist.name }}</Link>
                         </td>
