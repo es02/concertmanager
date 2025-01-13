@@ -101,6 +101,7 @@ class VenueController extends Controller
             'state' => 'active'
         ]);
 
+        return redirect()->route("venue", $venue->id)->with('status', 'Created');
     }
 
     public function updateVenue(Request $request){
@@ -251,7 +252,7 @@ class VenueController extends Controller
         }
         fclose($handle);
 
-        return redirect()->route('events')->with('success', 'Data has been added successfully.');
+        return redirect()->route('venues')->with('success', 'Data has been added successfully.');
     }
 
     public function getchunkdata($chunkdata)
