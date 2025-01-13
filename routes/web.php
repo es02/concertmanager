@@ -6,9 +6,12 @@ use Inertia\Inertia;
 use App\Http\Controllers\ArtistController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\MediaController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\SponsorController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\VenueController;
+use App\Http\Controllers\VolunteerController;
 
 // Route::get('/', function () {
 //     return Inertia::render('Welcome', [
@@ -48,8 +51,12 @@ Route::middleware([
     Route::get('/event/applications/{id}/search/{searchTerm}/{pagenum?}', [ApplicationController::class, 'showApplications']);
     Route::get('/event/applications/{id}/{pagenum?}', [ApplicationController::class, 'showApplications'])->name('event.applications');
     Route::get('/events/{pagenum?}', [EventController::class, 'getEventList'])->name('events');
-    Route::get('/media', [EventController::class, 'getEventList'])->name('media');
+    Route::get('/medias/{pagenum?}', [MediaController::class, 'getMediaList'])->name('medias');
+    Route::get('/media/{id}', [MediaController::class, 'getMedia'])->name('media');
     Route::get('/settings', [SettingsController::class, 'getSettings'])->name('settings');
+    Route::get('/sponsors/create', function () {return Inertia::render('Sponsor/Create');})->name('sponsor.create');
+    Route::get('/sponsors/{pagenum?}', [SponsorController::class, 'getSponsorList'])->name('sponsors');
+    Route::get('/sponsor/{id}', [SponsorController::class, 'getSponsor'])->name('sponsor');
     Route::get('/staff', [EventController::class, 'getEventList'])->name('staff');
     Route::get('/tasks/export-csv', [TaskController::class, 'exportCSV'])->name('tasks.getCSV');
     Route::get('/tasks', [TaskController::class, 'getTasks'])->name('tasks');
@@ -58,8 +65,9 @@ Route::middleware([
     Route::get('/venue/{id}', [VenueController::class, 'getVenue'])->name('venue');
     Route::get('/venue/edit/{id}', [VenueController::class, 'getVenue'])->name('venue.edit');
     Route::get('/venues/{pagenum?}', [VenueController::class, 'getVenueList'])->name('venues');
-    Route::get('/volunteers/{pagenum?}', [ArtistController::class, 'getArtistList'])->name('volunteers'); // TODO:: Create controller endpoint and update me
-    Route::get('/volunteers/{id}', [ArtistController::class, 'getArtist'])->name('volunteer'); // TODO:: Create controller endpoint and update me
+    Route::get('/volunteers/create', function () {return Inertia::render('Volunteer/Create');})->name('volunteer.create');
+    Route::get('/volunteers/{pagenum?}', [VolunteerController::class, 'getVolunteerList'])->name('volunteers');
+    Route::get('/volunteer/{id}', [VolunteerController::class, 'getVolunteer'])->name('volunteer');
 
     Route::post('/artist/apply', [ArtistController::class, 'applyForEvent'])->name('artist.apply'); // TODO:: Add prefill logic to form and use seperate update endpoint
     Route::post('/artists/import-csv', [ArtistController::class, 'importCSV'])->name('artists.putCSV');
@@ -81,6 +89,12 @@ Route::middleware([
     Route::post('/event/deleteApplication/{id}', [ApplicationController::class, 'deleteApplication'])->name('event.form.delete');
     Route::post('/event/publishApplication/{id}',[ApplicationController::class, 'publishApplication'])->name('event.form.publish');
     Route::post('/event/unpublishApplication/{id}',[ApplicationController::class, 'unpublishApplication'])->name('event.form.unpublish');
+    Route::post('/media/create', [MediaController::class, 'createMedia'])->name('media.new');
+    Route::post('/media/delete/{id}', [MediaController::class, 'destroyMedia'])->name('media.destroy');
+    Route::post('/media/update', [MediaController::class, 'updateMedia'])->name('media.update');
+    Route::post('/sponsor/create', [SponsorController::class, 'createSponsor'])->name('sponsor.new');
+    Route::post('/sponsor/delete/{id}', [SponsorController::class, 'destroySponsor'])->name('sponsor.destroy');
+    Route::post('/sponsor/update', [SponsorController::class, 'updateSponsor'])->name('sponsor.update');
     Route::post('/settings/update', [SettingsController::class, 'updateTenantData'])->name('settings.update');
     Route::post('/tasks/import-csv', [TaskController::class, 'importCSV'])->name('tasks.putCSV');
     Route::post('/tasks/create', [TaskController::class, 'newTask'])->name('tasks.new');
@@ -91,4 +105,7 @@ Route::middleware([
     Route::post('/venue/create', [VenueController::class, 'createVenue'])->name('venue.new');
     Route::post('/venue/delete/{id}', [VenueController::class, 'destroyVenue'])->name('venue.destroy');
     Route::post('/venue/update', [VenueController::class, 'updateVenue'])->name('venue.update');
+    Route::post('/volunteer/create', [VolunteerController::class, 'createVolunteer'])->name('volunteer.new');
+    Route::post('/volunteer/delete/{id}', [VolunteerController::class, 'destroyVolunteer'])->name('voluteer.destroy');
+    Route::post('/volunteer/update', [VolunteerController::class, 'updateVolunteer'])->name('volunteer.update');
 });

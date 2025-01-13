@@ -12,6 +12,7 @@ use Inertia\Response;
 use App\Models\Artist;
 use App\Models\Event_Application_Entry;
 use App\Models\Event_Application_Parent;
+use App\Models\User;
 
 class ArtistController extends Controller
 {
@@ -116,6 +117,19 @@ class ArtistController extends Controller
             'notes' => $request->notes,
             'state' => 'active'
         ]);
+
+        $user = User::where('tenant_id', 1)
+            ->where('email', $artist->email)
+            ->count();
+
+        if ($user === 0) {
+            User::create([
+                'tenant_id' => 1,
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make(Str::random(40)), // new user will need to reset password to be able to log in
+            ]);
+        }
 
         return redirect()->route("artist", $artist->id)->with('status', 'Created');
     }
@@ -341,6 +355,21 @@ class ArtistController extends Controller
             $artist->blacklisted = $column[12];
             $artist->notes = $column[13];
             $artist->save();
+
+
+
+            $user = User::where('tenant_id', 1)
+            ->where('email', $artist->email)
+            ->count();
+
+            if ($user === 0) {
+                User::create([
+                    'tenant_id' => 1,
+                    'name' => $artist->name,
+                    'email' => $artist->email,
+                    'password' => Hash::make(Str::random(40)), // new user will need to reset password to be able to log in
+                ]);
+            }
         }
     }
 }
