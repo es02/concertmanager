@@ -75,15 +75,18 @@ const logout = () => {
                                 <NavLink :href="route('venues')" :active="route().current('venues')">
                                     Venues
                                 </NavLink>
-                                <!-- <NavLink :href="route('volunteers')" :active="route().current('volunteers')">
+                                <NavLink :href="route('volunteers')" :active="route().current('volunteers')">
                                     Volunteers
-                                </NavLink> -->
+                                </NavLink>
+                                <NavLink :href="route('sponsors')" :active="route().current('sponsors')">
+                                    Sponsors
+                                </NavLink>
                                 <!-- <NavLink :href="route('staff')" :active="route().current('staff')">
                                     Staff
                                 </NavLink> -->
-                                <!-- <NavLink :href="route('media')" :active="route().current('media')">
+                                <NavLink :href="route('medias')" :active="route().current('medias')">
                                     Media
-                                </NavLink> -->
+                                </NavLink>
                                 <NavLink v-if="$page.props.isGod" :href="route('tasks')" :active="route().current('tasks')">
                                     Tasks
                                 </NavLink>
@@ -252,15 +255,18 @@ const logout = () => {
                         <ResponsiveNavLink :href="route('venues')" :active="route().current('venues')">
                             Venues
                         </ResponsiveNavLink>
-                        <!-- <ResponsiveNavLink :href="route('volunteers')" :active="route().current('volunteers')">
+                        <ResponsiveNavLink :href="route('volunteers')" :active="route().current('volunteers')">
                             Volunteers
-                        </ResponsiveNavLink> -->
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink :href="route('sponsors')" :active="route().current('sponsors')">
+                            Sponsors
+                        </ResponsiveNavLink>
                         <!-- <ResponsiveNavLink :href="route('staff')" :active="route().current('staff')">
                             Staff
                         </ResponsiveNavLink> -->
-                        <!-- <ResponsiveNavLink :href="route('media')" :active="route().current('media')">
+                        <ResponsiveNavLink :href="route('medias')" :active="route().current('medias')">
                             Media
-                        </ResponsiveNavLink> -->
+                        </ResponsiveNavLink>
                         <ResponsiveNavLink v-if="$page.props.isGod" :href="route('tasks')" :active="route().current('tasks')">
                             Tasks
                         </ResponsiveNavLink>
