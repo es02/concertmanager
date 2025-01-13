@@ -56,7 +56,7 @@ Route::middleware([
     Route::get('/settings', [SettingsController::class, 'getSettings'])->name('settings');
     Route::get('/sponsors/create', function () {return Inertia::render('Sponsor/Create');})->name('sponsor.create');
     Route::get('/sponsors/{pagenum?}', [SponsorController::class, 'getSponsorList'])->name('sponsors');
-    Route::get('/sponsors/{id}', [SponsorController::class, 'getSponsor'])->name('sponsor');
+    Route::get('/sponsor/{id}', [SponsorController::class, 'getSponsor'])->name('sponsor');
     Route::get('/staff', [EventController::class, 'getEventList'])->name('staff');
     Route::get('/tasks/export-csv', [TaskController::class, 'exportCSV'])->name('tasks.getCSV');
     Route::get('/tasks', [TaskController::class, 'getTasks'])->name('tasks');
