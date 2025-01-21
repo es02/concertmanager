@@ -607,7 +607,7 @@ class ApplicationController extends Controller
         $columns = [];
 
         $fields = Event_Application_Field::where('tenant_id', 1)
-            ->where('application_id', $id)
+            ->where('event_application_id', $id)
             ->get();
 
         foreach($fields as $field) {
@@ -619,18 +619,6 @@ class ApplicationController extends Controller
             Log::debug('Exporting Applications CSV: {name}', ['name' => $filename]);
 
             fputcsv($handle, $columns);
-
-             // Fetch and process data in chunks
-            // Artist::chunk(25, function ($artists) use ($handle) {
-            //     foreach ($artists as $artist) {
-            //         //Log::debug('Exporting artist: {name}', ['name' => $artist->name]);
-
-            //         $data = [];
-
-            //         // Write data to a CSV file.
-            //         fputcsv($handle, $data);
-            //     }
-            // });
 
             $rawApplications = Event_Application_Parent::where('tenant_id', 1)
                 ->where('application_id', $id)
