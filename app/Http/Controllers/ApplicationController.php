@@ -613,6 +613,9 @@ class ApplicationController extends Controller
         foreach($fields as $field) {
             $columns[] = $field->name;
         }
+        $columns[] = 'Accepted';
+        $columns[] = 'Shortlisted';
+        $columns[] = 'Rejected';
 
         $callback = function() use ($filename, $columns, $id) {
             $handle = fopen('php://output', 'w');
@@ -632,6 +635,10 @@ class ApplicationController extends Controller
                         foreach ($apps as $app) {
                             $data[] = $app->value;
                         }
+                        $data[] = $application->accepted;
+                        $data[] = $application->shortlisted;
+                        $data[] = $application->rejected;
+
                         fputcsv($handle, $data);
                     }
                 });
