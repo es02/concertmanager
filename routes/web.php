@@ -24,7 +24,7 @@ use App\Http\Controllers\VolunteerController;
 
 Route::get('/', function () {return Inertia::render('Dashboard');})->name('home');
 Route::get('/dashboard', function () {return Inertia::render('Dashboard');})->name('dashboard');
-Route::get('apply/success', function () {return Inertia::render('Apply/Success');})->name('success'); // Not really needed but helpful for prototyping/etc
+Route::get('apply/success', function () {return Inertia::render('Apply/Success');})->name('success');
 Route::get('/apply/{name}', [ApplicationController::class, 'showApplicationForm'])->name('apply');
 Route::post('/apply/{name}', [ApplicationController::class, 'applyForEvent'])->name('new.application');
 
@@ -33,6 +33,7 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
+    Route::get('/applications/{id}/export-csv', [ApplicationController::class, 'exportCSV'])->name('applications.getCSV');
     Route::get('/artist/create', function () {return Inertia::render('Artist/Create');})->name('artist.create');
     Route::get('/artist/{id}', [ArtistController::class, 'getArtist'])->name('artist');
     Route::get('/artists/export-csv', [ArtistController::class, 'exportCSV'])->name('artists.getCSV');

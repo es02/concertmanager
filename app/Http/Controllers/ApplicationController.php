@@ -164,7 +164,7 @@ class ApplicationController extends Controller
             if(isset($a) && $a !== 'undefined'){$filter = $a;}
         }
 
-        Log::debug('Generating event application list for Event: {id}, sorted by: {sort}, filtered by: {filter}, page: {page}', ['id' => $id, 'sort' => $sortby, 'filter' => $filter, 'page' => $pagenum]);
+        Log::debug('Generating event application list for Application Form: {id}, sorted by: {sort}, filtered by: {filter}, page: {page}', ['id' => $id, 'sort' => $sortby, 'filter' => $filter, 'page' => $pagenum]);
 
         // don't skip ahead a page
         // if ($pagenum !== 0) {
@@ -173,21 +173,25 @@ class ApplicationController extends Controller
 
         if($filter !== 'none') {
             $rawApplications = Event_Application_Parent::where('tenant_id', 1)
+                ->where('application_id', $id)
                 ->where($filter, 1)
                 // ->skip($pagenum * 10)
                 // ->take(10)
                 ->get();
 
             $count = Event_Application_Parent::where('tenant_id', 1)
+                ->where('application_id', $id)
                 ->where($filter, 1)
                 ->count();
         } else {
             $rawApplications = Event_Application_Parent::where('tenant_id', 1)
+                ->where('application_id', $id)
             //     ->skip($pagenum * 10)
             //     ->take(10)
                 ->get();
 
             $count = Event_Application_Parent::where('tenant_id', 1)
+                ->where('application_id', $id)
                 ->count();
         }
 
@@ -585,5 +589,68 @@ class ApplicationController extends Controller
         $email->sendEmail($to, $template, $data);
 
         //return redirect()->route("event.applications", $appId)->with('success', 'Re-sent');
+    }
+
+    public function exportCSV($id) {
+        $filename = 'applications.csv';
+
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => "inline; filename=\"$filename\"",
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0',
+            'X-Accel-Buffering' => 'no'
+        ];
+        Log::info('Exporting Applications CSV');
+
+        $columns = [];
+
+        $fields = Event_Application_Field::where('tenant_id', 1)
+            ->where('application_id', $id)
+            ->get();
+
+        foreach($fields as $field) {
+            $columns[] = $field->name;
+        }
+
+        $callback = function() use ($filename, $columns, $id) {
+            $handle = fopen('php://output', 'w');
+            Log::debug('Exporting Applications CSV: {name}', ['name' => $filename]);
+
+            fputcsv($handle, $columns);
+
+             // Fetch and process data in chunks
+            // Artist::chunk(25, function ($artists) use ($handle) {
+            //     foreach ($artists as $artist) {
+            //         //Log::debug('Exporting artist: {name}', ['name' => $artist->name]);
+
+            //         $data = [];
+
+            //         // Write data to a CSV file.
+            //         fputcsv($handle, $data);
+            //     }
+            // });
+
+            $rawApplications = Event_Application_Parent::where('tenant_id', 1)
+                ->where('application_id', $id)
+                ->chunk(25, function ($applications) use ($handle) {
+                    foreach ($applications as $application) {
+                        $apps = Event_Application_Entry::where('tenant_id', 1)
+                            ->where('event_application_parent_id', $application->id)
+                            ->get();
+
+                        $data = [];
+                        foreach ($apps as $app) {
+                            $data[] = $app->value;
+                        }
+                        fputcsv($handle, $data);
+                    }
+                });
+
+            fclose($handle);
+        };
+
+        return response()->stream($callback, 200, $headers)->send();
     }
 }
