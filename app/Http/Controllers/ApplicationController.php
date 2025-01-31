@@ -122,6 +122,15 @@ class ApplicationController extends Controller
             ->where('type', $type)
             ->first();
 
+        $god = false;
+        $user =  Auth::user();
+        if ($user->hasRole('god')) {$god = true;}
+
+        // Allow admin users to view unpublished forms
+        if ($application->published == 0 & $god == false) {
+            abort(404);
+        }
+
         $fields = Event_Application_Field::where('event_application_id', $application->id)
             ->where('tenant_id', 1)
             ->orderBy('order_id', 'asc')
