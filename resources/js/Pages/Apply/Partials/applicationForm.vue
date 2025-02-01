@@ -44,6 +44,7 @@ const applyForEvent = () => {
 
 };
 
+
 </script>
 
 
@@ -107,7 +108,7 @@ const applyForEvent = () => {
                 Applied.
             </ActionMessage>
 
-            <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+            <PrimaryButton v-if="application.state === 'open'" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                 Apply
             </PrimaryButton>
         </template>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -121,6 +122,14 @@ class ApplicationController extends Controller
             ->where('name', $name)
             ->where('type', $type)
             ->first();
+
+        $now = new Carbon();
+        $close = new Carbon($application->close);
+
+        if($close <= $now) {
+            $application->state = 'closed';
+            $application->save();
+        }
 
         $god = false;
         $user =  Auth::user();
