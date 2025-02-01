@@ -123,6 +123,14 @@ class ApplicationController extends Controller
             ->where('type', $type)
             ->first();
 
+        $now = new Carbon();
+        $close = new Carbon($application->close);
+
+        if($close <= $now) {
+            $application->state = 'closed';
+            $application->save();
+        }
+
         $god = false;
         $user =  Auth::user();
         if ($user->hasRole('god')) {$god = true;}
