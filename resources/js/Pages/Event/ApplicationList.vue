@@ -193,6 +193,7 @@ function downloadCSV() {
                             <span v-if="application.accepted" class="badge badge-success gap-2">Accepted</span>
                             <span v-if="application.shortlisted" class="badge badge-warning gap-2">Shortlisted</span>
                             <span v-if="application.rejected" class="badge badge-error gap-2">Rejected</span>
+                            <span v-if="application.blacklisted" class="badge badge-dark gap-2">Blacklisted</span>
                         </td>
                     </tr>
                 </tbody>
@@ -227,6 +228,7 @@ function downloadCSV() {
                 <span v-if="applications[displayedApplicationID].accepted" class="badge badge-success gap-2">Accepted</span>&nbsp;
                 <span v-if="applications[displayedApplicationID].shortlisted" class="badge badge-warning gap-2">Shortlisted</span>&nbsp;
                 <span v-if="applications[displayedApplicationID].rejected" class="badge badge-error gap-2">Rejected</span>&nbsp;
+                <span v-if="applications[displayedApplicationID].blacklisted" class="badge badge-dark gap-2">Blacklisted</span>&nbsp;
             </div>
             </template>
             <template #body>
