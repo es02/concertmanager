@@ -5,6 +5,17 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
+use App\Models\Artist;
+use App\Models\Event;
+use App\Models\Event_Application;
+use App\Models\Event_Application_Field;
+use App\Models\Event_Stage;
+use App\Models\Event_Set;
+use App\Models\Plan;
+use App\Models\User;
+use App\Models\Venue;
+use App\Models\Tenant;
+
 class DevelopmentSeeder extends Seeder
 {
     /**
@@ -99,6 +110,7 @@ class DevelopmentSeeder extends Seeder
             'name' => 'foo',
             'type' => 'artist',
             'published' => 1,
+            'description' => ' ',
         ]);
 
         Event_Application_Field::factory()->create([
