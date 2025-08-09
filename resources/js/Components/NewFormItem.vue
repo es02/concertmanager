@@ -3,6 +3,7 @@ import {ref} from 'vue';
 import BinIcon from './Icons/BinIcon.vue';
 import DraggableIcon from './Icons/DraggableIcon.vue';
 import DropdownIcon from './Icons/DropdownIcon.vue';
+import ImageIcon from './Icons/ImageIcon.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import LongTextInput from './LongTextInput.vue';
 import LongTextInputIcon from './Icons/LongTextInputIcon.vue';
@@ -26,7 +27,22 @@ const returnEntry = {
     entryOptions: [],
 }
 
+if (props.entry.entryName && returnEntry.entryName === '') {
+    var temp = clone(props.entry);
+    returnEntry.entryName = temp.entryName;
+    returnEntry.entryType = temp.entryType;
+    returnEntry.entryDescription = temp.entryDescription;
+    returnEntry.entryMappedField = temp.entryMappedField;
+    returnEntry.entryOptions = temp.entryOptions;
+}
+
 var options = [];
+
+// I hate this stupid language so much
+function clone(obj) {
+    if (null == obj || "object" != typeof obj) return obj;
+    return { ...obj };
+}
 
 function addEntryOption(entry) {
     returnEntry.entryOptions.push(entry);
@@ -45,6 +61,35 @@ function updateEntryOption(id, entry) {
 function deleteEntryOption(id) {
     options.splice(id, 1);
 }
+
+const selectNewPhoto = () => {
+    photoInput.value.click();
+};
+
+const updatePhotoPreview = () => {
+    const photo = photoInput.value.files[0];
+
+    if (! photo) return;
+
+    returnEntry.entryImage = photo;
+
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+        photoPreview.value = e.target.result;
+    };
+
+    reader.readAsDataURL(photo);
+
+    emit('update:modelValue', photo);
+    emit('updateEntry', props.entry.id, returnEntry);
+};
+
+const clearPhotoFileInput = () => {
+    if (photoInput.value?.value) {
+        photoInput.value.value = null;
+    }
+};
 </script>
 
 <template>
@@ -75,6 +120,7 @@ function deleteEntryOption(id) {
                         <option value="text" selected><TextInputIcon />Short Answer</option>
                         <option value="longtext"><LongTextInputIcon />Long Answer</option>
                         <option value="dropdown"><DropdownIcon />Dropdown</option>
+                        <option value="image"><ImageIcon />Image Upload</option>
                     </select>
                 </p>
                 <p>
@@ -107,7 +153,7 @@ function deleteEntryOption(id) {
                         <option value="epk_url">EPK URL</option>
                         <option value="genre">Genre(s)</option>
                         <option value="formed">Date Formed</option>
-                        <option value="img">Image URL</option>
+                        <option value="img">Image</option>
                     </select>
                 </p>
                 <div v-if="returnEntry.entryType === 'dropdown'" >
@@ -154,5 +200,3 @@ function deleteEntryOption(id) {
         </div>
     </div>
 </template>
-
-

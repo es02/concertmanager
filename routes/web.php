@@ -46,6 +46,7 @@ Route::middleware([
     Route::get('/event/{id}', [EventController::class, 'getEvent'])->name('event');
     Route::get('/event/createSet/{id}', [EventController::class, 'createSet'])->name('event.set.create'); // TODO:: Create controller endpoint and update me
     Route::get('/event/createApplication/{id}', [ApplicationController::class, 'showCreateApplication'])->name('event.form.create');
+    Route::get('/event/updateApplication/{id}/{form}', [ApplicationController::class, 'showCreateApplication'])->name('event.form.update');
     Route::get('/event/applications/{id}/filter/{filter}/{pagenum?}', [ApplicationController::class, 'showApplications']);
     Route::get('/event/applications/{id}/sort/{sortby}/{pagenum?}', [ApplicationController::class, 'showApplications']);
     Route::get('/event/applications/{id}/filter/{filter}/sort/{sortby}/{pagenum?}', [ApplicationController::class, 'showApplications']);
