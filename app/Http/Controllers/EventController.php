@@ -253,9 +253,9 @@ class EventController extends Controller
     }
 
     public function destroyEvent($id){
-        $event = Event::find($id);
-        $event->state = $request->status;
-        $event->save();
+        $event = Event::find($id)->delete();
+
+        return redirect()->route("Events", 1)->with('success', 'Deleted');
     }
 
     public function exportCSV() {
