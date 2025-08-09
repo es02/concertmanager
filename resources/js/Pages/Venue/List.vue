@@ -129,7 +129,7 @@ function deleteVenue(id) {
                 {{ page }}
             </Link>
         </div> -->
-        <div class="join flex justify-center fixed w-full p-4">
+        <div class="join flex justify-center bottom-0 w-full p-4">
             <nav aria-label="Page navigation">
                 <ul class="inline-flex -space-x-px text-sm">
                     <li>
