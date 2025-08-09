@@ -11,6 +11,7 @@ use Inertia\Response;
 use App\Models\Task;
 use App\Models\TaskList;
 use App\Models\User;
+use App\Http\Controllers\Utils;
 
 class TaskController extends Controller
 {
@@ -178,68 +179,8 @@ class TaskController extends Controller
             'import_csv' => 'required|mimes:csv',
         ]);
         //read csv file and skip data
-        $file = $request->file('import_csv');
-        $handle = fopen($file->path(), 'r');
-        Log::debug('Importing task CSV');
-
-        //skip the header row
-        fgetcsv($handle);
-
-        $chunksize = 25;
-        while(!feof($handle))
-        {
-            $chunkdata = [];
-
-            for($i = 0; $i<$chunksize; $i++)
-            {
-                $data = fgetcsv($handle);
-                if($data === false)
-                {
-                    break;
-                }
-                $chunkdata[] = $data;
-            }
-
-            $this->getchunkdata($chunkdata);
-        }
-        fclose($handle);
+        Utils::importCSV($request, 'task');
 
         return redirect()->route('tasks')->with('success', 'Data has been added successfully.');
-    }
-
-    public function getchunkdata($chunkdata)
-    {
-        foreach($chunkdata as $column){
-            Log::debug('Importing task: {name}', ['name' => $column[0]]);
-
-            $user =  Auth::user();
-
-            $taskList = TaskList::where('tenant_id', 1)
-            ->where('owner_id', $user->id)
-            ->first();
-
-            $taskCheck = Task::where('task_list_id', $taskList->id)
-                ->where('name', $column[0])
-                ->count();
-
-            Log::debug('Task records found: {count}', ['count' => $taskCheck]);
-
-            if ($taskCheck !== 0){
-                Log::debug('Task found - updating');
-                $task = Task::where('task_list_id', $taskList->id)
-                    ->where('name', $column[0])
-                    ->first();
-            } else {
-                Log::debug('Task not found - creating');
-                $task = new Task();
-                $task->task_list_id = $taskList->id;
-            }
-
-            $task->name = $column[0];
-            $task->due = $column[1];
-            $task->completed = $column[2];
-            $task->order_id = $column[3];
-            $task->save();
-        }
     }
 }

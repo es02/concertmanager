@@ -12,6 +12,7 @@ use Inertia\Inertia;
 use Inertia\Response;
 use App\Models\Volunteer;
 use App\Models\User;
+use App\Http\Controllers\Utils;
 
 class VolunteerController extends Controller
 {
@@ -128,5 +129,16 @@ class VolunteerController extends Controller
         $volunteer = Volunteer::find($id)->delete();
 
         return redirect()->route("Volunteers", 1)->with('success', 'Deleted');
+    }
+
+    public function importCSV(Request $request)
+    {
+        $request->validate([
+            'import_csv' => 'required|mimes:csv',
+        ]);
+        //read csv file and skip data
+        Utils::importCSV($request, 'media');
+
+        return redirect()->route('tasks')->with('success', 'Data has been added successfully.');
     }
 }
