@@ -11,6 +11,7 @@ use Illuminate\Validation\Validator;
 use Inertia\Inertia;
 use Inertia\Response;
 use App\Models\Venue;
+use App\Http\Controllers\Utils;
 
 class VenueController extends Controller
 {
@@ -226,93 +227,8 @@ class VenueController extends Controller
             'import_csv' => 'required|mimes:csv',
         ]);
         //read csv file and skip data
-        $file = $request->file('import_csv');
-        $handle = fopen($file->path(), 'r');
-        Log::debug('Importing venue CSV');
-
-        //skip the header row
-        fgetcsv($handle);
-
-        $chunksize = 25;
-        while(!feof($handle))
-        {
-            $chunkdata = [];
-
-            for($i = 0; $i<$chunksize; $i++)
-            {
-                $data = fgetcsv($handle);
-                if($data === false)
-                {
-                    break;
-                }
-                $chunkdata[] = $data;
-            }
-
-            $this->getchunkdata($chunkdata);
-        }
-        fclose($handle);
+        Utils::importCSV($request, 'venue');
 
         return redirect()->route('venues')->with('success', 'Data has been added successfully.');
-    }
-
-    public function getchunkdata($chunkdata)
-    {
-        foreach($chunkdata as $column){
-            Log::debug('Importing venue: {name}', ['name' => $column[0]]);
-
-            $venueCheck = Venue::Where('tenant_id', 1)
-                ->where('venue_name', $column[0])
-                ->count();
-
-            Log::debug('Venue records found: {count}', ['count' => $venueCheck]);
-
-            if ($venueCheck !== 0){
-                Log::debug('Venue found - updating');
-                $venue = Venue::Where('tenant_id', 1)
-                ->where('venue_name', $column[0])
-                ->first();
-            } else {
-                Log::debug('Venue not found - creating');
-                $venue = new Venue();
-                $venue->tenant_id = 1;
-            }
-
-            $description = null;
-            $location = null;
-            $capacity = null;
-            $standard_fee = null;
-            $ticket_cut = null;
-            $pic = null;
-            $cut_type = null;
-            $fee_type = null;
-            $additional_fees = null;
-            $tech_specs = null;
-            $backline = null;
-
-            if($column[2]){$description = $column[2];}
-            if($column[3]){$location = $column[3];}
-            if($column[4]){$capacity = $column[4];}
-            if($column[5]){$standard_fee = $column[5];}
-            if($column[7]){$ticket_cut = $column[7];}
-            if($column[8]){$cut_type = $column[8];}
-            if($column[6]){$fee_type = $column[6];}
-            if($column[9]){$additional_fees = $column[9];}
-            if($column[10]){$tech_specs = $column[10];}
-            if($column[11]){$backline = $column[11];}
-
-            $venue->venue_name = $column[0];
-            $venue->email = $column[1];
-            $venue->bio = $description;
-            $venue->location = $location;
-            $venue->capacity = $capacity;
-            $venue->standard_fee = $standard_fee;
-            $venue->fee_type = $fee_type;
-            $venue->ticket_cut = $ticket_cut;
-            $venue->cut_type = $cut_type;
-            $venue->additional_fees = $additional_fees;
-            $venue->tech_specs = $tech_specs;
-            $venue->backline = $backline;
-            $venue->save();
-        }
     }
 }

@@ -12,6 +12,7 @@ use Inertia\Inertia;
 use Inertia\Response;
 use App\Models\Sponsor;
 use App\Models\User;
+use App\Http\Controllers\Utils;
 
 class SponsorController extends Controller
 {
@@ -128,5 +129,16 @@ class SponsorController extends Controller
         $sponsor = Sponsor::find($id)->delete();
 
         return redirect()->route("sponsors", 1)->with('success', 'Deleted');
+    }
+
+    public function importCSV(Request $request)
+    {
+        $request->validate([
+            'import_csv' => 'required|mimes:csv',
+        ]);
+        //read csv file and skip data
+        Utils::importCSV($request, 'sponsor');
+
+        return redirect()->route('tasks')->with('success', 'Data has been added successfully.');
     }
 }

@@ -9,6 +9,7 @@ use Illuminate\Validation\Validator;
 use Inertia\Inertia;
 use Inertia\Response;
 use App\Models\Media;
+use App\Http\Controllers\Utils;
 
 class MediaController extends Controller
 {
@@ -108,5 +109,16 @@ class MediaController extends Controller
         $media = Media::find($id)->delete();
 
         return redirect()->route("Medias", 1)->with('success', 'Deleted');
+    }
+
+    public function importCSV(Request $request)
+    {
+        $request->validate([
+            'import_csv' => 'required|mimes:csv',
+        ]);
+        //read csv file and skip data
+        Utils::importCSV($request, 'media');
+
+        return redirect()->route('tasks')->with('success', 'Data has been added successfully.');
     }
 }

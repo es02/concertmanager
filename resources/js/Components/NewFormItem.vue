@@ -3,6 +3,7 @@ import {ref} from 'vue';
 import BinIcon from './Icons/BinIcon.vue';
 import DraggableIcon from './Icons/DraggableIcon.vue';
 import DropdownIcon from './Icons/DropdownIcon.vue';
+import ImageIcon from './Icons/ImageIcon.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import LongTextInput from './LongTextInput.vue';
 import LongTextInputIcon from './Icons/LongTextInputIcon.vue';
@@ -24,9 +25,25 @@ const returnEntry = {
     entryDescription: '',
     entryMappedField: '',
     entryOptions: [],
+};
+
+// So instead of the initial values we use this instead
+if (props.entry.entryName && props.entry.entryName !== '') {
+    var temp = clone(props.entry);
+    returnEntry.entryName = temp.entryName;
+    returnEntry.entryType = temp.entryType;
+    returnEntry.entryDescription = temp.entryDescription;
+    returnEntry.entryMappedField = temp.entryMappedField;
+    returnEntry.entryOptions = temp.entryOptions;
 }
 
 var options = [];
+
+// I hate this stupid language so much
+function clone(obj) {
+    if (null == obj || "object" != typeof obj) return obj;
+    return { ...obj };
+}
 
 function addEntryOption(entry) {
     returnEntry.entryOptions.push(entry);
@@ -34,7 +51,13 @@ function addEntryOption(entry) {
    // emit('addEntryOption', props.entry.id, id, entry);
 }
 
-function updateEntry() {
+async function updateEntry() {
+    await new Promise(r => setTimeout(r, 500));
+    console.log("updating entry " + props.entry.id + " with new data: ");
+    console.log("Name: " + returnEntry.entryName);
+    console.log("Type: " + returnEntry.entryType);
+    console.log("Desc: " + returnEntry.entryDescription);
+    console.log("Field: " + returnEntry.entryMappedField);
     emit('updateEntry', props.entry.id, returnEntry);
 }
 
@@ -45,6 +68,35 @@ function updateEntryOption(id, entry) {
 function deleteEntryOption(id) {
     options.splice(id, 1);
 }
+
+const selectNewPhoto = () => {
+    photoInput.value.click();
+};
+
+const updatePhotoPreview = () => {
+    const photo = photoInput.value.files[0];
+
+    if (! photo) return;
+
+    returnEntry.entryImage = photo;
+
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+        photoPreview.value = e.target.result;
+    };
+
+    reader.readAsDataURL(photo);
+
+    emit('update:modelValue', photo);
+    emit('updateEntry', props.entry.id, returnEntry);
+};
+
+const clearPhotoFileInput = () => {
+    if (photoInput.value?.value) {
+        photoInput.value.value = null;
+    }
+};
 </script>
 
 <template>
@@ -75,6 +127,7 @@ function deleteEntryOption(id) {
                         <option value="text" selected><TextInputIcon />Short Answer</option>
                         <option value="longtext"><LongTextInputIcon />Long Answer</option>
                         <option value="dropdown"><DropdownIcon />Dropdown</option>
+                        <option value="image"><ImageIcon />Image Upload</option>
                     </select>
                 </p>
                 <p>
@@ -97,17 +150,17 @@ function deleteEntryOption(id) {
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     >
                         <option value="none" selected></option>
-                        <option value="name">Name</option>
-                        <option value="email">Email</option>
+                        <option value="name">Name*</option>
+                        <option value="email">Email*</option>
                         <option value="bio">Bio</option>
                         <option value="location">Location</option>
-                        <option value="standard_fee">Fee</option>
+                        <option value="standard_fee">Fee*</option>
                         <option value="standard_rider">Hospitality Rider</option>
                         <option value="tech_specs">Technical Rider</option>
                         <option value="epk_url">EPK URL</option>
                         <option value="genre">Genre(s)</option>
                         <option value="formed">Date Formed</option>
-                        <option value="img">Image URL</option>
+                        <option value="img">Image</option>
                     </select>
                 </p>
                 <div v-if="returnEntry.entryType === 'dropdown'" >
@@ -154,5 +207,3 @@ function deleteEntryOption(id) {
         </div>
     </div>
 </template>
-
-

@@ -17,6 +17,31 @@ const returnEntry = {
     entryImage: '',
 }
 
+if (props.entry.entryImage) {
+    var temp = clone(props.entry);
+    var image = '';
+    returnEntry.entryImage = temp.entryImage;
+    returnEntry.entryDescription = temp.entryDescription;
+
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+        photoPreview.value = e.target.result;
+    };
+
+    fetch(temp.rawEntryImageURL)
+    .then(response => response.blob())
+    .then(blob => {
+        reader.readAsDataURL(blob);
+    })
+}
+
+// I hate this stupid language so much
+function clone(obj) {
+    if (null == obj || "object" != typeof obj) return obj;
+    return { ...obj };
+}
+
 const emit = defineEmits(['update:modelValue', 'updateEntry']);
 
 const selectNewPhoto = () => {
