@@ -47,7 +47,7 @@ class Utils {
                 $check = Sponsor::Where('tenant_id', 1);
                 break;
             case 'task':
-                Task::Where('tenant_id', 1);
+                $check = Task::Where('tenant_id', 1);
                 $column = 'task_list_id';
                 break;
             case 'volunteer':
