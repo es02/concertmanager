@@ -25,7 +25,7 @@ var form = {
 };
 
 function createEvent() {
-    router.post('/event/create', this.form);
+    router.post('/event/create', form);
 };
 
 const selectNewPhoto = () => {
