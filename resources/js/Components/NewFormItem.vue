@@ -53,11 +53,6 @@ function addEntryOption(entry) {
 
 async function updateEntry() {
     await new Promise(r => setTimeout(r, 500));
-    console.log("updating entry " + props.entry.id + " with new data: ");
-    console.log("Name: " + returnEntry.entryName);
-    console.log("Type: " + returnEntry.entryType);
-    console.log("Desc: " + returnEntry.entryDescription);
-    console.log("Field: " + returnEntry.entryMappedField);
     emit('updateEntry', props.entry.id, returnEntry);
 }
 
