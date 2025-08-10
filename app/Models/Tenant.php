@@ -21,6 +21,13 @@ class Tenant extends Model
         'fqdn',           // expected to auto fill as tenant_name.master_domain.com
         'plan_id',
         'payment_token',  // Stripe token for plan payment
+        // 'welcome_title',
+        // 'welcome_text',
+        // 'show_welcome',
+        // 'show_event_links',
+        // 'dashboard_event_limit',
+        // 'show_blog',
+        // 'dashboard_post_limit',
         'state',
     ];
 
