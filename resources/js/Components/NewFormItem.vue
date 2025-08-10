@@ -25,9 +25,10 @@ const returnEntry = {
     entryDescription: '',
     entryMappedField: '',
     entryOptions: [],
-}
+};
 
-if (props.entry.entryName && returnEntry.entryName === '') {
+// So instead of the initial values we use this instead
+if (props.entry.entryName && props.entry.entryName !== '') {
     var temp = clone(props.entry);
     returnEntry.entryName = temp.entryName;
     returnEntry.entryType = temp.entryType;
@@ -50,7 +51,13 @@ function addEntryOption(entry) {
    // emit('addEntryOption', props.entry.id, id, entry);
 }
 
-function updateEntry() {
+async function updateEntry() {
+    await new Promise(r => setTimeout(r, 500));
+    console.log("updating entry " + props.entry.id + " with new data: ");
+    console.log("Name: " + returnEntry.entryName);
+    console.log("Type: " + returnEntry.entryType);
+    console.log("Desc: " + returnEntry.entryDescription);
+    console.log("Field: " + returnEntry.entryMappedField);
     emit('updateEntry', props.entry.id, returnEntry);
 }
 
@@ -143,11 +150,11 @@ const clearPhotoFileInput = () => {
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     >
                         <option value="none" selected></option>
-                        <option value="name">Name</option>
-                        <option value="email">Email</option>
+                        <option value="name">Name*</option>
+                        <option value="email">Email*</option>
                         <option value="bio">Bio</option>
                         <option value="location">Location</option>
-                        <option value="standard_fee">Fee</option>
+                        <option value="standard_fee">Fee*</option>
                         <option value="standard_rider">Hospitality Rider</option>
                         <option value="tech_specs">Technical Rider</option>
                         <option value="epk_url">EPK URL</option>
