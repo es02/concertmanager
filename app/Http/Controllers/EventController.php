@@ -162,6 +162,8 @@ class EventController extends Controller
             'stage_name' => 'Main Stage',
             'state' => 'active',
         ]);
+
+        return redirect()->route('events')->with('success', 'Data has been added successfully.');
     }
 
     public function addSet(Request $request, $event, $stage){
