@@ -26,19 +26,18 @@ class EmailTemplateSeeder extends Seeder
         <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
     </head>
     <body class=\"font-sans antialiased\">
-        <h2>Hello {{ $name }},<h2>
-        <p>Thank you for applying for {{ $event }} as an {{ $applicationType }}.</p>
+        <h2>Hello {{ \$name }},<h2>
+        <p>Thank you for applying for {{ \$event }} as an {{ \$applicationType }}.</p>
         <p>For your records here is a copy of your application:</p>
-        <p> @foreach ($items as $key => $value)
-            {{ $key }}: {{ $value }}<br/>
+        <p> @foreach (\$items as \$key => \$value)
+            {{ \$key }}: {{ \$value }}<br/>
         @endforeach </p>
         <p>Please be assured that we take every application seriously, and we will let you know as soon as we have made a decision.</p>
         <p>Regards,<br/>
-        The {{ $event }} organising team.</p>
+        The {{ \$event }} organising team.</p>
     </body>
 </html>",
             'state' => 'active',
         ]);
     }
 }
-
