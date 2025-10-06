@@ -25,7 +25,7 @@ class ArtistController extends Controller
             $pagenum--;
         }
 
-        Log::debug('Generating artist list sorted by: {sort}', ['sort' => $sortby]);
+        Log::debug('Generating artist list page {page} sorted by: {sort}', ['page' => $pagenum ,'sort' => $sortby]);
 
         if ($sortby === 'rating') {
             $artists = Artist::where('state', '!=', 'deleted')
