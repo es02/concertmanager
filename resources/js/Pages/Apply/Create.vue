@@ -1,20 +1,21 @@
 <script setup>
 import {ref, computed, reactive} from 'vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
-import ImageIcon from '@/Components/Icons/ImageIcon.vue';
-import InputError from '@/Components/InputError.vue';
+// import ImageIcon from '@/Components/Icons/ImageIcon.vue';
+// import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import LongTextInput from '@/Components/LongTextInput.vue';
 import NewFormImage from '@/Components/NewFormImage.vue';
 import NewFormItem from '@/Components/NewFormItem.vue';
-import NewQuestionIcon from '@/Components/Icons/NewQuestionIcon.vue';
+// import NewQuestionIcon from '@/Components/Icons/NewQuestionIcon.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { useForm } from '@inertiajs/vue3';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
+// import fs from "fs";
 
-const props = defineProps(['event']);
+const props = defineProps(['event', 'appForm', 'fieldCount']);
 
 const form = useForm({
     name: '',
@@ -37,6 +38,8 @@ var defaultEntry = {
     entryMappedField: '',
     entryMandatory: false,
     entryOptions: [],
+    entryImage: '',
+    rawEntryImageURL:'',
 };
 
 var defaultImage = {
@@ -47,13 +50,52 @@ var defaultImage = {
     entryImage: '',
 };
 
-// pre-seed the form with a header image and a single question
-form.entries.push(clone(defaultImage));
-entryCount++;
-defaultEntry.id = entryCount;
-defaultImage.id = entryCount;
-form.entries.push(clone(defaultEntry));
+function getImageData(img) {
+ return new Promise((resolve) => {
+    img.onload = (imageData) => {
+      resolve(imageData);
+    }
+  });
+}
 
+async function getImage({ url }) {
+  const img = new Image();
+  const imgData = await getImageData(img);
+  return img;
+}
+
+if(props.fieldCount > 0) {
+    var id = 0;
+    entryCount = props.fieldCount;
+    form.name = props.appForm.name;
+    form.desc = props.appForm.description;
+    form.start = props.appForm.open;
+    form.end = props.appForm.close;
+    //form.entries = props.appForm.entries;
+    for (const [key, value] of Object.entries(props.appForm.entries)) {
+        var temp = clone(value)
+        temp.id = id
+        if(temp.entryImage !== '') {
+            var image = "../../../" + temp.entryImage;
+            console.log(image)
+
+            temp.rawEntryImageURL = image;
+            temp.entryImage = getImage(image);
+        }
+        id++
+    form.entries.push(clone(temp))
+    }
+    entryCount--
+    form.entries[entryCount].hasFocus = true;
+} else {
+    form.entries.push(clone(defaultImage));
+    entryCount++;
+    defaultEntry.id = entryCount;
+    defaultImage.id = entryCount;
+    form.entries.push(clone(defaultEntry));
+}
+
+// pre-seed the form with a header image and a single question
 function newQuestion() {
     for (const [key, value] of Object.entries(form.entries)) {
         value.hasFocus = false
@@ -77,6 +119,7 @@ function newImage() {
 }
 
 function setHasFocus(id) {
+    console.log(" setting focus for " + id)
     for (const [key, value] of Object.entries(form.entries)) {
         value.hasFocus = false
     }
@@ -128,11 +171,7 @@ function deleteEntryOption(id,optionId) {
 // I hate this stupid language so much
 function clone(obj) {
     if (null == obj || "object" != typeof obj) return obj;
-    var copy = obj.constructor();
-    for (var attr in obj) {
-        if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
-    }
-    return copy;
+    return { ...obj };
 }
 
 const createForm = () => {

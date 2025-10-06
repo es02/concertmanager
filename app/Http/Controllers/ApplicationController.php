@@ -21,11 +21,64 @@ use App\Models\User;
 
 class ApplicationController extends Controller
 {
-    public function showCreateApplication($id){
+    // Also called for updating a form
+    public function showCreateApplication($id, $form = 0){
         $event = Event::find($id);
+        $count = 0;
+        $formData = null;
+
+        Log::debug('Showing application form creation page for event {id}, form {form}', ['id' => $id, 'form' => $form]);
+
+        if($form > 0) {
+            Log::debug('Updating existing form');
+            $formData = Event_Application::where('tenant_id', 1)
+            ->where('id', $form)
+            ->first();
+
+            $fields = Event_Application_Field::where('event_application_id', $formData->id)
+            ->where('tenant_id', 1)
+            ->orderBy('order_id', 'asc');
+
+            $count = $fields->count();
+            $fields = $fields->get();
+            $entries = [];
+
+            foreach ($fields as &$field) {
+                $entry = [];
+                $tmp = str_replace(" ", "_", $field->name);
+                $tmp = str_replace("(s)", "s", $tmp);
+                $field->vmodel = $tmp;
+                $type = 'longText';
+                $entry['entryOptions'] = [];
+                $entry['entryImage'] = '';
+
+                if (substr($field->expected_value, 0, 3) === 'img') {
+                    $type = 'image';
+                    $entry['entryImage'] = substr($field->expected_value, 4, -1);
+                } elseif (substr($field->expected_value, 0, 4) === 'enum') {
+                    $type = 'dropdown';
+                    $entry['entryOptions'] = explode(',', substr($field->expected_value, 5, -1));
+                } elseif ($field->expected_value === 'string') {
+                    $type = 'text';
+                }
+
+                Log::debug('Adding form element {name}', ['name' => $field->name]);
+
+                $entry['entryType'] = $type;
+                $entry['entryName'] = $field->name;
+                $entry['entryDescription'] = $field->description;
+                $entry['entryMappedField'] = $field->mapped_value;
+                $entry['entryMandatory'] = $field->mandatory;
+                $entry['hasFocus'] = false;
+                $entries[] = $entry;
+            }
+            $formData['entries'] = $entries;
+        }
 
         return Inertia::render('Apply/Create', [
             'event' => $event,
+            'fieldCount' => $count,
+            'appForm' => $formData,
         ]);
     }
 
@@ -41,17 +94,41 @@ class ApplicationController extends Controller
         $start = new Carbon($request->start);
         $end = new Carbon($request->end);
 
-        $form = Event_Application::Create([
-            'tenant_id' => 1,
-            'event_id' => $id,
-            'name' =>  $request->name,
-            'description' =>  $request->desc,
-            'open' =>  $start->toDateTimeString(),
-            'close' =>  $end->toDateTimeString(),
-            'type' =>  $request->type,
-            'published' =>  1,
-            'state' =>  'open',
-        ]);
+        $formCheck = Event_Application::where('tenant_id', 1)
+            ->where('event_id', $id)
+            ->where('name', $request->name)
+            ->count();
+
+        if ($formCheck > 0) {
+            // There should never be 2 forms for an event with the same name
+            // so we can safely just pull the first record
+            $form = Event_Application::where('tenant_id', 1)
+            ->where('event_id', $id)
+            ->where('name', $request->name)
+            ->first();
+
+            // Update form values
+            $form->name = $request->name;
+            $form->description =  $request->desc;
+            $form->open =  $start->toDateTimeString();
+            $form->close =  $end->toDateTimeString();
+            $form->type =  $request->type;
+            $form->published =  1;
+            $form->state =  'open';
+            $form->save();
+        } else {
+            $form = Event_Application::Create([
+                'tenant_id' => 1,
+                'event_id' => $id,
+                'name' => $request->name,
+                'description' =>  $request->desc,
+                'open' =>  $start->toDateTimeString(),
+                'close' =>  $end->toDateTimeString(),
+                'type' =>  $request->type,
+                'published' =>  1,
+                'state' =>  'open',
+            ]);
+        }
 
         foreach($request->entries as $field){
             $mandatory = false;
@@ -75,7 +152,7 @@ class ApplicationController extends Controller
                 $desc = $field['entryDescription'];
             }
 
-            if ($field['entryType'] === 'image') {
+            if ($field['entryType'] === 'image' && !is_array($field['entryImage'])) {
                 $photo = $field['entryImage']->storePublicly(
                     'form-images', ['disk' => 'public']
                 );
@@ -92,17 +169,41 @@ class ApplicationController extends Controller
                 $expected_value = 'longText';
             }
 
-            Event_Application_Field::Create([
-                'tenant_id' => 1,
-                'event_id' => $id,
-                'event_application_id' => $form->id,
-                'order_id' => $field['id'],
-                'name' => $name,
-                'description' => $desc,
-                'expected_value' => $expected_value,
-                'mapped_value' => $mapped,
-                'mandatory' => $mandatory,
-            ]);
+            $entryCheck = Event_Application_Field::where('tenant_id', 1)
+                ->where('event_id', $id)
+                ->where('event_application_id', $form->id)
+                ->where('name', $name)
+                ->count();
+
+            if($entryCheck > 0) {
+                $field = Event_Application_Field::where('tenant_id', 1)
+                    ->where('event_id', $id)
+                    ->where('event_application_id', $form->id)
+                    ->where('name', $name)
+                    ->first();
+                    if ($field['entryType'] === 'image' && is_array($field['entryImage'])) {
+                        $expected_value = $field->expected_value;
+                    } 
+                
+                    $field->order_id = $field['id'];
+                    $field->description = $desc;
+                    $field->expected_value = $expected_value;
+                    $field->mapped_value = $mapped;
+                    $field->mandatory = $mandatory;
+                    $field->save();
+            } else {
+                Event_Application_Field::Create([
+                    'tenant_id' => 1,
+                    'event_id' => $id,
+                    'event_application_id' => $form->id,
+                    'order_id' => $field['id'],
+                    'name' => $name,
+                    'description' => $desc,
+                    'expected_value' => $expected_value,
+                    'mapped_value' => $mapped,
+                    'mandatory' => $mandatory,
+                ]);
+            }
         }
     }
 

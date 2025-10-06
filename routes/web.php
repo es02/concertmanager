@@ -46,6 +46,7 @@ Route::middleware([
     Route::get('/event/{id}', [EventController::class, 'getEvent'])->name('event');
     Route::get('/event/createSet/{id}', [EventController::class, 'createSet'])->name('event.set.create'); // TODO:: Create controller endpoint and update me
     Route::get('/event/createApplication/{id}', [ApplicationController::class, 'showCreateApplication'])->name('event.form.create');
+    Route::get('/event/updateApplication/{id}/{form}', [ApplicationController::class, 'showCreateApplication'])->name('event.form.update');
     Route::get('/event/applications/{id}/filter/{filter}/{pagenum?}', [ApplicationController::class, 'showApplications']);
     Route::get('/event/applications/{id}/sort/{sortby}/{pagenum?}', [ApplicationController::class, 'showApplications']);
     Route::get('/event/applications/{id}/filter/{filter}/sort/{sortby}/{pagenum?}', [ApplicationController::class, 'showApplications']);
@@ -93,9 +94,11 @@ Route::middleware([
     Route::post('/event/unpublishApplication/{id}',[ApplicationController::class, 'unpublishApplication'])->name('event.form.unpublish');
     Route::post('/media/create', [MediaController::class, 'createMedia'])->name('media.new');
     Route::post('/media/delete/{id}', [MediaController::class, 'destroyMedia'])->name('media.destroy');
+    Route::post('/media/import-csv', [MediaController::class, 'importCSV'])->name('media.putCSV');
     Route::post('/media/update', [MediaController::class, 'updateMedia'])->name('media.update');
     Route::post('/sponsor/create', [SponsorController::class, 'createSponsor'])->name('sponsor.new');
     Route::post('/sponsor/delete/{id}', [SponsorController::class, 'destroySponsor'])->name('sponsor.destroy');
+    Route::post('/sponsor/import-csv', [SponsorController::class, 'importCSV'])->name('sponsor.putCSV');
     Route::post('/sponsor/update', [SponsorController::class, 'updateSponsor'])->name('sponsor.update');
     Route::post('/settings/update', [SettingsController::class, 'updateTenantData'])->name('settings.update');
     Route::post('/tasks/import-csv', [TaskController::class, 'importCSV'])->name('tasks.putCSV');
@@ -109,5 +112,6 @@ Route::middleware([
     Route::post('/venue/update', [VenueController::class, 'updateVenue'])->name('venue.update');
     Route::post('/volunteer/create', [VolunteerController::class, 'createVolunteer'])->name('volunteer.new');
     Route::post('/volunteer/delete/{id}', [VolunteerController::class, 'destroyVolunteer'])->name('voluteer.destroy');
+    Route::post('/volunteer/import-csv', [VolunteerController::class, 'importCSV'])->name('volunteer.putCSV');
     Route::post('/volunteer/update', [VolunteerController::class, 'updateVolunteer'])->name('volunteer.update');
 });

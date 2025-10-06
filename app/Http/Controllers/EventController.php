@@ -20,6 +20,7 @@ use App\Models\Event_Application_Field;
 use App\Models\Event_Application_Entry;
 use App\Models\Event_Application_Parent;
 use App\Models\User;
+use App\Http\Controllers\Utils;
 
 class EventController extends Controller
 {
@@ -161,6 +162,8 @@ class EventController extends Controller
             'stage_name' => 'Main Stage',
             'state' => 'active',
         ]);
+
+        return redirect()->route('events')->with('success', 'Data has been added successfully.');
     }
 
     public function addSet(Request $request, $event, $stage){
@@ -253,9 +256,9 @@ class EventController extends Controller
     }
 
     public function destroyEvent($id){
-        $event = Event::find($id);
-        $event->state = $request->status;
-        $event->save();
+        $event = Event::find($id)->delete();
+
+        return redirect()->route("Events", 1)->with('success', 'Deleted');
     }
 
     public function exportCSV() {
@@ -336,77 +339,8 @@ class EventController extends Controller
             'import_csv' => 'required|mimes:csv',
         ]);
         //read csv file and skip data
-        $file = $request->file('import_csv');
-        $handle = fopen($file->path(), 'r');
-        Log::debug('Importing event CSV');
-
-        //skip the header row
-        fgetcsv($handle);
-
-        $chunksize = 25;
-        while(!feof($handle))
-        {
-            $chunkdata = [];
-
-            for($i = 0; $i<$chunksize; $i++)
-            {
-                $data = fgetcsv($handle);
-                if($data === false)
-                {
-                    break;
-                }
-                $chunkdata[] = $data;
-            }
-
-            $this->getchunkdata($chunkdata);
-        }
-        fclose($handle);
+        Utils::importCSV($request, 'event');
 
         return redirect()->route('events')->with('success', 'Data has been added successfully.');
-    }
-
-    public function getchunkdata($chunkdata)
-    {
-        foreach($chunkdata as $column){
-            Log::debug('Importing event: {name}', ['name' => $column[0]]);
-
-            $eventCheck = Event::Where('tenant_id', 1)
-                ->where('name', $column[0])
-                ->count();
-
-            Log::debug('Event records found: {count}', ['count' => $eventCheck]);
-
-            if ($eventCheck !== 0){
-                Log::debug('Event found - updating');
-                $event = Event::Where('tenant_id', 1)
-                ->where('name', $column[0])
-                ->first();
-            } else {
-                Log::debug('Event not found - creating');
-                $event = new Event();
-                $event->tenant_id = 1;
-            }
-
-            $free = 0;
-            if($column[6] === 'yes' || $column[6] === 'Yes') {
-                $booked = 1;
-            }
-            $aa = 0;
-            if($column[7] === 'yes' || $column[7] === 'Yes') {
-                $booked = 1;
-            }
-
-            $event->name = $column[0];
-            $event->venue_id = $column[1];
-            $event->start = $column[2];
-            $event->end = $column[3];
-            $event->description = $column[4];
-            $event->ticketing_provider = $column[5];
-            $event->free = $free;
-            $event->all_ages = $aa;
-            $event->ticket_url = $column[8];
-            $event->location = $column[9];
-            $event->save();
-        }
     }
 }

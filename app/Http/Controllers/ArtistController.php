@@ -13,6 +13,7 @@ use App\Models\Artist;
 use App\Models\Event_Application_Entry;
 use App\Models\Event_Application_Parent;
 use App\Models\User;
+use App\Http\Controllers\Utils;
 
 class ArtistController extends Controller
 {
@@ -279,97 +280,8 @@ class ArtistController extends Controller
             'import_csv' => 'required|mimes:csv',
         ]);
         //read csv file and skip data
-        $file = $request->file('import_csv');
-        $handle = fopen($file->path(), 'r');
-        Log::debug('Importing artist CSV');
-
-        //skip the header row
-        fgetcsv($handle);
-
-        $chunksize = 25;
-        while(!feof($handle))
-        {
-            $chunkdata = [];
-
-            for($i = 0; $i<$chunksize; $i++)
-            {
-                $data = fgetcsv($handle);
-                if($data === false)
-                {
-                    break;
-                }
-                $chunkdata[] = $data;
-            }
-
-            $this->getchunkdata($chunkdata);
-        }
-        fclose($handle);
+        Utils::importCSV($request, 'artist');
 
         return redirect()->route('artists')->with('success', 'Data has been added successfully.');
-    }
-
-    public function getchunkdata($chunkdata)
-    {
-        foreach($chunkdata as $column){
-            Log::debug('Importing artist: {name}', ['name' => $column[0]]);
-
-            $artistCheck = Artist::Where('tenant_id', 1)
-                ->where('name', $column[0])
-                ->count();
-
-            Log::debug('Artist records found: {count}', ['count' => $artistCheck]);
-
-            if ($artistCheck !== 0){
-                Log::debug('Artist found - updating');
-                $artist = Artist::Where('tenant_id', 1)
-                ->where('name', $column[0])
-                ->first();
-            } else {
-                Log::debug('Artist not found - creating');
-                $artist = new Artist();
-                $artist->tenant_id = 1;
-            }
-
-            $booked = 0;
-            if($column[9] === 'yes' || $column[9] === 'Yes') {
-                $booked = 1;
-            }
-
-            $rating = 0;
-            if (isset($column[11])) {
-                $rating = $column[11];
-            }
-
-            $artist->name = $column[0];
-            $artist->email = $column[1];
-            $artist->genre = $column[2];
-            $artist->bio = $column[3];
-            $artist->location = $column[4];
-            $artist->standard_fee = $column[5];
-            $artist->standard_rider = $column[6];
-            $artist->tech_specs = $column[7];
-            $artist->epk_url = $column[8];
-            $artist->booked_previously = $booked;
-            $artist->formed = $column[10];
-            $artist->rating = $rating;
-            $artist->blacklisted = $column[12];
-            $artist->notes = $column[13];
-            $artist->save();
-
-
-
-            $user = User::where('tenant_id', 1)
-            ->where('email', $artist->email)
-            ->count();
-
-            if ($user === 0) {
-                User::create([
-                    'tenant_id' => 1,
-                    'name' => $artist->name,
-                    'email' => $artist->email,
-                    'password' => Hash::make(Str::random(40)), // new user will need to reset password to be able to log in
-                ]);
-            }
-        }
     }
 }
