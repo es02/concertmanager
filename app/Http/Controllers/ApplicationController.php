@@ -501,6 +501,21 @@ class ApplicationController extends Controller
             ->where('artist_id', $artist->id)
             ->count();
 
+        $email = new EmailController;
+        $event = Event::find($app->event_id);
+
+        $to = $artist->email;
+        $template = 'test';         // TODO: Set correct template name from DB
+        $data = [
+            'name' => $artist->name,
+            'event' => $event->name,
+            'applicationType' => $type,
+            'items' => $items,
+        ];
+
+        // Send confirmation email
+        $email->sendEmail($to, $template, $data);
+
         if ($entryCount === 0) {
 
             // Only create a new parent entry if there is not an existing entry
@@ -660,7 +675,7 @@ class ApplicationController extends Controller
 
         $event = Event::find($app->event_id);
 
-        Log::debug('Getting details for Application {id}', ['id' => $rawApplication->id]);
+        //Log::debug('Getting details for Application {id}', ['id' => $rawApplication->id]);
 
         $apps = Event_Application_Entry::where('tenant_id', 1)
         ->where('event_application_parent_id', $rawApplication->id)
@@ -673,15 +688,6 @@ class ApplicationController extends Controller
             $rating = $artist->rating;
         }
 
-        // $items['application_id'] = $rawApplication->id;
-        // $items['rating'] = $rating;
-        // $items['new'] = $rawApplication->new;
-        // $items['shortlisted'] = $rawApplication->shortlisted;
-        // $items['accepted'] = $rawApplication->accepted;
-        // $items['rejected'] = $rawApplication->rejected;
-        // $items['reason'] = $rawApplication->reason;
-        // $items['artist'] = $artist->id;
-
         foreach($apps as $application) {
             $field = Event_Application_Field::find($application->event_application_field_id);
 
@@ -693,11 +699,11 @@ class ApplicationController extends Controller
             $items[$name] = $application->value;
         }
 
-        Log::debug('Built application entry: {application}', ['application' => $items]);
+        //Log::debug('Built application entry: {application}', ['application' => $items]);
 
         $email = new EmailController;
 
-        $to = 'test@example.com';
+        $to = $artist->email;
         $template = 'test';
         $data = [
             'name' => $artist->name,

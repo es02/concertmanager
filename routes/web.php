@@ -80,6 +80,7 @@ Route::middleware([
     Route::post('/event/applications/accept/{id}', [ApplicationController::class, 'accept'])->name('application.accept');
     Route::post('/event/applications/delete/{id}', [ApplicationController::class, 'delete'])->name('application.delete');
     Route::post('/event/applications/reject/{id}', [ApplicationController::class, 'reject'])->name('application.reject');
+    Route::post('/event/applications/resend/{id}', [ApplicationController::class, 'resendConfirmation'])->name('application.resend');
     Route::post('/event/applications/seen/{id}', [ApplicationController::class, 'seen'])->name('application.seen');
     Route::post('/event/applications/shortlist/{id}', [ApplicationController::class, 'shortlist'])->name('application.shortlist');
     Route::post('/event/import-csv', [EventController::class, 'importCSV'])->name('event.putCSV');

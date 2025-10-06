@@ -30,6 +30,8 @@ Once the code is deployed in your chosen location you can use the following to g
 In a separate terminal:
 - npm run dev
 
+For email functionality you will require a Google API Project with Gmail API permissions
+
 ### Contributors
 
 - Aimi Hobson - Architect & Fullstack Development
