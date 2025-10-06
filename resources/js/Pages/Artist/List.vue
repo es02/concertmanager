@@ -36,7 +36,11 @@ const paginatedArtists = computed(() => {
     if (props.artists.data) {
         return props.artists.data;
     }
-    return props.artists.slice(start, end);
+
+    // This breaks pagination
+    // TODO: FixMe
+    // return props.artists.slice(start, end);
+    return props.artists;
 });
 
 function changePage(page){
