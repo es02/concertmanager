@@ -11,6 +11,8 @@ use App\Models\Email;
 use App\Models\Email_Account;
 use App\Models\Email_Template;
 use App\Models\Email_Thread;
+use Mailjet\LaravelMailjet\Facades\Mailjet;
+use \Mailjet\Resources;
 
 class EmailController extends Controller
 {
@@ -21,8 +23,19 @@ class EmailController extends Controller
         $bladeContent = $bladeContent->template;
         $bladeContent = Blade::render($bladeContent, $data);
 
-        log::debug('{template}', ['template' => $bladeContent]);
+        //log::debug('{template}', ['template' => $bladeContent]);
 
+        $mj = Mailjet::getClient();
 
+        $body = [
+            'FromEmail' => "nowhere.bne@gmail.com",
+            'FromName' => "Nowhere Productions",
+            'Subject' => "Application Received",
+            'Recipients' => [['Email' => $to]],
+            'Html-part' => $bladeContent,
+        ];
+        $response =  $mj->post(Resources::$Email, ['body' => $body]);
+        $response->success() && var_dump($response->getData());
+        //log::debug('mail response {response}', ['response' => var_dump($response->getData())]);
     }
 }

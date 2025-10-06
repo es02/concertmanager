@@ -102,6 +102,10 @@ function destroy(id) {
     router.post(`/event/applications/delete/${id}`);
 }
 
+function resend(id) {
+    router.post(`/event/applications/resend/${id}`);
+}
+
 function rate(id) {
     rateForm.post(route('artist.rate', {id: id, via: 'application'}), {
         preserveScroll: true,
@@ -233,7 +237,7 @@ function downloadCSV() {
             </template>
             <template #body>
                 <div v-for="(value, key) in applications[displayedApplicationID]">
-                    <div class="py-1" v-if="key !== 'name' && key !== 'shortlisted' && key !== 'accepted' && key !== 'rejected' && key !== 'rating' && key !== 'reason' && key !== 'application_id' && key !== 'new' && key !== 'artist' && value !== null && value !== ''">
+                    <div class="py-1" v-if="key !== 'name' && key !== 'shortlisted' && key !== 'accepted' && key !== 'rejected' && key !== 'rating' && key !== 'reason' && key !== 'application_id' && key !== 'new' && key !== 'artist' && key !== 'blacklisted' && value !== null && value !== ''">
                         <span class="font-semibold">{{  key }} :</span>
                         <span v-if="key.replace(/(\(s\))/, '').slice(-3) === 'URL'">
                             <ul v-for="link in value.split(/\r?\n/g)" class="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
@@ -284,7 +288,10 @@ function downloadCSV() {
                         <fwb-button @click="rate(applications[displayedApplicationID].application_id)" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
                             Rate
                         </fwb-button>
-                        <fwb-button @click="destroy(applications[displayedApplicationID].application_id)" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
+                        <fwb-button @click="resend(applications[displayedApplicationID].application_id)" type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
+                            Resend confirmation email
+                        </fwb-button>
+                        <fwb-button @click="destroy(applications[displayedApplicationID].application_id)" type="button" class="text-right rtl:text-left focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">
                             Delete
                         </fwb-button>
                     </div>
