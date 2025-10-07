@@ -565,7 +565,7 @@ class ApplicationController extends Controller
 
                 Log::debug('Processing field {name} with value {value}', ['name' => $name, 'value' => $value]);
 
-                if ($name === 'Header_Image') {
+                if ($name === 'Header_Image' || $name === "image") {
                     continue;
                 }
 
@@ -573,7 +573,7 @@ class ApplicationController extends Controller
                     ->where('artist_id', $artist->id)
                     ->where('event_id', $application->event_id)
                     ->where('event_application_id', $application->id)
-                    ->where('event_application_field_id', $field->id)
+                    ->where('event_application_field_id', $field->id)    // FIXME: There's a null value here for no apparent reason.
                     ->first();
 
                 $applied->value = $value;
