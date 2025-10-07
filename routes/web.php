@@ -24,7 +24,7 @@ use App\Http\Controllers\VolunteerController;
 
 Route::get('/', function () {return Inertia::render('Dashboard');})->name('home');
 Route::get('/dashboard', function () {return Inertia::render('Dashboard');})->name('dashboard');
-Route::get('apply/success', function () {return Inertia::render('Apply/Success');})->name('success');
+Route::get('/apply/success', function () {return Inertia::render('Apply/Success');})->name('success');
 Route::get('/apply/{name}', [ApplicationController::class, 'showApplicationForm'])->name('apply');
 Route::post('/apply/{name}', [ApplicationController::class, 'applyForEvent'])->name('new.application');
 
