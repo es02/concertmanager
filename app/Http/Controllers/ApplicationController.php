@@ -446,7 +446,7 @@ class ApplicationController extends Controller
                 $artistKeys['location'] = $value;
             }
 
-            $items[$field->name] = value;
+            $items[$field->name] = $value;
         }
 
         // Only assume absolute mandatory fields have been set
