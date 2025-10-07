@@ -183,8 +183,8 @@ class ApplicationController extends Controller
                     ->first();
                     if ($field['entryType'] === 'image' && is_array($field['entryImage'])) {
                         $expected_value = $field->expected_value;
-                    } 
-                
+                    }
+
                     $field->order_id = $field['id'];
                     $field->description = $desc;
                     $field->expected_value = $expected_value;
@@ -502,7 +502,7 @@ class ApplicationController extends Controller
             ->count();
 
         $email = new EmailController;
-        $event = Event::find($app->event_id);
+        $event = Event::find($application->event_id);
 
         $to = $artist->email;
         $template = 'test';         // TODO: Set correct template name from DB
