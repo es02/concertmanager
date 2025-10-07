@@ -435,7 +435,7 @@ class ApplicationController extends Controller
 
             Log::debug('Processing field {name} with value {value}', ['name' => $name, 'value' => $value]);
 
-            if ($name === 'Header_Image') {
+            if (substr($field->expected_value, 0, 3) === 'img') {
                 continue;
             }
 
@@ -537,7 +537,7 @@ class ApplicationController extends Controller
 
                 Log::debug('Processing field {name} with value {value}', ['name' => $name, 'value' => $value]);
 
-                if ($name === 'Header_Image') {
+                if (substr($field->expected_value, 0, 3) === 'img') {
                     continue;
                 }
 
@@ -565,7 +565,7 @@ class ApplicationController extends Controller
 
                 Log::debug('Processing field {name} with value {value}', ['name' => $name, 'value' => $value]);
 
-                if ($name === 'Header_Image') {
+                if (substr($field->expected_value, 0, 3) === 'img') {
                     continue;
                 }
 
@@ -573,7 +573,7 @@ class ApplicationController extends Controller
                     ->where('artist_id', $artist->id)
                     ->where('event_id', $application->event_id)
                     ->where('event_application_id', $application->id)
-                    ->where('event_application_field_id', $field->id)
+                    ->where('event_application_field_id', $field->id)    // FIXME: There's a null value here for no apparent reason.
                     ->first();
 
                 $applied->value = $value;
@@ -697,7 +697,7 @@ class ApplicationController extends Controller
             $field = Event_Application_Field::find($application->event_application_field_id);
 
             $name = $field->name;
-            if ($field->name === 'image') {
+            if (substr($field->expected_value, 0, 3) === 'img') {
                 continue;
             }
 
