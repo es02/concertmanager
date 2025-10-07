@@ -559,6 +559,9 @@ class ApplicationController extends Controller
                 $name = str_replace(" ", "_", $name);
 
                 $value = $request->$name;
+                if ($value === null) {
+                    $value = "";
+                }
 
                 Log::debug('Processing field {name} with value {value}', ['name' => $name, 'value' => $value]);
 
