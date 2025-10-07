@@ -515,9 +515,6 @@ class ApplicationController extends Controller
             'items' => $items,
         ];
 
-        // Send confirmation email
-        $email->sendEmail($to, $template, $data);
-
         if ($entryCount === 0) {
 
             // Only create a new parent entry if there is not an existing entry
@@ -586,6 +583,9 @@ class ApplicationController extends Controller
             $parent = Event_Application_Parent::find($parent);
             $parent->new = 1;
         }
+
+        // Send confirmation email only if processing successful
+        $email->sendEmail($to, $template, $data);
 
         return Inertia::render('Apply/Success');
     }
