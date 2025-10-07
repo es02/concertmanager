@@ -501,6 +501,7 @@ class ApplicationController extends Controller
 
         $entryCount = Event_Application_Entry::where('tenant_id', 1)
             ->where('artist_id', $artist->id)
+            ->where('event_application_id', $application->id) // Ensure we're only checking for applications to this form
             ->count();
 
         $email = new EmailController;
