@@ -504,6 +504,17 @@ class ApplicationController extends Controller
         $email = new EmailController;
         $event = Event::find($application->event_id);
 
+        foreach($application as $app) {
+            $field = Event_Application_Field::find($app->event_application_field_id);
+
+            $name = $field->name;
+            if ($field->name === 'image') {
+                continue;
+            }
+
+            $items[$name] = $app->value;
+        }
+
         $to = $artist->email;
         $template = 'test';         // TODO: Set correct template name from DB
         $data = [
