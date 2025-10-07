@@ -507,7 +507,7 @@ class ApplicationController extends Controller
         $event = Event::find($application->event_id);
 
         $to = $artist->email;
-        $template = 'test';         // TODO: Set correct template name from DB
+        $template = 'event_success';         // TODO: Set correct template name from DB
         $data = [
             'name' => $artist->name,
             'event' => $event->name,
@@ -706,7 +706,7 @@ class ApplicationController extends Controller
         $email = new EmailController;
 
         $to = $artist->email;
-        $template = 'test';
+        $template = 'event_success';
         $data = [
             'name' => $artist->name,
             'event' => $event->name,
