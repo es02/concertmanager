@@ -560,7 +560,7 @@ class ApplicationController extends Controller
                     $value = "";
                 }
 
-                Log::debug('Processing field {name} with value {value}', ['name' => $name, 'value' => $value]);
+                Log::debug('Processing field {name} with value {value} id {id}', ['name' => $name, 'value' => $value, 'id' => $field->id]);
 
                 if (substr($field->expected_value, 0, 3) === 'img') {
                     continue;
