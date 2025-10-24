@@ -234,7 +234,7 @@ class ApplicationController extends Controller
 
         $god = false;
         $user =  Auth::user();
-        if ($user->hasRole('god')) {$god = true;}
+        if ($user && $user->hasRole('god')) {$god = true;}
 
         // Allow admin users to view unpublished forms
         if ($application->published == 0 & $god == false) {
