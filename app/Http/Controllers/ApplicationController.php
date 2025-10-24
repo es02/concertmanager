@@ -588,7 +588,7 @@ class ApplicationController extends Controller
         // Send confirmation email only if processing successful
         $email->sendEmail($to, $template, $data);
 
-        return Inertia::render('Apply/Success');
+        return redirect()->route("success", $event)->with('success', 'Applied');
     }
 
     public function shortlist($id) {
